@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Drawing.Drawing2D;
 
 namespace BordersTest
 {
@@ -16,8 +17,8 @@ namespace BordersTest
     {
         Image _drawArea;
         string[] _infos;
-        int width = 21600;
-        int height = 10800;
+        int wi2dth = 21600;
+        int he2ight = 10800;
 
         public Form1()
         {
@@ -26,15 +27,10 @@ namespace BordersTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _infos = File.ReadAllLines("borders.csv");
-            //_drawArea = Bitmap.FromFile("world.jpg");
-            
-            pictureBox1.Image = _drawArea;
-            textBox1.Text = "3";
+            picImage.Image = _drawArea;
         }
 
-
-        List<Polygon> getPolygons(string txt)
+        List<Polygon> getPolygons(string txt, int width, int height)
         {
             txt = Regex.Replace(txt, @"\(+", "(");
             txt = Regex.Replace(txt, @"\)+", ")");
@@ -62,7 +58,7 @@ namespace BordersTest
                         float lat = float.Parse(st[1].Replace('.', ','));
                         //float lon = float.Parse(st[0]);
                         //float lat = float.Parse(st[1]);
-                        pol.Points.Add(LatLongToPixelXY(lat, lon));
+                        pol.Points.Add(LatLongToPixelXY(lat, lon, width, height));
                     }
                     polygons.Add(pol);
                 //}
@@ -87,16 +83,20 @@ namespace BordersTest
             }
         }
 
-        void DrawBorder()
+        void DrawBorder(string picturePath, ref Image image, int penSize)
         {
-            _drawArea = Bitmap.FromFile("world.jpg");
-            Graphics g = Graphics.FromImage(_drawArea);
-            Pen pen = new Pen(Color.Red, int.Parse(textBox1.Text));
+            _infos = File.ReadAllLines("borders.csv");
+            image = Bitmap.FromFile(picturePath);
+            int width = image.Size.Width;
+            int height = image.Size.Height;
+
+            Graphics g = Graphics.FromImage(image);
+            Pen pen = new Pen(Color.Red, penSize);
 
             foreach (string line in _infos)
             {
                 string[] tmp = line.Split(';');
-                List<Polygon> polygons = getPolygons(tmp[0].Replace("\"", string.Empty));
+                List<Polygon> polygons = getPolygons(tmp[0].Replace("\"", string.Empty), width, height);
                 foreach (Polygon polygon in polygons)
                 {
                     List<Point> coordinateList = polygon.Points;
@@ -109,9 +109,6 @@ namespace BordersTest
                     g.DrawLine(pen, coordinateList[coordinateList.Count - 1], coordinateList[0]);
                 }
             }
-
-
-            pictureBox1.Image = _drawArea;
             
             g.Dispose();
         }
@@ -129,33 +126,59 @@ namespace BordersTest
             return null;
         }
 
-        private Point LatLongToPixelXY(float lat, float lon){
+        private Point LatLongToPixelXY(float lat, float lon, int width, int height){
             Point p = new Point();
             p.X = (int)Math.Round((width / 360.0) * (180 + lon));
             p.Y = (int)Math.Round((height / 180.0) * (90 - lat));
 	        return p;
         }
 
-        private void Save()
+        private void Save(string filename, Image image, long Quality)
         {
             ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
             System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder,
-        100L);
+        Quality);
             myEncoderParameters.Param[0] = myEncoderParameter;
 
-            _drawArea.Save("world_with_borders.jpg", jgpEncoder, myEncoderParameters);
+            image.Save(filename, jgpEncoder, myEncoderParameters);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DrawBorder();
+            DrawBorder("world.jpg", ref _drawArea, (int)num.Value);
+            picImage.Image = _drawArea;
+            button2.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Save();
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Save(saveFileDialog1.FileName, _drawArea, (long)numericUpDown1.Value);
+            }
+        }
+
+        private void picImage_LoadCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (picImage.Height < panel1.Height || picImage.Width < panel1.Width)
+            {
+
+                picImage.Dock = DockStyle.Fill;
+
+                picImage.SizeMode = PictureBoxSizeMode.CenterImage;
+
+            }
+
+            else
+            {
+
+                picImage.Dock = DockStyle.None;
+
+                picImage.SizeMode = PictureBoxSizeMode.AutoSize;
+
+            }
         }
     }
 }
