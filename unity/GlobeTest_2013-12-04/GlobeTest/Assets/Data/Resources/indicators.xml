@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<indicators>
+	<indicator name="Fossil fuel energy consumption (% of total)" code="EG.USE.COMM.FO.ZS" topic="Energy and Mining" />
+	<indicator name="Alternative and nuclear energy (% of total energy use)" code="EG.USE.COMM.CL.ZS" topic="Energy and Mining" />
+	<indicator name="Forest area (sq. km)" code="AG.LND.FRST.K2" topic="Environment" />
+</indicators>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<continents>
+	<continent name="Europe" rotationx="315" rotationy="180" rotationz="110">
+		<country name="Austria" isoalphathreecode="AUT" planetexture="flag_austria" />
+		<country name="Germany" isoalphathreecode="DEU" planetexture="flag_germany" />
+		<country name="Switzerland" isoalphathreecode="CHE" planetexture="flag_switzerland" />
+	</continent>
+	<continent name="North America" rotationx="299" rotationy="180" rotationz="352">
+		<country name="Canada" isoalphathreecode="CAN" planetexture="flag_canada" />
+		<country name="USA" isoalphathreecode="USA" planetexture="flag_usa" />
+	</continent>
+</continents>
