@@ -19,7 +19,7 @@ public class CountrySelection : MonoBehaviour {
 		{
 			string[] tmp = str.Split(';');
 			List<Polygon> polygons = getPolygons(tmp[0].Replace("\"", string.Empty));
-			_countries.Add(new Country((tmp[5], tmp[3], float.Parse(tmp[10].Replace('.', ',')), float.Parse(tmp[11].Replace('.', ',')), polygons));
+			_countries.Add(new Country(tmp[5], tmp[3], float.Parse(tmp[10].Replace('.', ',')), float.Parse(tmp[11].Replace('.', ',')), polygons));
 		}
 		} catch (Exception ex){
 
