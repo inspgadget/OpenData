@@ -19,7 +19,7 @@ public class CountrySelection : MonoBehaviour {
 		{
 			string[] tmp = str.Split(';');
 			List<Polygon> polygons = getPolygons(tmp[0].Replace("\"", string.Empty));
-			_countries.Add(new Country(tmp[5], float.Parse(tmp[10].Replace('.', ',')), float.Parse(tmp[11].Replace('.', ',')), polygons));
+			_countries.Add(new Country(tmp[5], tmp[3], float.Parse(tmp[10].Replace('.', ',')), float.Parse(tmp[11].Replace('.', ',')), polygons));
 		}
 		} catch (Exception ex){
 
@@ -144,7 +144,7 @@ public class CountrySelection : MonoBehaviour {
 	public class Country
 	{
 		private float _longitude, _latitude;
-		private string _name;
+		private string _name, _code;
 		private List<Polygon> _polygons;
 		
 		public string Name
@@ -153,6 +153,12 @@ public class CountrySelection : MonoBehaviour {
 			set { _name = value; }
 		}
 		
+		public string Code
+		{
+			get { return _code; }
+			set { _code = value; }
+	   }
+
 		public float Latitude
 		{
 			get { return _latitude; }
@@ -165,9 +171,10 @@ public class CountrySelection : MonoBehaviour {
 			set { _longitude = value; }
 		}
 		
-		public Country(string name, float longitude, float latitude, List<Polygon> polygons)
+		public Country(string name, string code, float longitude, float latitude, List<Polygon> polygons)
 		{
 			_name = name;
+			_code = code;
 			_longitude = longitude;
 			_latitude = latitude;
 			_polygons = polygons;
