@@ -7,6 +7,9 @@ public class KeyboardInputController : MonoBehaviour, IInputController
 {
 	public event InputReceivedEventHandler InputReceived;
 
+	public KeyCode zoomInKey = KeyCode.R;
+	public KeyCode zoomOutKey = KeyCode.F;
+
 	public KeyCode rotateUpKey = KeyCode.W;
 	public KeyCode rotateDownKey = KeyCode.S;
 	public KeyCode rotateLeftKey = KeyCode.A;
@@ -19,6 +22,16 @@ public class KeyboardInputController : MonoBehaviour, IInputController
 	void FixedUpdate()
 	{
 		InputType inputTypes = 0;
+
+		if(Input.GetKey(zoomInKey) == true)
+		{
+			inputTypes = inputTypes | InputType.ZoomIn;
+		}
+
+		if(Input.GetKey(zoomOutKey) == true)
+		{
+			inputTypes = inputTypes | InputType.ZoomOut;
+		}
 
 		if(Input.GetKey(rotateUpKey) == true)
 		{
@@ -45,12 +58,12 @@ public class KeyboardInputController : MonoBehaviour, IInputController
 	
 	public void StartController()
 	{
-		throw new System.NotImplementedException();
+		//throw new System.NotImplementedException();
 	}
 	
 	public void StopController()
 	{
-		throw new System.NotImplementedException();
+		//throw new System.NotImplementedException();
 	}
 	
 	protected void OnInputReceived(InputType inputTypes)

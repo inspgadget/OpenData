@@ -16,34 +16,34 @@ namespace Globetrotter.NetworkLayer
 			string host = GetHost(url);
 			string path = GetPath(url);
 
-			string request = "GET " + path + " HTTP/1.1\nHost: " + host + "\r\n\r\n";
+			string request = "GET " + path + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n";
 
 			using(TcpClient socket = new TcpClient(host, port))
 			{
 				using(BufferedStream bs = new BufferedStream(socket.GetStream()))
 				{
 					//request
-					using(StreamWriter sw = new StreamWriter(new BufferedStream(socket.GetStream())))
+					using(StreamWriter sw = new StreamWriter(bs))
 					{
 						sw.Write(request);
 						sw.Flush();
-						
+
 						//response
-						using(StreamReader sr = new StreamReader(new BufferedStream(socket.GetStream())))
+						using(StreamReader sr = new StreamReader(bs))
 						{
 							if(sr.EndOfStream == false)
 							{
 								string line = sr.ReadLine();
-								
+
 								if(line.Contains("200"))
 								{
 									line = null;
-									
+
 									//read over header
 									while((sr.EndOfStream == false) && ((line = sr.ReadLine()) != ""))
 									{
 									}
-									
+
 									//read content
 									StringBuilder sb = new StringBuilder();
 									line = null;
@@ -54,6 +54,10 @@ namespace Globetrotter.NetworkLayer
 									}
 
 									return sb.ToString();
+								}
+								else
+								{
+									UnityEngine.Debug.LogError(line);
 								}
 							}
 						}

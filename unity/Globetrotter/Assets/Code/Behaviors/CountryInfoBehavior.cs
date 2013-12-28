@@ -13,8 +13,6 @@ public class CountryInfoBehavior : MonoBehaviour
 	{
 		Country country = m_countriesController.CurrentCountry;
 
-		GUI.Box(new Rect(Screen.width - 200, 80, 200, 300), string.Empty);
-
 		if(country != null)
 		{
 			StringBuilder sb = new StringBuilder();

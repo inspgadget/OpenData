@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Globetrotter.DomainLayer
 {
@@ -177,6 +178,18 @@ namespace Globetrotter.DomainLayer
 			m_surfaceArea = 0.0;
 			m_latitude = 0.0;
 			m_longitude = 0.0;
+		}
+
+		public class CountryComparer : IComparer<Country>
+		{
+			public CountryComparer()
+			{
+			}
+
+			public int Compare(Country a, Country b)
+			{
+				return a.IsoAlphaThreeCode.CompareTo(b.IsoAlphaThreeCode);
+			}
 		}
 	}
 }

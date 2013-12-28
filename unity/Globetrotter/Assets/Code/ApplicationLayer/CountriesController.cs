@@ -10,6 +10,10 @@ namespace Globetrotter.ApplicationLayer
 {
 	public class CountriesController
 	{
+		//private object m_lockObject = new object();
+
+		private const int MaxSelectedCountries = 5;
+
 		private DataController m_dataController;
 
 		private Country m_currCountry;
@@ -42,7 +46,10 @@ namespace Globetrotter.ApplicationLayer
 
 		public CountriesController(DataController dataController)
 		{
+			try{
+			//
 			m_dataController = dataController;
+			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
 			m_currCountry = null;
 			m_selectedCountries = new List<Country>();
@@ -61,14 +68,43 @@ namespace Globetrotter.ApplicationLayer
 					//load indicator data
 				}
 			}
+			//
+			try
+			{
+				m_currCountry = m_countries["AUT"];
+			}
+			catch(Exception exc)
+			{
+				UnityEngine.Debug.LogError(exc);
+			}
+			//
+			}catch(Exception exc){UnityEngine.Debug.LogError(exc);}
 		}
 
 		public void AddCountry()
 		{
+			if(m_currCountry!=null)
+			{
+				if(m_selectedCountries.Count >= CountriesController.MaxSelectedCountries)
+				{
+					m_selectedCountries.RemoveAt(0);
+				}
+
+				m_selectedCountries.Add(m_currCountry);
+			}
 		}
 
 		public void RemoveCountry()
 		{
+			if(m_currCountry!=null)
+			{
+				m_selectedCountries.Remove(m_currCountry);
+			}
+		}
+
+		protected void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)
+		{
+			//
 		}
 	}
 }

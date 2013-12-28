@@ -7,6 +7,8 @@ using Globetrotter.InputLayer;
 
 public class GlobeSceneSetupBehavior : MonoBehaviour
 {
+	public Camera mainCamera;
+
 	void Start()
 	{
 		//input controller
@@ -14,7 +16,7 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		if(inputController == null)
 		{
-			inputController = gameObject.AddComponent<KeyboardInputController>();
+			inputController = mainCamera.gameObject.AddComponent<KeyboardInputController>();
 		}
 
 		//data controller
@@ -39,8 +41,17 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		GlobeBehavior globeBehavior = gameObject.AddComponent<GlobeBehavior>();
 		globeBehavior.Init(inputController);
 
-		//country info behvior
-		CountryInfoBehavior countryInfoBehavior = gameObject.AddComponent<CountryInfoBehavior>();
-		countryInfoBehavior.Init(countriesController);
+		//country selector behavior
+		CountrySelectorBehavior countrySelectorBehavior = mainCamera.gameObject.AddComponent<CountrySelectorBehavior>();
+		countrySelectorBehavior.Init(countriesController);
+
+		//selected countries behavior
+		SelectedCountriesBehavior selectedCountriesBehavior = mainCamera.gameObject.AddComponent<SelectedCountriesBehavior>();
+		selectedCountriesBehavior.Init(countriesController);
+
+		//camera zoom behavior
+		CameraZoomBehavior cameraZoomBehavior = mainCamera.gameObject.AddComponent<CameraZoomBehavior>();
+		cameraZoomBehavior.Init(inputController);
+
 	}
 }

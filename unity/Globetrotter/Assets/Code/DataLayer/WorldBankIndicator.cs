@@ -72,17 +72,18 @@ namespace Globetrotter.DataLayer
 			string url = GetRequestUrlForCountries(isoAlphaThreeCode, yearFrom, yearTo);
 			int port = 80;
 
-			return ParseXml(new TcpRequestController().GetRepsonseData(url, port));
+			IList<WorldBankDataItem> items = ParseXml(new TcpRequestController().GetRepsonseData(url, port));
+
+			return new WorldBankData(m_name, GetCountriesArrayAsString(isoAlphaThreeCode), false, items);
 		}
 		
-		private WorldBankData ParseXml(string xml)
+		private IList<WorldBankDataItem> ParseXml(string xml)
 		{
 			try
 			{
 				IWorldBankDataParser parser = new WorldBankDataParser();
-				IList<WorldBankDataItem> items = parser.parseXml(xml);
-				
-				return new WorldBankData(m_name, string.Empty, false, items);
+
+				return parser.parseXml(xml);
 			}
 			catch(Exception exc)
 			{
@@ -97,14 +98,8 @@ namespace Globetrotter.DataLayer
 			StringBuilder sb = new StringBuilder();
 			
 			sb.Append("http://api.worldbank.org/en/countries/");
-			
-			for(int i = 0; i < (isoAlphaThreeCodes.Length - 1); i++)
-			{
-				sb.Append(isoAlphaThreeCodes[i]);
-				sb.Append(';');
-			}
-			
-			sb.Append(isoAlphaThreeCodes[(isoAlphaThreeCodes.Length - 1)]);
+
+			sb.Append(GetCountriesArrayAsString(isoAlphaThreeCodes));
 			
 			sb.Append("/indicators/");
 			sb.Append(m_code);
@@ -120,6 +115,21 @@ namespace Globetrotter.DataLayer
 		public string GetRequestUrlForCountry(string isoAlphaThreeCode, int yearFrom, int yearTo)
 		{
 			return GetRequestUrlForCountries(new string[] { isoAlphaThreeCode }, yearFrom, yearTo);
+		}
+
+		public string GetCountriesArrayAsString(string[] isoAlphaThreeCodes)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			for(int i = 0; i < (isoAlphaThreeCodes.Length - 1); i++)
+			{
+				sb.Append(isoAlphaThreeCodes[i]);
+				sb.Append(';');
+			}
+
+			sb.Append(isoAlphaThreeCodes[(isoAlphaThreeCodes.Length - 1)]);
+
+			return sb.ToString();
 		}
 		
 		public class WorldBankIndicatorComparer : IComparer<WorldBankIndicator>

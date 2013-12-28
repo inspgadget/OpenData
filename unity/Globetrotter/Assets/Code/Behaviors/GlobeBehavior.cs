@@ -7,6 +7,8 @@ public class GlobeBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
+	private IInputController m_inputController;
+
 	private float m_horizontalAngle;
 	private float m_verticalAngle;
 
@@ -33,8 +35,10 @@ public class GlobeBehavior : MonoBehaviour
 
 	public void Init(IInputController inputController)
 	{
-		inputController.InputReceived -= InputReceivedHandler;
-		inputController.InputReceived += InputReceivedHandler;
+		m_inputController = inputController;
+
+		m_inputController.InputReceived -= InputReceivedHandler;
+		m_inputController.InputReceived += InputReceivedHandler;
 	}
 
 	protected void InputReceivedHandler(object sender, InputReceivedEventArgs args)

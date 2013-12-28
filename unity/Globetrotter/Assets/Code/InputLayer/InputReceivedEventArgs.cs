@@ -27,14 +27,14 @@ namespace Globetrotter.InputLayer
 			{
 				for(int i = 0; i < inputTypes.Length; i++)
 				{
-					m_inputTypes = m_inputTypes | inputTypes[i];
+					m_inputTypes = m_inputTypes.Or(inputTypes[i]);
 				}
 			}
 		}
 		
 		public bool HasInputType(InputType inputType)
 		{
-			return ((m_inputTypes & inputType) == inputType);
+			return (m_inputTypes.And(inputType) == inputType);
 		}
 	}
 }

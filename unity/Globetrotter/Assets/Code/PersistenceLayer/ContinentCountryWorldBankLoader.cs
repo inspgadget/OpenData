@@ -35,7 +35,7 @@ namespace Globetrotter.PersistenceLayer
         {
             IList<Country> listOfCountries = new List<Country>();
             int port = 80;
-            string url = "http://api.worldbank.org/countries?per_page=300";
+            string url = "http://api.worldbank.org/countries?per_page=512";
 
             //load the xml
             string xml = new TcpRequestController().GetRepsonseData(url, port);
@@ -102,7 +102,7 @@ namespace Globetrotter.PersistenceLayer
 
         public Country loadCountry(string isoAlphaThreeCode)
         {
-            throw new NotImplementedException();
+			return null;
         }
     }
 
