@@ -66,7 +66,8 @@
      <Compile Include="Assets\Code\InputLayer\IInputController.cs" />
      <Compile Include="Assets\Code\InputLayer\InputReceivedEventArgs.cs" />
      <Compile Include="Assets\Code\InputLayer\InputType.cs" />
-     <Compile Include="Assets\Code\NetworkLayer\TcpRequestController.cs" />
+     <Compile Include="Assets\Code\NetworkLayer\HttpRequestController.cs" />
+     <Compile Include="Assets\Code\NetworkLayer\HttpResponse.cs" />
      <Compile Include="Assets\Code\ObjectDepot.cs" />
      <Compile Include="Assets\Code\PersistenceLayer\ContinentCountryWorldBankLoader.cs" />
      <Compile Include="Assets\Code\PersistenceLayer\ContinentCountryXmlLoader.cs" />

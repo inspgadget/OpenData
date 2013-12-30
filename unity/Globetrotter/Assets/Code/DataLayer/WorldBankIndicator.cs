@@ -72,7 +72,8 @@ namespace Globetrotter.DataLayer
 			string url = GetRequestUrlForCountries(isoAlphaThreeCode, yearFrom, yearTo);
 			int port = 80;
 
-			IList<WorldBankDataItem> items = ParseXml(new TcpRequestController().GetRepsonseData(url, port));
+			HttpResponse response = new HttpRequestController().GetResponse(url, port);
+			IList<WorldBankDataItem> items = ParseXml(System.Text.Encoding.UTF8.GetString(response.Data));
 
 			return new WorldBankData(m_name, GetCountriesArrayAsString(isoAlphaThreeCode), false, items);
 		}

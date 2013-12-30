@@ -10,10 +10,24 @@ namespace Globetrotter.ApplicationLayer
 {
 	public class DataController
 	{
+		private object m_lockObject = new object();
+
 		public delegate void WorldBankDataFetchedEventHandler(object sender, WorldBankDataFetchedEventArgs args);
 		public event WorldBankDataFetchedEventHandler WorldBankDataFetched;
 
+		private WorldBankIndicator m_currIndicator;
 		private Dictionary<string, WorldBankIndicator> m_indicators;
+
+		public WorldBankIndicator CurrentIndicator
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_currIndicator;
+				}
+			}
+		}
 
 		public DataController()
 		{
@@ -25,6 +39,15 @@ namespace Globetrotter.ApplicationLayer
 				foreach(WorldBankIndicator indicator in indicators)
 				{
 					m_indicators[indicator.Code] = indicator;
+				}
+
+				if(indicators.Count > 0)
+				{
+					m_currIndicator = indicators[0];
+				}
+				else
+				{
+					m_currIndicator = null;
 				}
 			}
 		}
@@ -48,7 +71,10 @@ namespace Globetrotter.ApplicationLayer
 
 		public WorldBankIndicator GetIndicator(string code)
 		{
-			return m_indicators[code];
+			lock(m_lockObject)
+			{
+				return m_indicators[code];
+			}
 		}
 
 		private string[] CountriesAsCodes(Country[] countries)
@@ -65,9 +91,12 @@ namespace Globetrotter.ApplicationLayer
 
 		protected void OnWorldBankDataFetched(WorldBankData data)
 		{
-			if((WorldBankDataFetched != null) && (data != null))
+			lock(m_lockObject)
 			{
-				WorldBankDataFetched(this, new WorldBankDataFetchedEventArgs(data));
+				if((WorldBankDataFetched != null) && (data != null))
+				{
+					WorldBankDataFetched(this, new WorldBankDataFetchedEventArgs(data));
+				}
 			}
 		}
 	}

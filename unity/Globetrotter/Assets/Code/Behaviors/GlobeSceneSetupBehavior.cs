@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 using Globetrotter;
 using Globetrotter.ApplicationLayer;
@@ -8,6 +8,7 @@ using Globetrotter.InputLayer;
 public class GlobeSceneSetupBehavior : MonoBehaviour
 {
 	public Camera mainCamera;
+	public GameObject magnifyingGlass;
 
 	void Start()
 	{
@@ -51,7 +52,7 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		//camera zoom behavior
 		CameraZoomBehavior cameraZoomBehavior = mainCamera.gameObject.AddComponent<CameraZoomBehavior>();
-		cameraZoomBehavior.Init(inputController);
+		cameraZoomBehavior.Init(inputController, new float[]{ -1.5f, -3.0f }, new GameObject[]{ magnifyingGlass });
 
 	}
 }

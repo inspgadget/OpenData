@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using Globetrotter.DataLayer;
 using Globetrotter.DomainLayer;
@@ -46,7 +47,7 @@ namespace Globetrotter.ApplicationLayer
 
 		public CountriesController(DataController dataController)
 		{
-			try{
+			//try{
 			//
 			m_dataController = dataController;
 			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
@@ -66,9 +67,23 @@ namespace Globetrotter.ApplicationLayer
 					m_countries[country.IsoAlphaThreeCode] = country;
 
 					//load indicator data
+					Thread t = new Thread(delegate(){
+						//population
+						WorldBankIndicator populationIndicator = m_dataController.GetIndicator("");
+						WorldBankData populationData = m_dataController.FetchData(new Country[]{ country }, populationIndicator, year, year);
+						country.Population = (int)populationData.Items[0].Value;
+
+						//surface area
+						WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.LND.TOTL.K2");
+						WorldBankData surfaceAreaData = m_dataController.FetchData(new Country[]{ country }, surfaceAreaIndicator, year, year);
+						country.SurfaceArea = surfaceAreaData.Items[0].Value;
+					});
+
+					t.IsBackground = true;
+					//t.Start();
 				}
 			}
-			//
+
 			try
 			{
 				m_currCountry = m_countries["AUT"];
@@ -77,8 +92,7 @@ namespace Globetrotter.ApplicationLayer
 			{
 				UnityEngine.Debug.LogError(exc);
 			}
-			//
-			}catch(Exception exc){UnityEngine.Debug.LogError(exc);}
+			//}catch(Exception exc){UnityEngine.Debug.LogError(exc);}
 		}
 
 		public void AddCountry()

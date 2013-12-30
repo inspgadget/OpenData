@@ -37,66 +37,67 @@ namespace Globetrotter.PersistenceLayer
             int port = 80;
             string url = "http://api.worldbank.org/countries?per_page=512";
 
-            //load the xml
-            string xml = new TcpRequestController().GetRepsonseData(url, port);
-            string data = xml.Replace("wb:", "");
-            byte[] encodedString = Encoding.UTF8.GetBytes(data);
-
-            // Put the byte array into a stream and rewind it to the beginning
-            MemoryStream ms = new MemoryStream(encodedString);
-            ms.Flush();
-            ms.Position = 0;
-
-            XmlDocument document = new XmlDocument();
-            document.Load(ms);
+			HttpResponse response = new HttpRequestController().GetResponse(url, port);
+			string xml = Encoding.UTF8.GetString(response.Data);
+			string data = xml.Replace("wb:", "");
             
-			foreach (XmlNode nodeContinent in document.SelectSingleNode(ContinentCountryWorldBankLoader.DataXPath))
-            {
-                Country item = new Country();
-                listOfCountries.Add(item);
+			using(MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+			{
+				ms.Flush();
+				ms.Position = 0;
 
-                foreach (XmlAttribute attributeData in nodeContinent.Attributes)
-                {
-					if(attributeData.Name==ContinentCountryWorldBankLoader.CountryTagAttribute && !string.IsNullOrEmpty(attributeData.Value)) 
-                    {
-                        item.IsoAlphaThreeCode = attributeData.Value;
-                    }
-                }
+				XmlDocument document = new XmlDocument();
+	            document.Load(ms);
+	            
+				foreach (XmlNode nodeContinent in document.SelectSingleNode(ContinentCountryWorldBankLoader.DataXPath))
+	            {
+	                Country item = new Country();
+	                listOfCountries.Add(item);
 
-                foreach (XmlElement element in nodeContinent.ChildNodes)
-                {
-                    switch (element.Name)
-                    {
-					case ContinentCountryWorldBankLoader.NameTag:
-                            if(!string.IsNullOrEmpty(element.InnerText)) 
-                                item.Name = element.InnerText;
-                            break;
+	                foreach (XmlAttribute attributeData in nodeContinent.Attributes)
+	                {
+						if(attributeData.Name==ContinentCountryWorldBankLoader.CountryTagAttribute && !string.IsNullOrEmpty(attributeData.Value)) 
+	                    {
+	                        item.IsoAlphaThreeCode = attributeData.Value;
+	                    }
+	                }
 
-					case ContinentCountryWorldBankLoader.RegionTag:
-                            if (!string.IsNullOrEmpty(element.InnerText))
-                                item.Continent = element.InnerText;
-                            break;
+	                foreach (XmlElement element in nodeContinent.ChildNodes)
+	                {
+	                    switch (element.Name)
+	                    {
+						case ContinentCountryWorldBankLoader.NameTag:
+	                            if(!string.IsNullOrEmpty(element.InnerText)) 
+	                                item.Name = element.InnerText;
+	                            break;
 
-					case ContinentCountryWorldBankLoader.CapitalCityTag:
-                            if (!string.IsNullOrEmpty(element.InnerText))
-                                item.CapitalCity = element.InnerText;
-                            break;
+						case ContinentCountryWorldBankLoader.RegionTag:
+	                            if (!string.IsNullOrEmpty(element.InnerText))
+	                                item.Continent = element.InnerText;
+	                            break;
 
-					case ContinentCountryWorldBankLoader.LongitudeTag:
-                            if (!string.IsNullOrEmpty(element.InnerText))
-                                item.Longitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
-                            break;
+						case ContinentCountryWorldBankLoader.CapitalCityTag:
+	                            if (!string.IsNullOrEmpty(element.InnerText))
+	                                item.CapitalCity = element.InnerText;
+	                            break;
 
-					case ContinentCountryWorldBankLoader.LatitudeTag:
-                            if (!string.IsNullOrEmpty(element.InnerText))
-                                item.Latitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
-                            break;
+						case ContinentCountryWorldBankLoader.LongitudeTag:
+	                            if (!string.IsNullOrEmpty(element.InnerText))
+	                                item.Longitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
+	                            break;
 
-                        default:
-                            break;
-                    }
-                }
-            }
+						case ContinentCountryWorldBankLoader.LatitudeTag:
+	                            if (!string.IsNullOrEmpty(element.InnerText))
+	                                item.Latitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
+	                            break;
+
+	                        default:
+	                            break;
+	                    }
+	                }
+	            }
+			}
+
             return listOfCountries;
         }
 
