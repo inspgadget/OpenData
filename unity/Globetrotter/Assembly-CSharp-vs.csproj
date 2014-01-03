@@ -62,7 +62,11 @@
      <Compile Include="Assets\Code\DataLayer\WorldBankDataParser.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankIndicator.cs" />
      <Compile Include="Assets\Code\DomainLayer\Country.cs" />
+     <Compile Include="Assets\Code\GuiLayer\CountrySelectorViewModel.cs" />
+     <Compile Include="Assets\Code\GuiLayer\GlobeViewModel.cs" />
+     <Compile Include="Assets\Code\GuiLayer\SelectedCountriesViewModel.cs" />
      <Compile Include="Assets\Code\GuiLayer\StyleDepot.cs" />
+     <Compile Include="Assets\Code\GuiLayer\ViewModelBase.cs" />
      <Compile Include="Assets\Code\InputLayer\IInputController.cs" />
      <Compile Include="Assets\Code\InputLayer\InputReceivedEventArgs.cs" />
      <Compile Include="Assets\Code\InputLayer\InputType.cs" />

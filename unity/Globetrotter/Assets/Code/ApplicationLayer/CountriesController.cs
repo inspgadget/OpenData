@@ -11,7 +11,7 @@ namespace Globetrotter.ApplicationLayer
 {
 	public class CountriesController
 	{
-		//private object m_lockObject = new object();
+		private object m_lockObj = new object();
 
 		private const int MaxSelectedCountries = 5;
 
@@ -25,7 +25,10 @@ namespace Globetrotter.ApplicationLayer
 		{
 			get
 			{
-				return m_currCountry;
+				lock(m_lockObj)
+				{
+					return m_currCountry;
+				}
 			}
 		}
 
@@ -33,7 +36,10 @@ namespace Globetrotter.ApplicationLayer
 		{
 			get
 			{
-				return m_countries.Values.ToArray();
+				lock(m_lockObj)
+				{
+					return m_countries.Values.ToArray();
+				}
 			}
 		}
 
@@ -41,7 +47,10 @@ namespace Globetrotter.ApplicationLayer
 		{
 			get
 			{
-				return m_selectedCountries.ToArray();
+				lock(m_lockObj)
+				{
+					return m_selectedCountries.ToArray();
+				}
 			}
 		}
 
@@ -97,22 +106,44 @@ namespace Globetrotter.ApplicationLayer
 
 		public void AddCountry()
 		{
-			if(m_currCountry!=null)
+			lock(m_lockObj)
 			{
-				if(m_selectedCountries.Count >= CountriesController.MaxSelectedCountries)
+				AddCountry(m_currCountry);
+			}
+		}
+		
+		public void AddCountry(Country country)
+		{
+			lock(m_lockObj)
+			{
+				if(country != null)
 				{
-					m_selectedCountries.RemoveAt(0);
+					if(m_selectedCountries.Count >= CountriesController.MaxSelectedCountries)
+					{
+						m_selectedCountries.RemoveAt(0);
+					}
+					
+					m_selectedCountries.Add(country);
 				}
-
-				m_selectedCountries.Add(m_currCountry);
 			}
 		}
 
 		public void RemoveCountry()
 		{
-			if(m_currCountry!=null)
+			lock(m_lockObj)
 			{
-				m_selectedCountries.Remove(m_currCountry);
+				RemoveCountry(m_currCountry);
+			}
+		}
+		
+		public void RemoveCountry(Country country)
+		{
+			lock(m_lockObj)
+			{
+				if(country != null)
+				{
+					m_selectedCountries.Remove(country);
+				}
 			}
 		}
 

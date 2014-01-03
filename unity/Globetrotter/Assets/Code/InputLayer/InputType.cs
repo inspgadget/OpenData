@@ -10,12 +10,16 @@ namespace Globetrotter.InputLayer
 		RotateLeft = 8,
 		RotateRight = 16,
 		RotateUp = 32,
-		WipeDown = 64,
-		WipeLeft = 128,
-		WipeRight = 256,
-		WipeUp = 512,
-		ZoomIn = 1024,
-		ZoomOut = 2048
+		ScrollDown = 64,
+		ScrollLeft = 128,
+		ScrollRight = 256,
+		ScrollUp = 512,
+		WipeDown = 1024,
+		WipeLeft = 2048,
+		WipeRight = 4096,
+		WipeUp = 8192,
+		ZoomIn = 16384,
+		ZoomOut = 32768
 	}
 
 	public static class InputTypeExtensions

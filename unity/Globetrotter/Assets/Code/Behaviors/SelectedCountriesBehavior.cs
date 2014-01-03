@@ -1,44 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using Globetrotter.ApplicationLayer;
 using Globetrotter.DomainLayer;
+using Globetrotter.GuiLayer;
 
 public class SelectedCountriesBehavior : MonoBehaviour
 {
-	private CountriesController m_countriesController;
+	//private CountriesController m_countriesController;
+	private SelectedCountriesViewModel m_selectedCountriesViewModel;
 
 	void OnGUI()
 	{
-		Country[] m_selectedCountries = m_countriesController.SelectedCountries;
-
-		//left, top, width, height
-		int screenWidth = Screen.width;
-		int screenHeight = Screen.height;
-		
-		//box
-		GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty);
-
-		//labels
-		if((m_selectedCountries != null) && (m_selectedCountries.Length > 0))
+		lock(m_selectedCountriesViewModel.LockObject)
 		{
-			int top = (screenHeight / 2) + 15;
+			Country[] selectedCountries = m_selectedCountriesViewModel.SelectedCountries;
 
-			for(int i = 0; i < m_selectedCountries.Length; i++)
+			//left, top, width, height
+			int screenWidth = Screen.width;
+			int screenHeight = Screen.height;
+			
+			//box
+			GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty);
+
+			//labels
+			if((selectedCountries != null) && (selectedCountries.Length > 0))
 			{
-				GUI.Label(new Rect( screenWidth - 210, top, 200, 25), "No countries selected.");
+				int top = (screenHeight / 2) + 15;
 
-				top = top + 30;
+				for(int i = 0; i < selectedCountries.Length; i++)
+				{
+					GUIStyle style = StyleDepot.Instance.SelectedCountryStyle;
+
+					if(i == m_selectedCountriesViewModel.CurrentCountryIndex)
+					{
+						style = StyleDepot.Instance.SelectedCountryHoverStyle;
+					}
+
+					GUI.Label(new Rect( screenWidth - 210, top, 200, 25), selectedCountries[i].Name, style);
+
+					top = top + 30;
+				}
 			}
-		}
-		else
-		{
-			GUI.Label(new Rect( screenWidth - 210, (screenHeight / 2) + 15, 200, 25), "No countries selected.");
+			else
+			{
+				GUI.Label(new Rect( screenWidth - 210, (screenHeight / 2) + 15, 200, 25),
+							"No countries selected.",
+				          	StyleDepot.Instance.SelectedCountryStyle);
+			}
 		}
 	}
 
-	public void Init(CountriesController countriesController)
+	public void Init(SelectedCountriesViewModel selectedCountriesViewModel)
 	{
-		m_countriesController = countriesController;
+		m_selectedCountriesViewModel = selectedCountriesViewModel;
 	}
 }

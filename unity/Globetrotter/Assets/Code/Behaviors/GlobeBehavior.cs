@@ -1,69 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using Globetrotter.InputLayer;
+using Globetrotter.GuiLayer;
 
 public class GlobeBehavior : MonoBehaviour
 {
-	private object m_lockObj = new object();
-
-	private IInputController m_inputController;
-
-	private float m_horizontalAngle;
-	private float m_verticalAngle;
-
-	private float m_speed;
-
-	void Start()
-	{
-		m_horizontalAngle = 0.0f;
-		m_verticalAngle = 0.0f;
-
-		m_speed = 1.0f;
-	}
+	private GlobeViewModel m_globeViewModel;
 
 	void Update()
 	{
-		lock(m_lockObj)
+		lock(m_globeViewModel.LockObject)
 		{
-			transform.Rotate(m_verticalAngle, m_horizontalAngle, 0.0f, Space.World);
+			float horizontalAngle = m_globeViewModel.HorizontalAngle;
+			m_globeViewModel.HorizontalAngle = 0.0f;
 
-			m_horizontalAngle = 0.0f;
-			m_verticalAngle = 0.0f;
+			float verticalAngle = m_globeViewModel.VerticalAngle;
+			m_globeViewModel.VerticalAngle = 0.0f;
+
+			transform.Rotate(verticalAngle, horizontalAngle, 0.0f, Space.World);
 		}
 	}
 
-	public void Init(IInputController inputController)
+	public void Init(GlobeViewModel globeViewModel)
 	{
-		m_inputController = inputController;
-
-		m_inputController.InputReceived -= InputReceivedHandler;
-		m_inputController.InputReceived += InputReceivedHandler;
-	}
-
-	protected void InputReceivedHandler(object sender, InputReceivedEventArgs args)
-	{
-		lock(m_lockObj)
-		{
-			if(args.HasInputType(InputType.RotateUp) == true)
-			{
-				m_verticalAngle = m_verticalAngle - m_speed;
-			}
-
-			if(args.HasInputType(InputType.RotateDown) == true)
-			{
-				m_verticalAngle = m_verticalAngle + m_speed;
-			}
-			
-			if(args.HasInputType(InputType.RotateLeft) == true)
-			{
-				m_horizontalAngle = m_horizontalAngle + m_speed;
-			}
-
-			if(args.HasInputType(InputType.RotateRight) == true)
-			{
-				m_horizontalAngle = m_horizontalAngle - m_speed;
-			}
-		}
+		m_globeViewModel = globeViewModel;
 	}
 }
