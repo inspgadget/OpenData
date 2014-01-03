@@ -4,6 +4,4 @@
 	<indicator name="Fossil fuel energy consumption (% of total)" code="EG.USE.COMM.FO.ZS" topic="Energy and Mining" />
 	<indicator name="Alternative and nuclear energy (% of total energy use)" code="EG.USE.COMM.CL.ZS" topic="Energy and Mining" />
 	<indicator name="Forest area (sq. km)" code="AG.LND.FRST.K2" topic="Environment" />
-	<indicator name="Surface area (sq. km)" code="AG.SRF.TOTL.K2" topic="Agriculture & Rural Development" />
-	<indicator name="SP.POP.TOTL" code="SP.POP.TOTL" topic="Health" />
 </indicators>

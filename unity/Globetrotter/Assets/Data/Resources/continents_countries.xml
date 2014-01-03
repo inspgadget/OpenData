@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<continents>
+	<continent name="Africa">
+		<country name="Algeria" isoalphathreecode="DZA" />
+		<country name="Angola" isoalphathreecode="AGO" />
+		<country name="Benin" isoalphathreecode="BEN" />
+		<country name="Botswana" isoalphathreecode="BWA" />
+		<country name="Burkina Faso" isoalphathreecode="BFA" />
+		<country name="Burundi" isoalphathreecode="BDI" />
+	</continent>
+	<continent name="Asia">
+		<country name="Afghanistan" isoalphathreecode="AFG" />
+		<country name="Bahrain" isoalphathreecode="BHR" />
+		<country name="Bangladesh" isoalphathreecode="BGD" />
+		<country name="Bhutan" isoalphathreecode="BTU" />
+		<country name="Cambodia" isoalphathreecode="KHM" />
+	</continent>
+	<continent name="Australia">
+		<country name="Australia" isoalphathreecode="AUS" />
+	</continent>
+	<continent name="Europe">
+		<country name="Albania" isoalphathreecode="ALB" />
+		<country anem="Andorra" isoalphathreecode="AND" />
+		<country name="Armenia" isoalphathreecode="ARM" />
+		<country name="Austria" isoalphathreecode="AUT" />
+		<country name="Azerbaijan" isoalphathreecode="AZE" />
+		<country name="Belarus" isoalphathreecode=BLR"" />
+		<country name="Belgium" isoalphathreecode="BEL" />
+		<country name="Bosnia and Herzegovina" isoalphathreecode="BIH" />
+		<country name="Bulgaria" isoalphathreecode="BGR" />
+		<country name="France" isoalphathreecode="FRA" />
+		<country name="Germany" isoalphathreecode="DEU" />
+		<country name="Italy" isoalphathreecode="ITA" />
+		<country name="Spain" isoalphathreecode="ESP" />
+		<country name="Switzerland" isoalphathreecode="CHE" />
+	</continent>
+	<continent name="North America">
+		<country name="Bahamas" isoalphathreecode="BHS" />
+		<country name="Belize" isoalphathreecode="BLZ" />
+		<country name="Bermuda" isoalphathreecode="BMU" />
+		<country name="Canada" isoalphathreecode="CAN" />
+		<country name="USA" isoalphathreecode="USA" />
+	</continent>
+	<continent name="South America">
+		<country name="Argentina" isoalphathreecode="ARG" />
+		<country name="Bolivia" isoalphathreecode="BOL" />
+		<country name="Brazil" isoalphathreecode="BRA" />
+	</continent>
+</continents>
