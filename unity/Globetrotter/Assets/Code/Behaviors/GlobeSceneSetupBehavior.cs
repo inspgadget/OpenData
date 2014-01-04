@@ -3,16 +3,25 @@ using System.Collections.Generic;
 
 using Globetrotter;
 using Globetrotter.ApplicationLayer;
-using Globetrotter.GuiLayer;
+using Globetrotter.GuiLayer.Controllers;
+using Globetrotter.GuiLayer.ViewModel;
 using Globetrotter.InputLayer;
 
 public class GlobeSceneSetupBehavior : MonoBehaviour
 {
+	private object m_lockObj = new object();
+
 	public Camera mainCamera;
 	public GameObject magnifyingGlass;
 
+	private GlobeSceneGuiController m_globeSceneGuiController;
+
+	private string m_sceneName;
+
 	void Start()
 	{
+		m_sceneName = null;
+
 		//input controller
 		IInputController inputController = ObjectDepot.Instance.Retrive<IInputController>();
 
@@ -41,7 +50,6 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		//globe view model
 		GlobeViewModel globeViewModel = new GlobeViewModel(1.0f);
-		inputController.InputReceived -= globeViewModel.InputReceivedHandler;
 		inputController.InputReceived += globeViewModel.InputReceivedHandler;
 
 		//country selector view model
@@ -68,6 +76,18 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 			ObjectDepot.Instance.Store<SelectedCountriesViewModel>(selectedCountriesViewModel);
 		}
 
+		//camera zoom view model
+		CameraZoomViewModel cameraZoomViewModel = new CameraZoomViewModel(new float[] { -1.5f, -3.0f}, 0.05f);
+		inputController.InputReceived += cameraZoomViewModel.InputReceivedHandler;
+
+		//globe scene gui controller
+		m_globeSceneGuiController = new GlobeSceneGuiController(cameraZoomViewModel,
+		                                                        	globeViewModel,
+		                                                        	countrySelectorViewModel,
+		                                                        	selectedCountriesViewModel,
+		                                                        	inputController);
+		m_globeSceneGuiController.ChangeScene += ChangeSceneHandler;
+
 		//globe behavior
 		GlobeBehavior globeBehavior = gameObject.AddComponent<GlobeBehavior>();
 		globeBehavior.Init(globeViewModel);
@@ -82,7 +102,25 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		//camera zoom behavior
 		CameraZoomBehavior cameraZoomBehavior = mainCamera.gameObject.AddComponent<CameraZoomBehavior>();
-		cameraZoomBehavior.Init(inputController, new float[]{ -1.5f, -3.0f }, new GameObject[]{ magnifyingGlass });
+		cameraZoomBehavior.Init(cameraZoomViewModel, new GameObject[]{ magnifyingGlass });
+	}
 
+	void FixedUpdate()
+	{
+		lock(m_lockObj)
+		{
+			if(string.IsNullOrEmpty(m_sceneName) == false)
+			{
+				Application.LoadLevel(m_sceneName);
+			}
+		}
+	}
+
+	public void ChangeSceneHandler(object sender, ChangeSceneEventArgs args)
+	{
+		lock(m_lockObj)
+		{
+			m_sceneName = args.SceneName;
+		}
 	}
 }

@@ -5,7 +5,7 @@ using Globetrotter.ApplicationLayer;
 using Globetrotter.DomainLayer;
 using Globetrotter.InputLayer;
 
-namespace Globetrotter.GuiLayer
+namespace Globetrotter.GuiLayer.ViewModel
 {
 	public class CountrySelectorViewModel : ViewModelBase
 	{
@@ -62,6 +62,7 @@ namespace Globetrotter.GuiLayer
 		}
 
 		public CountrySelectorViewModel(CountriesController countriesController)
+			: base()
 		{
 			m_countriesController = countriesController;
 
@@ -91,8 +92,16 @@ namespace Globetrotter.GuiLayer
 			{
 				if(ReactOnInput == true)
 				{
-					//todo: handle input
+					if(args.InputTypes.And(InputType.ClickDouble) == InputType.ClickDouble)
+					{
+						if(m_currCountryIndex >= 0)
+						{
+							m_countriesController.AddCountry();
+						}
+					}
 				}
+
+				//todo: other inputs
 			}
 		}
 	}

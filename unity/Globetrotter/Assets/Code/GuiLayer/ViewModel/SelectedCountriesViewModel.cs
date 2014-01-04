@@ -6,7 +6,7 @@ using Globetrotter.ApplicationLayer;
 using Globetrotter.DomainLayer;
 using Globetrotter.InputLayer;
 
-namespace Globetrotter.GuiLayer
+namespace Globetrotter.GuiLayer.ViewModel
 {
 	public class SelectedCountriesViewModel : ViewModelBase
 	{
@@ -71,6 +71,7 @@ namespace Globetrotter.GuiLayer
 		}
 
 		public SelectedCountriesViewModel(CountriesController countriesController)
+			: base()
 		{
 			m_countriesController = countriesController;
 

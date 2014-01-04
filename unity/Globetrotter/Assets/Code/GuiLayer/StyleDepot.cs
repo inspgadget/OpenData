@@ -76,32 +76,32 @@ namespace Globetrotter.GuiLayer
 		private StyleDepot()
 		{
 			m_focusedBoxStyle = new GUIStyle();
-			Texture2D texture = new Texture2D(32, 32);
-			/*int row = 0;
-			int col =0;
-			while(row < 32)
+			Texture2D texture = new Texture2D(32, 32, TextureFormat.ARGB32, false);
+			Color color = new Color(1.0f, 0.8f, 0.01f, 1.0f);
+			int x = 0;
+			int y = 0;
+			while(x < 32)
 			{
-				while(col < 32)
+				texture.SetPixel(x, y, color);
+				y++;
+				if(y >= 32)
 				{
-					texture.
-					col++;
-					if(col >= 32)
-					{
-						col = 0;
-						row++;
-					}
+					y = 0;
+					x++;
 				}
-			}*/
+			}
+			texture.Apply();
 			m_focusedBoxStyle.normal.background = texture;
+			m_focusedBoxStyle.normal.textColor = Color.black;
 
 			m_unfocusedBoxStyle = new GUIStyle();
-			m_unfocusedBoxStyle.normal.background = texture;
+			m_unfocusedBoxStyle.normal.textColor = Color.white;
 
 			m_selectedCountryStyle = new GUIStyle();
 			m_selectedCountryStyle.normal.textColor = Color.white;
 
 			m_selectedCountryHoverStyle = new GUIStyle();
-			m_selectedCountryHoverStyle.normal.textColor = Color.yellow;
+			m_selectedCountryHoverStyle.normal.textColor = Color.blue;
 		}
 	}
 }

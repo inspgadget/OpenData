@@ -3,10 +3,10 @@ using System.Collections;
 
 using Globetrotter.DomainLayer;
 using Globetrotter.GuiLayer;
+using Globetrotter.GuiLayer.ViewModel;
 
 public class SelectedCountriesBehavior : MonoBehaviour
 {
-	//private CountriesController m_countriesController;
 	private SelectedCountriesViewModel m_selectedCountriesViewModel;
 
 	void OnGUI()
@@ -20,7 +20,17 @@ public class SelectedCountriesBehavior : MonoBehaviour
 			int screenHeight = Screen.height;
 			
 			//box
-			GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty);
+			if(m_selectedCountriesViewModel.ReactOnInput == true)
+			{
+				GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10),
+				        	string.Empty,
+				        	StyleDepot.Instance.FocusedBoxStyle);
+			}
+			else
+			{
+				GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty,
+				        	StyleDepot.Instance.UnfocusedBoxStyle);
+			}
 
 			//labels
 			if((selectedCountries != null) && (selectedCountries.Length > 0))

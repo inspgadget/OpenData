@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Globetrotter.InputLayer;
 
-namespace Globetrotter.GuiLayer
+namespace Globetrotter.GuiLayer.ViewModel
 {
 	public class GlobeViewModel : ViewModelBase
 	{
@@ -70,6 +70,7 @@ namespace Globetrotter.GuiLayer
 		}
 
 		public GlobeViewModel(float speed)
+			: base()
 		{
 			m_horizontalAngle = 0.0f;
 			m_verticalAngle = 0.0f;

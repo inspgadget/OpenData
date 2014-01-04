@@ -5,6 +5,7 @@ using System.Text;
 
 using Globetrotter.DomainLayer;
 using Globetrotter.GuiLayer;
+using Globetrotter.GuiLayer.ViewModel;
 using Globetrotter.PersistenceLayer;
 
 public class CountrySelectorBehavior : MonoBehaviour
@@ -25,10 +26,16 @@ public class CountrySelectorBehavior : MonoBehaviour
 				int screenHeight = Screen.height;
 				int boxCenter = screenWidth - 110;
 
+				GUIStyle style = StyleDepot.Instance.UnfocusedBoxStyle;
+
+				if(m_countrySelectorViewModel.ReactOnInput == true)
+				{
+					style = StyleDepot.Instance.FocusedBoxStyle;
+				}
+
 				//boxes
-				GUI.Box(new Rect(screenWidth - 220, 10, 210, (screenHeight / 2) - 15), string.Empty);
-				GUI.Box(new Rect(boxCenter - 37, 15, 74, 74), string.Empty/*, StyleDepot.Instance.FocusedBoxStyle*/);
-				//GUI.Label(new Rect(boxCenter - 37, 15, 74, 74), string.Empty, StyleDepot.Instance.FocusedBoxStyle);
+				GUI.Box(new Rect(screenWidth - 220, 10, 210, (screenHeight / 2) - 15), string.Empty, style);
+				GUI.Box(new Rect(boxCenter - 37, 15, 74, 74), string.Empty);
 
 				//flags
 				Texture prevCountryTexture = flagLoader.LoadFlag(m_countrySelectorViewModel.PreviousCountry.IsoAlphaThreeCode);
@@ -64,7 +71,7 @@ public class CountrySelectorBehavior : MonoBehaviour
 				sb.Append("Population: ").Append(currCountry.Population).Append("\n");
 				sb.Append("Surface Area: ").Append(currCountry.SurfaceArea).Append("sq. km");
 				
-				GUI.Label(new Rect(Screen.width - 210, 90, 200, 280), sb.ToString());
+				GUI.Label(new Rect(Screen.width - 210, 90, 200, 180), sb.ToString(), style);
 			}
 		}
 	}

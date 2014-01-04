@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Globetrotter.GuiLayer
+namespace Globetrotter.GuiLayer.ViewModel
 {
 	public abstract class ViewModelBase
 	{

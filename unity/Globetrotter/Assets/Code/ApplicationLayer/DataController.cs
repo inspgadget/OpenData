@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using Globetrotter.DataLayer;
@@ -18,6 +19,9 @@ namespace Globetrotter.ApplicationLayer
 		private WorldBankIndicator m_currIndicator;
 		private Dictionary<string, WorldBankIndicator> m_indicators;
 
+		private int m_yearFrom;
+		private int m_yearTo;
+
 		public WorldBankIndicator CurrentIndicator
 		{
 			get
@@ -25,6 +29,63 @@ namespace Globetrotter.ApplicationLayer
 				lock(m_lockObject)
 				{
 					return m_currIndicator;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObject)
+				{
+					m_currIndicator = value;
+				}
+			}
+		}
+
+		public WorldBankIndicator[] Indicators
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_indicators.Values.ToArray();
+				}
+			}
+		}
+		
+		public int YearFrom
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_yearFrom;
+				}
+			}
+			
+			set
+			{
+				lock(m_lockObject)
+				{
+					m_yearFrom = value;
+				}
+			}
+		}
+
+		public int YearTo
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_yearTo;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObject)
+				{
+					m_yearTo = value;
 				}
 			}
 		}
@@ -50,11 +111,31 @@ namespace Globetrotter.ApplicationLayer
 					m_currIndicator = null;
 				}
 			}
+
+			m_yearTo = DateTime.Now.Year;
+			m_yearFrom = m_yearTo - 10;
+		}
+		
+		public WorldBankData FetchData(Country[] countries, WorldBankIndicator indicator)
+		{
+			return FetchData(countries, indicator, YearFrom, YearTo);
 		}
 
 		public WorldBankData FetchData(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)
 		{
 			return indicator.FetchData(CountriesAsCodes(countries), yearFrom, yearTo);
+		}
+		
+		public void FetchDataAsync(Country[] countries, WorldBankIndicator indicator)
+		{
+			Thread thread = new Thread(delegate(){
+				WorldBankData data = FetchData(countries, indicator, YearFrom, YearTo);
+				
+				OnWorldBankDataFetched(data);
+			});
+			
+			thread.IsBackground = true;
+			thread.Start();
 		}
 
 		public void FetchDataAsync(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using Globetrotter.GuiLayer;
+using Globetrotter.GuiLayer.ViewModel;
 
 public class GlobeBehavior : MonoBehaviour
 {
