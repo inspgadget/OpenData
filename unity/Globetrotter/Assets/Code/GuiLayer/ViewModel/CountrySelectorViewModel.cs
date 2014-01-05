@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Globetrotter.ApplicationLayer;
 using Globetrotter.DomainLayer;
@@ -66,8 +67,10 @@ namespace Globetrotter.GuiLayer.ViewModel
 		{
 			m_countriesController = countriesController;
 
-			m_currCountryIndex = 0;
 			m_countries = m_countriesController.Countries;
+			Array.Sort(m_countries, new Country.CountryComparer(Country.SortProperty.Name));
+
+			m_currCountryIndex = GetIndexOfCountry(m_countriesController.CurrentCountry);
 		}
 		
 		private int GetIndexOfCountry(Country country)
@@ -92,16 +95,53 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
-					if(args.InputTypes.And(InputType.ClickDouble) == InputType.ClickDouble)
+					if(args.HasInputType(InputType.ClickDouble) == true)
 					{
 						if(m_currCountryIndex >= 0)
 						{
 							m_countriesController.AddCountry();
 						}
 					}
-				}
 
-				//todo: other inputs
+					int scroll = 0;
+
+					if(args.HasInputType(InputType.ScrollLeft) == true)
+					{
+						scroll = -1;
+					}
+
+					if(args.HasInputType(InputType.ScrollRight) == true)
+					{
+						scroll = 1;
+					}
+
+					if(args.HasInputType(InputType.WipeLeft) == true)
+					{
+						scroll = -10;
+					}
+					
+					if(args.HasInputType(InputType.WipeRight) == true)
+					{
+						scroll = 10;
+					}
+
+					int currCountryIndex = m_currCountryIndex + scroll;
+
+					if(currCountryIndex != m_currCountryIndex)
+					{
+						if(currCountryIndex < 0)
+						{
+							currCountryIndex = m_countries.Length + currCountryIndex;
+						}
+						else if(currCountryIndex >= m_countries.Length)
+						{
+							currCountryIndex = 0 + (currCountryIndex - m_countries.Length);
+						}
+
+						m_currCountryIndex = currCountryIndex;
+						m_countriesController.CurrentCountry = m_countries[m_currCountryIndex];
+					}
+				}
 			}
 		}
 	}

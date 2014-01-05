@@ -102,7 +102,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
-					if(args.InputTypes.And(InputType.ClickDouble) == InputType.ClickDouble)
+					if(args.HasInputType(InputType.ClickDouble) == true)
 					{
 						if((m_currIndicatorIndex >= 0) && (m_isFetching == false))
 						{
@@ -111,6 +111,45 @@ namespace Globetrotter.GuiLayer.ViewModel
 							m_dataController.CurrentIndicator = m_indicators[m_currIndicatorIndex];
 							m_dataController.FetchDataAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
 						}
+					}
+					
+					int scroll = 0;
+					
+					if(args.HasInputType(InputType.ScrollLeft) == true)
+					{
+						scroll = -1;
+					}
+					
+					if(args.HasInputType(InputType.ScrollRight) == true)
+					{
+						scroll = 1;
+					}
+					
+					if(args.HasInputType(InputType.WipeLeft) == true)
+					{
+						scroll = -10;
+					}
+					
+					if(args.HasInputType(InputType.WipeRight) == true)
+					{
+						scroll = 10;
+					}
+					
+					int currIndicatorIndex = m_currIndicatorIndex + scroll;
+					
+					if(currIndicatorIndex != m_currIndicatorIndex)
+					{
+						if(currIndicatorIndex < 0)
+						{
+							currIndicatorIndex = m_indicators.Length + currIndicatorIndex;
+						}
+						else if(currIndicatorIndex >= m_indicators.Length)
+						{
+							currIndicatorIndex = 0 + (currIndicatorIndex - m_indicators.Length);
+						}
+						
+						m_currIndicatorIndex = currIndicatorIndex;
+						m_dataController.CurrentIndicator = m_indicators[m_currIndicatorIndex];
 					}
 				}
 			}

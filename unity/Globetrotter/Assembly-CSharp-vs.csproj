@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Code\ApplicationLayer\CountriesController.cs" />
      <Compile Include="Assets\Code\ApplicationLayer\DataController.cs" />
+     <Compile Include="Assets\Code\ApplicationLayer\SelectedCountriesChangedEventArgs.cs" />
      <Compile Include="Assets\Code\Behaviors\CameraZoomBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountryInfoBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountrySelectorBehavior.cs" />
@@ -58,7 +59,7 @@
      <Compile Include="Assets\Code\Behaviors\KeyboardInputController.cs" />
      <Compile Include="Assets\Code\Behaviors\RotatingGlobeBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\SelectedCountriesBehavior.cs" />
-     <Compile Include="Assets\Code\Behaviors\YearFromBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\YearRangeBehavior.cs" />
      <Compile Include="Assets\Code\DataLayer\IWorldBankDataParser.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankData.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankDataFetchedEventArgs.cs" />
@@ -67,6 +68,7 @@
      <Compile Include="Assets\Code\DataLayer\WorldBankIndicator.cs" />
      <Compile Include="Assets\Code\DomainLayer\Country.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\ChangeSceneEventArgs.cs" />
+     <Compile Include="Assets\Code\GuiLayer\Controllers\DataSceneGuiController.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\GlobeSceneGuiController.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\GuiController.cs" />
      <Compile Include="Assets\Code\GuiLayer\StyleDepot.cs" />
@@ -77,6 +79,7 @@
      <Compile Include="Assets\Code\GuiLayer\ViewModel\SelectedCountriesViewModel.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\ViewModelBase.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\YearFromViewModel.cs" />
+     <Compile Include="Assets\Code\GuiLayer\ViewModel\YearToViewModel.cs" />
      <Compile Include="Assets\Code\InputLayer\IInputController.cs" />
      <Compile Include="Assets\Code\InputLayer\InputReceivedEventArgs.cs" />
      <Compile Include="Assets\Code\InputLayer\InputType.cs" />

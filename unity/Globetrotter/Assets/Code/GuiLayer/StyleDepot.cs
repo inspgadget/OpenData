@@ -13,6 +13,9 @@ namespace Globetrotter.GuiLayer
 		private GUIStyle m_focusedBoxStyle;
 		private GUIStyle m_unfocusedBoxStyle;
 
+		private GUIStyle m_focusedTextStyle;
+		private GUIStyle m_unfocusedTextStyle;
+
 		private GUIStyle m_selectedCountryStyle;
 		private GUIStyle m_selectedCountryHoverStyle;
 
@@ -36,6 +39,17 @@ namespace Globetrotter.GuiLayer
 				lock(m_lockObject)
 				{
 					return m_focusedBoxStyle;
+				}
+			}
+		}
+		
+		public GUIStyle FocusedTextStyle
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_focusedTextStyle;
 				}
 			}
 		}
@@ -72,30 +86,31 @@ namespace Globetrotter.GuiLayer
 				}
 			}
 		}
+		
+		public GUIStyle UnfocusedTextStyle
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_unfocusedTextStyle;
+				}
+			}
+		}
 
 		private StyleDepot()
 		{
 			m_focusedBoxStyle = new GUIStyle();
-			Texture2D texture = new Texture2D(32, 32, TextureFormat.ARGB32, false);
-			Color color = new Color(1.0f, 0.8f, 0.01f, 1.0f);
-			int x = 0;
-			int y = 0;
-			while(x < 32)
-			{
-				texture.SetPixel(x, y, color);
-				y++;
-				if(y >= 32)
-				{
-					y = 0;
-					x++;
-				}
-			}
-			texture.Apply();
-			m_focusedBoxStyle.normal.background = texture;
-			m_focusedBoxStyle.normal.textColor = Color.black;
+			m_focusedBoxStyle.normal.background = Resources.Load<Texture2D>("box_focused");
 
 			m_unfocusedBoxStyle = new GUIStyle();
-			m_unfocusedBoxStyle.normal.textColor = Color.white;
+			m_unfocusedBoxStyle.normal.background = Resources.Load<Texture2D>("box_unfocused");
+
+			m_focusedTextStyle = new GUIStyle();
+			m_focusedTextStyle.normal.textColor = Color.black;
+
+			m_unfocusedTextStyle = new GUIStyle();
+			m_unfocusedTextStyle.normal.textColor = Color.white;
 
 			m_selectedCountryStyle = new GUIStyle();
 			m_selectedCountryStyle.normal.textColor = Color.white;

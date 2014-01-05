@@ -15,6 +15,9 @@ namespace Globetrotter.ApplicationLayer
 
 		private const int MaxSelectedCountries = 5;
 
+		public delegate void SelectedCountriesChangedEventHandler(object sender, SelectedCountriesChangedEventArgs args);
+		public event SelectedCountriesChangedEventHandler SelectedCountriesChanged;
+
 		private DataController m_dataController;
 
 		private Country m_currCountry;
@@ -28,6 +31,14 @@ namespace Globetrotter.ApplicationLayer
 				lock(m_lockObj)
 				{
 					return m_currCountry;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObj)
+				{
+					m_currCountry = value;
 				}
 			}
 		}
@@ -73,23 +84,26 @@ namespace Globetrotter.ApplicationLayer
 			{
 				foreach(Country country in countries)
 				{
-					m_countries[country.IsoAlphaThreeCode] = country;
+					if(string.IsNullOrEmpty(country.CapitalCity) == false)
+					{
+						m_countries[country.IsoAlphaThreeCode] = country;
 
-					//load indicator data
-					Thread t = new Thread(delegate(){
-						//population
-						WorldBankIndicator populationIndicator = m_dataController.GetIndicator("");
-						WorldBankData populationData = m_dataController.FetchData(new Country[]{ country }, populationIndicator, year, year);
-						country.Population = (int)populationData.Items[0].Value;
+						//load indicator data
+						Thread t = new Thread(delegate(){
+							//population
+							WorldBankIndicator populationIndicator = m_dataController.GetIndicator("");
+							WorldBankData populationData = m_dataController.FetchData(new Country[]{ country }, populationIndicator, year, year);
+							country.Population = (int)populationData.Items[0].Value;
 
-						//surface area
-						WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.LND.TOTL.K2");
-						WorldBankData surfaceAreaData = m_dataController.FetchData(new Country[]{ country }, surfaceAreaIndicator, year, year);
-						country.SurfaceArea = surfaceAreaData.Items[0].Value;
-					});
+							//surface area
+							WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.LND.TOTL.K2");
+							WorldBankData surfaceAreaData = m_dataController.FetchData(new Country[]{ country }, surfaceAreaIndicator, year, year);
+							country.SurfaceArea = surfaceAreaData.Items[0].Value;
+						});
 
-					t.IsBackground = true;
-					//t.Start();
+						t.IsBackground = true;
+						//t.Start();
+					}
 				}
 			}
 
@@ -126,6 +140,8 @@ namespace Globetrotter.ApplicationLayer
 					m_selectedCountries.Add(country);
 				}
 			}
+			
+			OnSelectedCountriesChanged(SelectedCountries);
 		}
 
 		public void RemoveCountry()
@@ -145,11 +161,21 @@ namespace Globetrotter.ApplicationLayer
 					m_selectedCountries.Remove(country);
 				}
 			}
+			
+			OnSelectedCountriesChanged(SelectedCountries);
 		}
 
-		protected void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)
+		public void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)
 		{
 			//
+		}
+
+		protected void OnSelectedCountriesChanged(Country[] countries)
+		{
+			if(SelectedCountriesChanged != null)
+			{
+				SelectedCountriesChanged(this, new SelectedCountriesChangedEventArgs(countries));
+			}
 		}
 	}
 }

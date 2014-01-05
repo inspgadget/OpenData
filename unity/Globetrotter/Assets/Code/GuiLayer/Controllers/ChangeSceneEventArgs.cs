@@ -15,6 +15,7 @@ namespace Globetrotter.GuiLayer.Controllers
 		}
 
 		public ChangeSceneEventArgs(string sceneName)
+			: base()
 		{
 			m_sceneName = sceneName;
 		}

@@ -26,16 +26,16 @@ public class CountrySelectorBehavior : MonoBehaviour
 				int screenHeight = Screen.height;
 				int boxCenter = screenWidth - 110;
 
+				//boxes
 				GUIStyle style = StyleDepot.Instance.UnfocusedBoxStyle;
-
+				
 				if(m_countrySelectorViewModel.ReactOnInput == true)
 				{
 					style = StyleDepot.Instance.FocusedBoxStyle;
 				}
 
-				//boxes
-				GUI.Box(new Rect(screenWidth - 220, 10, 210, (screenHeight / 2) - 15), string.Empty, style);
-				GUI.Box(new Rect(boxCenter - 37, 15, 74, 74), string.Empty);
+				GUI.Box(new Rect(screenWidth - 220, 60, 210, (screenHeight / 2) - 65), string.Empty, style);
+				GUI.Box(new Rect(boxCenter - 37, 10, 74, 50), string.Empty, style);
 
 				//flags
 				Texture prevCountryTexture = flagLoader.LoadFlag(m_countrySelectorViewModel.PreviousCountry.IsoAlphaThreeCode);
@@ -64,6 +64,13 @@ public class CountrySelectorBehavior : MonoBehaviour
 				GUI.Label(new Rect(boxCenter + 42, 20, 64, 32), nextCountryTexture);
 
 				//country info
+				style = StyleDepot.Instance.UnfocusedTextStyle;
+
+				if(m_countrySelectorViewModel.ReactOnInput == true)
+				{
+					style = StyleDepot.Instance.FocusedTextStyle;
+				}
+
 				StringBuilder sb = new StringBuilder();
 
 				sb.Append(currCountry.Name).Append(" - ").Append(currCountry.IsoAlphaThreeCode).Append("\n\n");

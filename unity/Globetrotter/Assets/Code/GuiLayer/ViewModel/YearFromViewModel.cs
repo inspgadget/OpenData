@@ -12,6 +12,17 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 		private int m_min;
 
+		public int Min
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_min;
+				}
+			}
+		}
+
 		public int YearFrom
 		{
 			get
@@ -51,7 +62,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 					{
 						int year = m_dataController.YearFrom + 1;
 						
-						if(year < m_dataController.YearTo)
+						if(year <= m_dataController.YearTo)
 						{
 							m_dataController.YearFrom = year;
 						}

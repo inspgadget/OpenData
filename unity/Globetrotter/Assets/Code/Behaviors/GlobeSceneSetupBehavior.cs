@@ -58,7 +58,6 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		if(countrySelectorViewModel == null)
 		{
 			countrySelectorViewModel = new CountrySelectorViewModel(countriesController);
-			inputController.InputReceived -= countrySelectorViewModel.InputReceivedHandler;
 			inputController.InputReceived += countrySelectorViewModel.InputReceivedHandler;
 
 			ObjectDepot.Instance.Store<CountrySelectorViewModel>(countrySelectorViewModel);
@@ -70,7 +69,6 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		if(selectedCountriesViewModel == null)
 		{
 			selectedCountriesViewModel = new SelectedCountriesViewModel(countriesController);
-			inputController.InputReceived -= selectedCountriesViewModel.InputReceivedHandler;
 			inputController.InputReceived += selectedCountriesViewModel.InputReceivedHandler;
 
 			ObjectDepot.Instance.Store<SelectedCountriesViewModel>(selectedCountriesViewModel);

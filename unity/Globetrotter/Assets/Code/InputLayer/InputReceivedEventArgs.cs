@@ -15,11 +15,13 @@ namespace Globetrotter.InputLayer
 		}
 		
 		public InputReceivedEventArgs(InputType inputTypes)
+			: base()
 		{
 			m_inputTypes = inputTypes;
 		}
 		
 		public InputReceivedEventArgs(InputType[] inputTypes)
+			: base()
 		{
 			m_inputTypes = 0;
 			

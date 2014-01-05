@@ -40,13 +40,13 @@ namespace Globetrotter.GuiLayer.Controllers
 			m_selectedCountriesViewModel.ReactOnInput = false;
 		}
 
-		private void InputReceivedHandler(object sender, InputReceivedEventArgs args)
+		public void InputReceivedHandler(object sender, InputReceivedEventArgs args)
 		{
 			lock(m_lockObj)
 			{
-				if(args.InputTypes.And(InputType.ClickLong) == InputType.ClickLong)
+				if(args.HasInputType(InputType.ClickLong) == true)
 				{
-					//disconnect from event handler
+					//disconnect from event
 					m_inputController.InputReceived -= InputReceivedHandler;
 
 					m_inputController.InputReceived -= m_cameraZoomViewModel.InputReceivedHandler;
@@ -61,8 +61,8 @@ namespace Globetrotter.GuiLayer.Controllers
 				}
 				else
 				{
-					if((args.InputTypes.And(InputType.FocusPrevious) == InputType.FocusPrevious) ||
-					   	(args.InputTypes.And(InputType.FocusNext) == InputType.FocusNext))
+					if((args.HasInputType(InputType.FocusPrevious) == true) ||
+					   	(args.HasInputType(InputType.FocusNext) == true))
 					{
 						m_countrySelectorViewModel.ReactOnInput = !m_countrySelectorViewModel.ReactOnInput;
 						m_selectedCountriesViewModel.ReactOnInput = !m_selectedCountriesViewModel.ReactOnInput;

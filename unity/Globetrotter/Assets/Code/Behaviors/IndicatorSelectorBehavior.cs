@@ -2,6 +2,7 @@
 using System.Collections;
 
 using Globetrotter.DataLayer;
+using Globetrotter.GuiLayer;
 using Globetrotter.GuiLayer.ViewModel;
 
 public class IndicatorSelectorBehavior : MonoBehaviour
@@ -16,9 +17,29 @@ public class IndicatorSelectorBehavior : MonoBehaviour
 			int screenWidth = Screen.width;
 			int screenWidthHalf = screenWidth / 2;
 
-			GUI.Label(new Rect(screenWidthHalf - 200, 10, 120, 50), m_indicatorSelectorViewModel.PreviousIndicator.Name);
-			GUI.Label(new Rect(screenWidthHalf - 60, 10, 120, 50), m_indicatorSelectorViewModel.CurrentIndicator.Name);
-			GUI.Label(new Rect(screenWidthHalf + 80, 10, 120, 50), m_indicatorSelectorViewModel.NextIndicator.Name);
+			//boxes
+			GUIStyle style = StyleDepot.Instance.UnfocusedBoxStyle;
+
+			if(m_indicatorSelectorViewModel.ReactOnInput == true)
+			{
+				style = StyleDepot.Instance.FocusedBoxStyle;
+			}
+
+			GUI.Box(new Rect(screenWidthHalf - 100, 10, 200, 50), string.Empty, style);
+
+			//labels
+			GUI.Label(new Rect(screenWidthHalf - 420, 10, 200, 50), m_indicatorSelectorViewModel.PreviousIndicator.Name);
+
+			/*style = StyleDepot.Instance.UnfocusedTextStyle;
+
+			if(m_indicatorSelectorViewModel.ReactOnInput == true)
+			{
+				style = StyleDepot.Instance.FocusedTextStyle;
+			}*/
+
+			GUI.Label(new Rect(screenWidthHalf - 100, 10, 200, 50), m_indicatorSelectorViewModel.CurrentIndicator.Name/*, style*/);
+
+			GUI.Label(new Rect(screenWidthHalf + 120, 10, 200, 50), m_indicatorSelectorViewModel.NextIndicator.Name);
 		}
 	}
 

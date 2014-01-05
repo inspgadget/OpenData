@@ -20,42 +20,44 @@ public class SelectedCountriesBehavior : MonoBehaviour
 			int screenHeight = Screen.height;
 			
 			//box
+			GUIStyle style = StyleDepot.Instance.UnfocusedBoxStyle;
+			
 			if(m_selectedCountriesViewModel.ReactOnInput == true)
 			{
-				GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10),
-				        	string.Empty,
-				        	StyleDepot.Instance.FocusedBoxStyle);
-			}
-			else
-			{
-				GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty,
-				        	StyleDepot.Instance.UnfocusedBoxStyle);
+				style = StyleDepot.Instance.FocusedBoxStyle;
 			}
 
+			GUI.Box(new Rect(screenWidth - 220, (screenHeight / 2) + 5, 210, (screenHeight / 2) - 10), string.Empty, style);
+
 			//labels
+			style = StyleDepot.Instance.UnfocusedTextStyle;
+			
+			if(m_selectedCountriesViewModel.ReactOnInput == true)
+			{
+				style = StyleDepot.Instance.FocusedTextStyle;
+			}
+
 			if((selectedCountries != null) && (selectedCountries.Length > 0))
 			{
 				int top = (screenHeight / 2) + 15;
 
 				for(int i = 0; i < selectedCountries.Length; i++)
 				{
-					GUIStyle style = StyleDepot.Instance.SelectedCountryStyle;
+					GUIStyle s = style;
 
-					if(i == m_selectedCountriesViewModel.CurrentCountryIndex)
+					if((i == m_selectedCountriesViewModel.CurrentCountryIndex) && (m_selectedCountriesViewModel.ReactOnInput == true))
 					{
-						style = StyleDepot.Instance.SelectedCountryHoverStyle;
+						s = StyleDepot.Instance.SelectedCountryHoverStyle;
 					}
 
-					GUI.Label(new Rect( screenWidth - 210, top, 200, 25), selectedCountries[i].Name, style);
+					GUI.Label(new Rect( screenWidth - 210, top, 200, 25), selectedCountries[i].Name, s);
 
 					top = top + 30;
 				}
 			}
 			else
 			{
-				GUI.Label(new Rect( screenWidth - 210, (screenHeight / 2) + 15, 200, 25),
-							"No countries selected.",
-				          	StyleDepot.Instance.SelectedCountryStyle);
+				GUI.Label(new Rect( screenWidth - 210, (screenHeight / 2) + 15, 200, 25), "No countries selected.", style);
 			}
 		}
 	}

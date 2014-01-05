@@ -16,6 +16,7 @@ namespace Globetrotter.DataLayer
 		}
 		
 		public WorldBankDataFetchedEventArgs(WorldBankData data)
+			: base()
 		{
 			m_data = data;
 		}

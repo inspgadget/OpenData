@@ -11,6 +11,15 @@ public class DataSceneSetupBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
+	public GameObject yearRange;
+	public GameObject yearFrom;
+	public GameObject yearTo;
+
+	public Material focusedObjectMaterial;
+	public Material unfocusedObjectMaterial;
+
+	private DataSceneGuiController m_dataSceneGuiController;
+
 	private string m_sceneName;
 	
 	void Start()
@@ -49,7 +58,6 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		if(indicatorSelectorViewModel == null)
 		{
 			indicatorSelectorViewModel = new IndicatorSelectorViewModel(countriesController, dataController);
-			inputController.InputReceived -= indicatorSelectorViewModel.InputReceivedHandler;
 			inputController.InputReceived += indicatorSelectorViewModel.InputReceivedHandler;
 			
 			ObjectDepot.Instance.Store<IndicatorSelectorViewModel>(indicatorSelectorViewModel);
@@ -57,16 +65,28 @@ public class DataSceneSetupBehavior : MonoBehaviour
 
 		//year from view model
 		YearFromViewModel yearFromViewModel = new YearFromViewModel(dataController, 1960);
-		inputController.InputReceived -= yearFromViewModel.InputReceivedHandler;
 		inputController.InputReceived += yearFromViewModel.InputReceivedHandler;
+		
+		//year to view model
+		YearToViewModel yearToViewModel = new YearToViewModel(dataController, System.DateTime.Now.Year);
+		inputController.InputReceived += yearToViewModel.InputReceivedHandler;
+		
+		//data scene gui controller
+		m_dataSceneGuiController = new DataSceneGuiController(indicatorSelectorViewModel,
+		                                                      	yearFromViewModel,
+		                                                      	yearToViewModel,
+		                                                      	inputController);
+		m_dataSceneGuiController.ChangeScene += ChangeSceneHandler;
 
 		//indicator selector behavior
 		IndicatorSelectorBehavior indicatorSelectorBehavior = gameObject.AddComponent<IndicatorSelectorBehavior>();
 		indicatorSelectorBehavior.Init(indicatorSelectorViewModel);
 
-		//year from view behavior
-		YearFromBehavior yearFromBehavior = gameObject.AddComponent<YearFromBehavior>();
-		yearFromBehavior.Init(yearFromViewModel);
+		//year range behavior
+		YearRangeBehavior yearRangeBehavior = gameObject.AddComponent<YearRangeBehavior>();
+		yearRangeBehavior.Init(yearFromViewModel, yearToViewModel,
+		                       	yearRange, yearFrom, yearTo,
+		                       	focusedObjectMaterial, unfocusedObjectMaterial);
 	}
 	
 	void FixedUpdate()

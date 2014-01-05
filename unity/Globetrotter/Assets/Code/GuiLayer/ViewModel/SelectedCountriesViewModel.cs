@@ -13,6 +13,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private CountriesController m_countriesController;
 
 		private int m_currCountryIndex;
+		private Country[] m_selectedCountries;
 
 		public int CurrentCountryIndex
 		{
@@ -65,7 +66,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				lock(m_lockObj)
 				{
-					return m_countriesController.SelectedCountries;
+					return m_selectedCountries;
 				}
 			}
 		}
@@ -74,8 +75,11 @@ namespace Globetrotter.GuiLayer.ViewModel
 			: base()
 		{
 			m_countriesController = countriesController;
+			m_countriesController.SelectedCountriesChanged += SelectedCountriesChangedHandler;
 
-			if(m_countriesController.SelectedCountries.Length > 0)
+			m_selectedCountries = m_countriesController.SelectedCountries;
+
+			if(m_selectedCountries.Length > 0)
 			{
 				m_currCountryIndex = 0;
 			}
@@ -91,9 +95,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
-					if(args.InputTypes.And(InputType.WipeLeft) == InputType.WipeLeft)
+					if(args.HasInputType(InputType.WipeLeft) == true)
 					{
-						m_countriesController.RemoveCountry(m_countriesController.Countries[m_currCountryIndex]);
+						m_countriesController.RemoveCountry(m_selectedCountries[m_currCountryIndex]);
 
 						int n = m_countriesController.SelectedCountries.Length;
 
@@ -107,7 +111,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 					}
 
-					if(args.InputTypes.And(InputType.ScrollUp) == InputType.ScrollUp)
+					if(args.HasInputType(InputType.ScrollUp) == true)
 					{
 						if(m_currCountryIndex >= 0)
 						{
@@ -120,7 +124,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 					}
 
-					if(args.InputTypes.And(InputType.ScrollDown) == InputType.ScrollDown)
+					if(args.HasInputType(InputType.ScrollDown) == true)
 					{
 						if(m_currCountryIndex >= 0)
 						{
@@ -133,6 +137,14 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 					}
 				}
+			}
+		}
+
+		public void SelectedCountriesChangedHandler(object sender, SelectedCountriesChangedEventArgs args)
+		{
+			lock(m_lockObj)
+			{
+				m_selectedCountries = args.SelectedCountries;
 			}
 		}
 	}

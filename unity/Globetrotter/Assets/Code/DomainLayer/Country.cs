@@ -182,14 +182,33 @@ namespace Globetrotter.DomainLayer
 
 		public class CountryComparer : IComparer<Country>
 		{
-			public CountryComparer()
+			private SortProperty m_sortProperty;
+
+			public CountryComparer(SortProperty sortProperty)
 			{
+				m_sortProperty = sortProperty;
 			}
 
 			public int Compare(Country a, Country b)
 			{
-				return a.IsoAlphaThreeCode.CompareTo(b.IsoAlphaThreeCode);
+				switch(m_sortProperty)
+				{
+					case SortProperty.IsoAlphaThreeCode:
+						return a.IsoAlphaThreeCode.CompareTo(b.IsoAlphaThreeCode);
+
+					case SortProperty.Name:
+						return a.Name.CompareTo(b.Name);
+
+					default:
+						return 0;
+				}
 			}
+		}
+
+		public enum SortProperty
+		{
+			IsoAlphaThreeCode,
+			Name
 		}
 	}
 }
