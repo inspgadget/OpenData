@@ -15,6 +15,7 @@ namespace Globetrotter.GuiLayer.Controllers
 		private IndicatorSelectorViewModel m_indicatorSelectorViewModel;
 		private YearFromViewModel m_yearFromViewModel;
 		private YearToViewModel m_yearToViewModel;
+		private ChartViewModel m_chartViewModel;
 
 		private int m_focusIndex;
 		private List<ViewModelBase> m_focusList;
@@ -22,6 +23,7 @@ namespace Globetrotter.GuiLayer.Controllers
 		public DataSceneGuiController(IndicatorSelectorViewModel indicatorSelectorViewModel,
 		                              	YearFromViewModel yearFromViewModel,
 		                              	YearToViewModel yearToViewModel,
+		                              	ChartViewModel chartViewModel,
 		                              	IInputController inputController)
 			: base()
 		{
@@ -42,6 +44,10 @@ namespace Globetrotter.GuiLayer.Controllers
 			m_yearToViewModel.ReactOnInput = false;
 			m_focusList.Add(m_yearToViewModel);
 
+			m_chartViewModel = chartViewModel;
+			m_chartViewModel.ReactOnInput = false;
+			m_focusList.Add(m_chartViewModel);
+
 			m_focusIndex = 0;
 		}
 
@@ -56,6 +62,7 @@ namespace Globetrotter.GuiLayer.Controllers
 					
 					m_inputController.InputReceived -= m_yearToViewModel.InputReceivedHandler;
 					m_inputController.InputReceived -= m_yearToViewModel.InputReceivedHandler;
+					m_inputController.InputReceived -= m_chartViewModel.InputReceivedHandler;
 					
 					//stop reacting on input
 					m_indicatorSelectorViewModel.ReactOnInput = false;

@@ -44,7 +44,7 @@ namespace Globetrotter.GuiLayer.Controllers
 		{
 			lock(m_lockObj)
 			{
-				if(args.HasInputType(InputType.ClickLong) == true)
+				if((args.HasInputType(InputType.ClickLong) == true) && (m_selectedCountriesViewModel.SelectedCountries.Length > 0))
 				{
 					//disconnect from event
 					m_inputController.InputReceived -= InputReceivedHandler;

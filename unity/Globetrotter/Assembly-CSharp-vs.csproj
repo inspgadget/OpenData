@@ -50,6 +50,7 @@
      <Compile Include="Assets\Code\ApplicationLayer\DataController.cs" />
      <Compile Include="Assets\Code\ApplicationLayer\SelectedCountriesChangedEventArgs.cs" />
      <Compile Include="Assets\Code\Behaviors\CameraZoomBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\ChartBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountryInfoBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountrySelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\DataSceneSetupBehavior.cs" />
@@ -71,8 +72,10 @@
      <Compile Include="Assets\Code\GuiLayer\Controllers\DataSceneGuiController.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\GlobeSceneGuiController.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\GuiController.cs" />
+     <Compile Include="Assets\Code\GuiLayer\DataPoint.cs" />
      <Compile Include="Assets\Code\GuiLayer\StyleDepot.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\CameraZoomViewModel.cs" />
+     <Compile Include="Assets\Code\GuiLayer\ViewModel\ChartViewModel.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\CountrySelectorViewModel.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\GlobeViewModel.cs" />
      <Compile Include="Assets\Code\GuiLayer\ViewModel\IndicatorSelectorViewModel.cs" />

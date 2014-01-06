@@ -87,14 +87,33 @@ namespace Globetrotter.DataLayer
 		
 		public class WorldBankDataItemComparer : IComparer<WorldBankDataItem>
 		{
-			public WorldBankDataItemComparer()
+			private SortProperty m_sortProperty;
+
+			public WorldBankDataItemComparer(SortProperty sortProperty)
 			{
+				m_sortProperty = sortProperty;
 			}
 			
 			public int Compare (WorldBankDataItem a, WorldBankDataItem b)
 			{
-				return a.Year.CompareTo(b.Year);
+				switch(m_sortProperty)
+				{
+					case SortProperty.Country:
+						return a.Country.CompareTo(b.Country);
+
+					case SortProperty.Year:
+						return a.Year.CompareTo(b.Year);
+
+					default:
+						return 0;
+				}
 			}
+		}
+
+		public enum SortProperty
+		{
+			Country,
+			Year
 		}
 	}
 }

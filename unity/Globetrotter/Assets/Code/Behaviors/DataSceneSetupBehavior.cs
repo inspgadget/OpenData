@@ -11,9 +11,24 @@ public class DataSceneSetupBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
-	public GameObject yearRange;
+	public GameObject yearRangeScale;
 	public GameObject yearFrom;
 	public GameObject yearTo;
+
+	public GUIText yearRangeText;
+
+	public GUIText xAxisNameText;
+	public GUIText yAxisNameText;
+
+	public GUIText prevYearText;
+	public GUIText currYearText;
+	public GUIText nextYearText;
+
+	public GUIText seriesOneLegendText;
+	public GUIText seriesTwoLegendText;
+	public GUIText seriesThreeLegendText;
+	public GUIText seriesFourLegendText;
+	public GUIText seriesFiveLegendText;
 
 	public Material focusedObjectMaterial;
 	public Material unfocusedObjectMaterial;
@@ -58,10 +73,13 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		if(indicatorSelectorViewModel == null)
 		{
 			indicatorSelectorViewModel = new IndicatorSelectorViewModel(countriesController, dataController);
-			inputController.InputReceived += indicatorSelectorViewModel.InputReceivedHandler;
 			
 			ObjectDepot.Instance.Store<IndicatorSelectorViewModel>(indicatorSelectorViewModel);
 		}
+
+		//set event handler outside to catch the special case for keyboard input
+		inputController.InputReceived -= indicatorSelectorViewModel.InputReceivedHandler;
+		inputController.InputReceived += indicatorSelectorViewModel.InputReceivedHandler;
 
 		//year from view model
 		YearFromViewModel yearFromViewModel = new YearFromViewModel(dataController, 1960);
@@ -70,11 +88,16 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		//year to view model
 		YearToViewModel yearToViewModel = new YearToViewModel(dataController, System.DateTime.Now.Year);
 		inputController.InputReceived += yearToViewModel.InputReceivedHandler;
+
+		//chart view model
+		ChartViewModel chartViewModel = new ChartViewModel(dataController);
+		inputController.InputReceived += chartViewModel.InputReceivedHandler;
 		
 		//data scene gui controller
 		m_dataSceneGuiController = new DataSceneGuiController(indicatorSelectorViewModel,
 		                                                      	yearFromViewModel,
 		                                                      	yearToViewModel,
+		                                                      	chartViewModel,
 		                                                      	inputController);
 		m_dataSceneGuiController.ChangeScene += ChangeSceneHandler;
 
@@ -85,8 +108,17 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		//year range behavior
 		YearRangeBehavior yearRangeBehavior = gameObject.AddComponent<YearRangeBehavior>();
 		yearRangeBehavior.Init(yearFromViewModel, yearToViewModel,
-		                       	yearRange, yearFrom, yearTo,
+		                       	yearRangeScale, yearFrom, yearTo,
+		                       	yearRangeText,
 		                       	focusedObjectMaterial, unfocusedObjectMaterial);
+
+		//chart behavior
+		ChartBehavior chartBehavior = gameObject.AddComponent<ChartBehavior>();
+		chartBehavior.Init(chartViewModel,
+		                   	xAxisNameText, yAxisNameText,
+		                   	prevYearText, currYearText, nextYearText,
+		                    new GUIText[] { seriesOneLegendText, seriesTwoLegendText, seriesThreeLegendText,
+												seriesFourLegendText, seriesFiveLegendText });
 	}
 	
 	void FixedUpdate()

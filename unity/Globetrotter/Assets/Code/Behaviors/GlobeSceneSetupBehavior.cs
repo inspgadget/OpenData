@@ -58,10 +58,13 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		if(countrySelectorViewModel == null)
 		{
 			countrySelectorViewModel = new CountrySelectorViewModel(countriesController);
-			inputController.InputReceived += countrySelectorViewModel.InputReceivedHandler;
 
 			ObjectDepot.Instance.Store<CountrySelectorViewModel>(countrySelectorViewModel);
 		}
+		
+		//set event handler outside to catch the special case for keyboard input
+		inputController.InputReceived -= countrySelectorViewModel.InputReceivedHandler;
+		inputController.InputReceived += countrySelectorViewModel.InputReceivedHandler;
 
 		//selected countries view model
 		SelectedCountriesViewModel selectedCountriesViewModel = ObjectDepot.Instance.Retrive<SelectedCountriesViewModel>();
@@ -69,10 +72,13 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		if(selectedCountriesViewModel == null)
 		{
 			selectedCountriesViewModel = new SelectedCountriesViewModel(countriesController);
-			inputController.InputReceived += selectedCountriesViewModel.InputReceivedHandler;
 
 			ObjectDepot.Instance.Store<SelectedCountriesViewModel>(selectedCountriesViewModel);
 		}
+		
+		//set event handler outside to catch the special case for keyboard input
+		inputController.InputReceived -= selectedCountriesViewModel.InputReceivedHandler;
+		inputController.InputReceived += selectedCountriesViewModel.InputReceivedHandler;
 
 		//camera zoom view model
 		CameraZoomViewModel cameraZoomViewModel = new CameraZoomViewModel(new float[] { -1.5f, -3.0f}, 0.05f);

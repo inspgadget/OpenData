@@ -48,24 +48,42 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
+					int delta = 0;
+
 					if(args.InputTypes.And(InputType.ScrollLeft) == InputType.ScrollLeft)
 					{
-						int year = m_dataController.YearFrom - 1;
-
-						if(year >= m_min)
-						{
-							m_dataController.YearFrom = year;
-						}
+						delta = -1;
 					}
 
 					if(args.InputTypes.And(InputType.ScrollRight) == InputType.ScrollRight)
 					{
-						int year = m_dataController.YearFrom + 1;
-						
-						if(year <= m_dataController.YearTo)
+						delta = 1;
+					}
+					
+					if(args.InputTypes.And(InputType.WipeLeft) == InputType.WipeLeft)
+					{
+						delta = -10;
+					}
+					
+					if(args.InputTypes.And(InputType.WipeRight) == InputType.WipeRight)
+					{
+						delta = 10;
+					}
+
+					if(delta != 0)
+					{
+						int year = m_dataController.YearFrom + delta;
+
+						if(year < m_min)
 						{
-							m_dataController.YearFrom = year;
+							year = m_min;
 						}
+						else if(year > m_dataController.YearTo)
+						{
+							year = m_dataController.YearTo;
+						}
+
+						m_dataController.YearFrom = year;
 					}
 				}
 			}

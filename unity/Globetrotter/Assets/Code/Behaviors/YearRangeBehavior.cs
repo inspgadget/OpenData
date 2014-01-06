@@ -6,9 +6,11 @@ using Globetrotter.GuiLayer.ViewModel;
 
 public class YearRangeBehavior : MonoBehaviour
 {
-	private GameObject m_yearRangeObj;
+	private GameObject m_yearRangeScaleObj;
 	private GameObject m_yearFromObj;
 	private GameObject m_yearToObj;
+
+	private GUIText m_yearRangeText;
 
 	private Material m_focusedObjectMaterial;
 	private Material m_unfocusedObjectMaterial;
@@ -21,31 +23,6 @@ public class YearRangeBehavior : MonoBehaviour
 	void Start()
 	{
 		m_offsetX = -4.0f;
-	}
-
-	void OnGUI()
-	{
-		int yearFrom = m_yearFromViewModel.YearFrom;
-		int yearTo = m_yearToViewModel.YearTo;
-
-		//left, top, width, height
-		int screenWidth = Screen.width;
-		int screenWidthHalf = screenWidth / 2;
-		int screenHeight = Screen.height;
-		int screenHeigthHalf = screenHeight / 2;
-
-		GUIStyle style = StyleDepot.Instance.UnfocusedBoxStyle;
-
-		if((m_yearFromViewModel.ReactOnInput || m_yearToViewModel.ReactOnInput) == true)
-		{
-			style = StyleDepot.Instance.FocusedBoxStyle;
-		}
-
-		GUI.Box(new Rect(screenWidthHalf - 40, screenHeigthHalf - 130, 80, 20), string.Empty, style);
-
-		GUI.Label(new Rect(screenWidthHalf - 40, screenHeigthHalf - 130, 80, 20),
-		          	yearFrom + " - " + yearTo,
-		          	StyleDepot.Instance.UnfocusedTextStyle);
 	}
 
 	void Update()
@@ -69,6 +46,9 @@ public class YearRangeBehavior : MonoBehaviour
 		                                             	m_yearToObj.transform.position.y,
 		                                             	m_yearToObj.transform.position.z);
 
+		//text
+		m_yearRangeText.text = yearFrom + " - " + yearTo;
+
 		//materials
 		bool yearFromActive = m_yearFromViewModel.ReactOnInput;
 		bool yearToActive = m_yearToViewModel.ReactOnInput;
@@ -76,7 +56,7 @@ public class YearRangeBehavior : MonoBehaviour
 
 		if(active == true)
 		{
-			m_yearRangeObj.renderer.material = m_focusedObjectMaterial;
+			//m_yearRangeScaleObj.renderer.material = m_focusedObjectMaterial;
 
 			if(yearFromActive == true)
 			{
@@ -98,22 +78,25 @@ public class YearRangeBehavior : MonoBehaviour
 		}
 		else
 		{
-			m_yearRangeObj.renderer.material = m_unfocusedObjectMaterial;
+			m_yearRangeScaleObj.renderer.material = m_unfocusedObjectMaterial;
 			m_yearFromObj.renderer.material = m_unfocusedObjectMaterial;
 			m_yearToObj.renderer.material = m_unfocusedObjectMaterial;
 		}
 	}
 
 	public void Init(YearFromViewModel yearFromViewModel, YearToViewModel yearToViewModel,
-	                 	GameObject yearRangeObj, GameObject yearFromObj, GameObject yearToObj,
+	                 	GameObject yearRangeScaleObj, GameObject yearFromObj, GameObject yearToObj,
+	                 	GUIText yearRangeText,
 	                 	Material focusedObjectMaterial, Material unfocusedObjectMaterial)
 	{
 		m_yearFromViewModel = yearFromViewModel;
 		m_yearToViewModel = yearToViewModel;
 		
-		m_yearRangeObj = yearRangeObj;
+		m_yearRangeScaleObj = yearRangeScaleObj;
 		m_yearFromObj = yearFromObj;
 		m_yearToObj = yearToObj;
+
+		m_yearRangeText = yearRangeText;
 
 		m_focusedObjectMaterial = focusedObjectMaterial;
 		m_unfocusedObjectMaterial = unfocusedObjectMaterial;

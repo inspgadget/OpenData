@@ -74,6 +74,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 		{
 			m_countriesController = countriesController;
 			m_dataController = dataController;
+			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
 			m_indicators = m_dataController.Indicators;
 			m_currIndicatorIndex = GetIndexOfIndicator(dataController.CurrentIndicator);
@@ -139,11 +140,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 					
 					if(currIndicatorIndex != m_currIndicatorIndex)
 					{
-						if(currIndicatorIndex < 0)
+						while(currIndicatorIndex < 0)
 						{
 							currIndicatorIndex = m_indicators.Length + currIndicatorIndex;
 						}
-						else if(currIndicatorIndex >= m_indicators.Length)
+
+						while(currIndicatorIndex >= m_indicators.Length)
 						{
 							currIndicatorIndex = 0 + (currIndicatorIndex - m_indicators.Length);
 						}

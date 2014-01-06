@@ -129,11 +129,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 					if(currCountryIndex != m_currCountryIndex)
 					{
-						if(currCountryIndex < 0)
+						while(currCountryIndex < 0)
 						{
 							currCountryIndex = m_countries.Length + currCountryIndex;
 						}
-						else if(currCountryIndex >= m_countries.Length)
+
+						while(currCountryIndex >= m_countries.Length)
 						{
 							currCountryIndex = 0 + (currCountryIndex - m_countries.Length);
 						}
