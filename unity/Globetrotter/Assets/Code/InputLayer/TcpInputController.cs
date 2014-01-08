@@ -147,7 +147,7 @@ namespace Globetrotter.InputLayer
 			handler.BeginReceive( state.buffer, 0, StateObject.BufferSize, 0,
 			                     new AsyncCallback(ReadCallback), state);
 		}
-		
+
 		public void ReadCallback(IAsyncResult ar) {
 			String content = String.Empty;
 			
@@ -194,11 +194,26 @@ namespace Globetrotter.InputLayer
 						type = InputType.ZoomIn;
 					} else if (content.StartsWith("ZoomOut")){
 						type = InputType.ZoomOut;
+					} else if (content.StartsWith("Acc")){
+						string[] tmp = content.Split(';');
+						float x = float.Parse(tmp[1]);
+						float y = float.Parse(tmp[2]);
+						float z = float.Parse(tmp[3]);
+
+						if(x > 5f){
+							type = InputType.RotateRight;
+						} else if(x < -5f){
+							type = InputType.RotateLeft;
+						} else if(y > 1f){
+							type = InputType.RotateDown;
+						} else if(y < -1f){
+							type = InputType.RotateUp;
+						}
 					}
 
 					UnityEngine.Debug.Log(type.ToString());
 
-					if(type != InputType.None){
+					if(type != InputType.None ){
 						OnInputReceived(this, type);
 					}
 				} else {
