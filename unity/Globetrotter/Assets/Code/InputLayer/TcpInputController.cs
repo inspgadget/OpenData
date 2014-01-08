@@ -83,13 +83,13 @@ namespace Globetrotter.InputLayer
 			IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
 			IPAddress ipAddress = ipHostInfo.AddressList[0];
 
-			int port = 5555;
+			int port = 60123;
 
 			/*while(!isAvailable(port)){
 				port++;
 			}*/
 
-			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 5555);
+			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
 
 			lock(m_lockObj)
@@ -147,7 +147,8 @@ namespace Globetrotter.InputLayer
 			handler.BeginReceive( state.buffer, 0, StateObject.BufferSize, 0,
 			                     new AsyncCallback(ReadCallback), state);
 		}
-		
+		int count = 0;
+
 		public void ReadCallback(IAsyncResult ar) {
 			String content = String.Empty;
 			
@@ -194,13 +195,31 @@ namespace Globetrotter.InputLayer
 						type = InputType.ZoomIn;
 					} else if (content.StartsWith("ZoomOut")){
 						type = InputType.ZoomOut;
+					} else if (content.StartsWith("Acc")){
+						string[] tmp = content.Split(';');
+						float x = float.Parse(tmp[1]);
+						float y = float.Parse(tmp[2]);
+						float z = float.Parse(tmp[3]);
+
+						if(x > 5f){
+							type = InputType.RotateRight;
+						} else if(x < -5f){
+							type = InputType.RotateLeft;
+						} else if(y > 1f){
+							type = InputType.RotateDown;
+						} else if(y < -1f){
+							type = InputType.RotateUp;
+						}
 					}
 
 					UnityEngine.Debug.Log(type.ToString());
 
-					if(type != InputType.None){
-						OnInputReceived(this, type);
-					}
+					if(count % 5 == 0){
+						if(type != InputType.None){
+							OnInputReceived(this, type);
+							count = 0;
+						}
+					} else { count++; }
 				} else {
 					// Not all data received. Get more.
 					handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
