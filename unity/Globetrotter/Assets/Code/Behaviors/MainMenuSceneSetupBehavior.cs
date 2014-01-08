@@ -9,8 +9,6 @@ public class MainMenuSceneSetupBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
-	public GUIText headerText;
-
 	private IInputController m_inputController;
 
 	private string m_sceneName;
@@ -38,9 +36,6 @@ public class MainMenuSceneSetupBehavior : MonoBehaviour
 
 			m_inputController.StartController();
 		}
-
-		//main menu behavior
-		MainMenuBehavior mainMenuBehavior = gameObject.AddComponent<MainMenuBehavior>();
 
 		//connection setup behavior
 		ConnectionSetupBehavior connectionSetupBehavior = gameObject.AddComponent<ConnectionSetupBehavior>();
