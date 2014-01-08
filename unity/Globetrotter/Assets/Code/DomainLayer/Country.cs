@@ -9,6 +9,7 @@ namespace Globetrotter.DomainLayer
 
 		private string m_name;
 		private string m_isoAlphaThreeCode;
+		private string m_isoTwoCode;
 		private string m_continent;
 		private string m_capitalCity;
 		private int m_population;
@@ -69,6 +70,25 @@ namespace Globetrotter.DomainLayer
 				lock(m_lockObj)
 				{
 					m_isoAlphaThreeCode = value;
+				}
+			}
+		}
+
+		public string IsoTwoCode
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_isoTwoCode;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObj)
+				{
+					m_isoTwoCode = value;
 				}
 			}
 		}
@@ -172,6 +192,7 @@ namespace Globetrotter.DomainLayer
 		{
 			m_name = string.Empty;
 			m_isoAlphaThreeCode = string.Empty;
+			m_isoTwoCode = string.Empty;
 			m_continent = string.Empty;
 			m_capitalCity = string.Empty;
 			m_population = 0;

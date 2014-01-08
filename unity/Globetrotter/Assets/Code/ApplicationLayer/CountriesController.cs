@@ -67,8 +67,6 @@ namespace Globetrotter.ApplicationLayer
 
 		public CountriesController(DataController dataController)
 		{
-			//try{
-			//
 			m_dataController = dataController;
 			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
@@ -78,32 +76,38 @@ namespace Globetrotter.ApplicationLayer
 			m_countries = new Dictionary<string, Country>();
 			IList<Country> countries = new ContinentCountryWorldBankLoader().LoadCountries();
 
-			int year = DateTime.Now.Year - 1;
+			int year = DateTime.Now.Year - 3;
 
 			if(countries != null)
 			{
+				Dictionary<string, Country> isoTwoCodeDictionary = new Dictionary<string, Country>();
+
 				foreach(Country country in countries)
 				{
 					if(string.IsNullOrEmpty(country.CapitalCity) == false)
 					{
 						m_countries[country.IsoAlphaThreeCode] = country;
-
-						//load indicator data
-						Thread t = new Thread(delegate(){
-							//population
-							WorldBankIndicator populationIndicator = m_dataController.GetIndicator("");
-							WorldBankData populationData = m_dataController.FetchData(new Country[]{ country }, populationIndicator, year, year);
-							country.Population = (int)populationData.Items[0].Value;
-
-							//surface area
-							WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.LND.TOTL.K2");
-							WorldBankData surfaceAreaData = m_dataController.FetchData(new Country[]{ country }, surfaceAreaIndicator, year, year);
-							country.SurfaceArea = surfaceAreaData.Items[0].Value;
-						});
-
-						t.IsBackground = true;
-						//t.Start();
+						isoTwoCodeDictionary[country.IsoTwoCode] = country;
 					}
+				}
+
+				//load data
+				Country[] countriesArray = m_countries.Values.ToArray();
+
+				WorldBankIndicator populationIndicator = m_dataController.GetIndicator("SP.POP.TOTL");
+				WorldBankData populationData = m_dataController.FetchData(countriesArray, populationIndicator, year, year);
+
+				for(int i = 0; i < populationData.Items.Count; i++)
+				{
+					isoTwoCodeDictionary[populationData.Items[i].IsoTwoCode].Population = (int)populationData.Items[i].Value;
+				}
+
+				WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.SRF.TOTL.K2");
+				WorldBankData surfaceAreaData = m_dataController.FetchData(countriesArray, surfaceAreaIndicator, year, year);
+				
+				for(int j = 0; j < surfaceAreaData.Items.Count; j++)
+				{
+					isoTwoCodeDictionary[surfaceAreaData.Items[j].IsoTwoCode].SurfaceArea = surfaceAreaData.Items[j].Value;
 				}
 			}
 
@@ -115,7 +119,6 @@ namespace Globetrotter.ApplicationLayer
 			{
 				UnityEngine.Debug.LogError(exc);
 			}
-			//}catch(Exception exc){UnityEngine.Debug.LogError(exc);}
 		}
 
 		public void AddCountry()

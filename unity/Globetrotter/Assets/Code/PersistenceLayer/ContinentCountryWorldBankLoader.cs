@@ -19,6 +19,7 @@ namespace Globetrotter.PersistenceLayer
 
 		private const string CountryTag = "country";
 		private const string CountryTagAttribute = "id";
+		private const string IsoTwoCodeTag = "iso2Code";
 		private const string NameTag = "name";
 		private const string RegionTag = "region";
 		private const string CapitalCityTag = "capitalCity";
@@ -66,33 +67,38 @@ namespace Globetrotter.PersistenceLayer
 	                {
 	                    switch (element.Name)
 	                    {
-						case ContinentCountryWorldBankLoader.NameTag:
-	                            if(!string.IsNullOrEmpty(element.InnerText)) 
-	                                item.Name = element.InnerText;
-	                            break;
+							case ContinentCountryWorldBankLoader.IsoTwoCodeTag:
+								if(!string.IsNullOrEmpty(element.InnerText))
+									item.IsoTwoCode = element.InnerText;
+								break;
 
-						case ContinentCountryWorldBankLoader.RegionTag:
-	                            if (!string.IsNullOrEmpty(element.InnerText))
-	                                item.Continent = element.InnerText;
-	                            break;
+							case ContinentCountryWorldBankLoader.NameTag:
+		                            if(!string.IsNullOrEmpty(element.InnerText)) 
+		                                item.Name = element.InnerText;
+		                            break;
 
-						case ContinentCountryWorldBankLoader.CapitalCityTag:
-	                            if (!string.IsNullOrEmpty(element.InnerText))
-	                                item.CapitalCity = element.InnerText;
-	                            break;
+							case ContinentCountryWorldBankLoader.RegionTag:
+		                            if (!string.IsNullOrEmpty(element.InnerText))
+		                                item.Continent = element.InnerText;
+		                            break;
 
-						case ContinentCountryWorldBankLoader.LongitudeTag:
-	                            if (!string.IsNullOrEmpty(element.InnerText))
-	                                item.Longitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
-	                            break;
+							case ContinentCountryWorldBankLoader.CapitalCityTag:
+		                            if (!string.IsNullOrEmpty(element.InnerText))
+		                                item.CapitalCity = element.InnerText;
+		                            break;
 
-						case ContinentCountryWorldBankLoader.LatitudeTag:
-	                            if (!string.IsNullOrEmpty(element.InnerText))
-	                                item.Latitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
-	                            break;
+							case ContinentCountryWorldBankLoader.LongitudeTag:
+		                            if (!string.IsNullOrEmpty(element.InnerText))
+		                                item.Longitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
+		                            break;
 
-	                        default:
-	                            break;
+							case ContinentCountryWorldBankLoader.LatitudeTag:
+		                            if (!string.IsNullOrEmpty(element.InnerText))
+		                                item.Latitude = double.Parse(element.InnerText, CultureInfo.InvariantCulture);
+		                            break;
+
+		                        default:
+		                            break;
 	                    }
 	                }
 	            }

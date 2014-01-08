@@ -36,18 +36,6 @@ public class ConnectionSetupBehavior : MonoBehaviour
 				QRCodeWriter writer = new QRCodeWriter();
 				
 				BitMatrix bm = writer.encode(ipAddress + ";" + port, BarcodeFormat.QR_CODE, 256, 256);
-				
-				/*for(int i = 0; i < bm.Height; i++){
-					ZXing.Common.BitArray ba = bm.getRow(i, null);
-					ba.reverse();
-
-					for(int j = 0; j < ba.Size; j++){
-						ba.flip(j);
-					}
-
-					bm.setRow(i, ba);
-				}*/
-				
 				BarcodeWriter brwriter = new BarcodeWriter();
 				Color32[] col = brwriter.Write(bm);
 				

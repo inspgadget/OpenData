@@ -8,6 +8,7 @@ namespace Globetrotter.DataLayer
 		private string m_indicatorCode;
 		private string m_indicatorName;
 		private string m_country;
+		private string m_isoTwoCode;
 		private int m_year;
 		private double m_value;
 		
@@ -49,7 +50,20 @@ namespace Globetrotter.DataLayer
 				m_indicatorName = value;
 			}
 		}
-		
+
+		public string IsoTwoCode
+		{
+			get
+			{
+				return m_isoTwoCode;
+			}
+
+			set
+			{
+				m_isoTwoCode = value;
+			}
+		}
+
 		public double Value
 		{
 			get
@@ -81,6 +95,7 @@ namespace Globetrotter.DataLayer
 			m_indicatorCode = string.Empty;
 			m_indicatorName = string.Empty;
 			m_country = string.Empty;
+			m_isoTwoCode = string.Empty;
 			m_year = 0;
 			m_value = 0.0;
 		}

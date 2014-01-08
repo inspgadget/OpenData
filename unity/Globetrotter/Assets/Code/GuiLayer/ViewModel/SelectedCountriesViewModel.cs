@@ -95,7 +95,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
-					if(args.HasInputType(InputType.WipeLeft) == true)
+					if(args.HasInputType(InputType.ScrollLeft) == true)
 					{
 						m_countriesController.RemoveCountry(m_selectedCountries[m_currCountryIndex]);
 

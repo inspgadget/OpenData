@@ -75,8 +75,12 @@ public class CountrySelectorBehavior : MonoBehaviour
 
 				sb.Append(currCountry.Name).Append(" - ").Append(currCountry.IsoAlphaThreeCode).Append("\n\n");
 				sb.Append("Capital city: ").Append(currCountry.CapitalCity).Append("\n");
-				sb.Append("Population: ").Append(currCountry.Population).Append("\n");
-				sb.Append("Surface Area: ").Append(currCountry.SurfaceArea).Append("sq. km");
+				sb.Append("Population: ").Append(string.Format(System.Globalization.CultureInfo.CreateSpecificCulture("de-AT"),
+				                                               	"{0:0,0}",
+				                                               	currCountry.Population)).Append("\n");
+				sb.Append("Surface Area: ").Append(string.Format(System.Globalization.CultureInfo.CreateSpecificCulture("de-AT"),
+				                                                 	"{0:#,##0.00}",
+				                                                 	currCountry.SurfaceArea)).Append(" km\xb2");
 				
 				GUI.Label(new Rect(Screen.width - 210, 90, 200, 180), sb.ToString(), style);
 			}
