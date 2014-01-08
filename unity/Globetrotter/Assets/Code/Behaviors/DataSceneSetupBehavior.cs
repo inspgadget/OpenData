@@ -11,6 +11,9 @@ public class DataSceneSetupBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
+	public GameObject arrowLeft;
+	public GameObject arrowRight;
+
 	public GameObject yearRangeScale;
 	public GameObject yearFrom;
 	public GameObject yearTo;
@@ -42,6 +45,8 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	public Material focusedObjectMaterial;
 	public Material unfocusedObjectMaterial;
 
+	private Vector3[,] m_arrowPositions;
+
 	private DataSceneGuiController m_dataSceneGuiController;
 
 	private string m_sceneName;
@@ -49,6 +54,11 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	void Start()
 	{
 		m_sceneName = null;
+
+		m_arrowPositions = new Vector3[,] { { new Vector3(-4.5f, 5.1f, 0.0f), new Vector3(4.5f, 5.1f, 0.0f) },
+											{ new Vector3(-4.5f, 4.25f, 0.0f), new Vector3(4.5f, 4.25f, 0.0f) },
+											{ new Vector3(-4.5f, 4.25f, 0.0f), new Vector3(4.5f, 4.25f, 0.0f) },
+											{ new Vector3(-4.5f, 2.0f, 0.0f), new Vector3(4.5f, 2.0f, 0.0f) }};
 		
 		//input controller
 		IInputController inputController = ObjectDepot.Instance.Retrive<IInputController>();
@@ -143,6 +153,14 @@ public class DataSceneSetupBehavior : MonoBehaviour
 				Application.LoadLevel(m_sceneName);
 			}
 		}
+	}
+
+	void Update()
+	{
+		int focusIndex = m_dataSceneGuiController.FocusIndex;
+
+		arrowLeft.transform.position = m_arrowPositions[focusIndex, 0];
+		arrowRight.transform.position = m_arrowPositions[focusIndex, 1];
 	}
 	
 	public void ChangeSceneHandler(object sender, ChangeSceneEventArgs args)

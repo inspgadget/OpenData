@@ -20,6 +20,17 @@ namespace Globetrotter.GuiLayer.Controllers
 		private int m_focusIndex;
 		private List<ViewModelBase> m_focusList;
 
+		public int FocusIndex
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_focusIndex;
+				}
+			}
+		}
+
 		public DataSceneGuiController(IndicatorSelectorViewModel indicatorSelectorViewModel,
 		                              	YearFromViewModel yearFromViewModel,
 		                              	YearToViewModel yearToViewModel,
