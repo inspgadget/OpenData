@@ -51,6 +51,7 @@
      <Compile Include="Assets\Code\ApplicationLayer\SelectedCountriesChangedEventArgs.cs" />
      <Compile Include="Assets\Code\Behaviors\CameraZoomBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\ChartBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\ConnectionSetupBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountryInfoBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\CountrySelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\DataSceneSetupBehavior.cs" />
@@ -58,9 +59,11 @@
      <Compile Include="Assets\Code\Behaviors\GlobeSceneSetupBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\IndicatorSelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\KeyboardInputController.cs" />
+     <Compile Include="Assets\Code\Behaviors\MainMenuSceneSetupBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\RotatingGlobeBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\SelectedCountriesBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\YearRangeBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\zxing.cs" />
      <Compile Include="Assets\Code\DataLayer\IWorldBankDataParser.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankData.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankDataFetchedEventArgs.cs" />
@@ -86,6 +89,7 @@
      <Compile Include="Assets\Code\InputLayer\IInputController.cs" />
      <Compile Include="Assets\Code\InputLayer\InputReceivedEventArgs.cs" />
      <Compile Include="Assets\Code\InputLayer\InputType.cs" />
+     <Compile Include="Assets\Code\InputLayer\TcpInputController.cs" />
      <Compile Include="Assets\Code\NetworkLayer\HttpRequestController.cs" />
      <Compile Include="Assets\Code\NetworkLayer\HttpResponse.cs" />
      <Compile Include="Assets\Code\ObjectDepot.cs" />
@@ -99,8 +103,12 @@
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Data\Resources\indicators.xml" />
      <None Include="Assets\Data\Resources\continents_countries.xml" />
+     <None Include="Assets\Libraries\zxing.unity.xml" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
+ <Reference Include="zxing.unity">
+ <HintPath>Assets\Libraries\zxing.unity.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

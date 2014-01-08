@@ -16,6 +16,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private DataPoint[] m_dataPoints;
 		private string[] m_seriesNames;
 
+		private double m_min;
+		private double m_max;
+
 		private int m_currDataPointIndex;
 
 		public DataPoint CurrentDataPoint
@@ -52,6 +55,28 @@ namespace Globetrotter.GuiLayer.ViewModel
 				lock(m_lockObj)
 				{
 					return m_worldBankData;
+				}
+			}
+		}
+
+		public double Max
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_max;
+				}
+			}
+		}
+
+		public double Min
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_min;
 				}
 			}
 		}
@@ -123,6 +148,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 			m_dataPoints = new DataPoint[0];
 			m_seriesNames = new string[5];
 
+			m_min = 0.0;
+			m_max = 0.0;
+
 			m_currDataPointIndex = -1;
 		}
 
@@ -167,6 +195,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 						{
 							currDataPointIndex = 0 + (currDataPointIndex - m_dataPoints.Length);
 						}
+
+						m_currDataPointIndex = currDataPointIndex;
 					}
 				}
 			}
@@ -177,6 +207,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 			lock(m_lockObj)
 			{
 				m_worldBankData = args.Data;
+
+				m_min = double.MaxValue;
+				m_max = double.MinValue;
 
 				List<DataPoint> dataPoints = new List<DataPoint>();
 
@@ -195,23 +228,39 @@ namespace Globetrotter.GuiLayer.ViewModel
 					}
 
 					itemsList.Add(item);
+
+					if(item.Value < m_min)
+					{
+						m_min = item.Value;
+					}
+
+					if(item.Value > m_max)
+					{
+						m_max = item.Value;
+					}
 				}
 
 				//series names
 				Dictionary<int, List<WorldBankDataItem>>.KeyCollection keys = items.Keys;
 
-				m_seriesNames = new string[5];
-
 				if(keys.Count > 0)
 				{
 					int n = items[keys.First()].Count;
+					string[] seriesNames = new string[n];
 
 					for(int k = 0; k < n; k++)
 					{
-						m_seriesNames[k] = items[keys.First()][k].Country;
+						seriesNames[k] = items[keys.First()][k].Country;
 					}
 
-					Array.Sort<string>(m_seriesNames);
+					Array.Sort<string>(seriesNames);
+
+					m_seriesNames = new string[5];
+
+					for(int l = 0; l < 5; l++)
+					{
+						m_seriesNames[l] = l < n ? seriesNames[l] : string.Empty;
+					}
 				}
 
 				//create data points

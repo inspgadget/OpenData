@@ -15,6 +15,15 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	public GameObject yearFrom;
 	public GameObject yearTo;
 
+	public GameObject xAxis;
+	public GameObject yAxis;
+
+	public GameObject currentDataPointOne;
+	public GameObject currentDataPointTwo;
+	public GameObject currentDataPointThree;
+	public GameObject currentDataPointFour;
+	public GameObject currentDataPointFive;
+
 	public GUIText yearRangeText;
 
 	public GUIText xAxisNameText;
@@ -115,10 +124,14 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		//chart behavior
 		ChartBehavior chartBehavior = gameObject.AddComponent<ChartBehavior>();
 		chartBehavior.Init(chartViewModel,
+		                   	new GameObject[] { currentDataPointOne, currentDataPointTwo, currentDataPointThree,
+												currentDataPointFour, currentDataPointFive },
+							xAxis, yAxis,
 		                   	xAxisNameText, yAxisNameText,
 		                   	prevYearText, currYearText, nextYearText,
 		                    new GUIText[] { seriesOneLegendText, seriesTwoLegendText, seriesThreeLegendText,
-												seriesFourLegendText, seriesFiveLegendText });
+												seriesFourLegendText, seriesFiveLegendText },
+							focusedObjectMaterial, unfocusedObjectMaterial);
 	}
 	
 	void FixedUpdate()
