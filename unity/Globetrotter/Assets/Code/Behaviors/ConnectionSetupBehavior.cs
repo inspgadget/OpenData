@@ -18,7 +18,7 @@ public class ConnectionSetupBehavior : MonoBehaviour
 	{
 		if(m_encoded != null)
 		{
-			GUI.Label(new Rect(Screen.width - 220, Screen.height - 220, m_encoded.width, m_encoded.height), m_encoded);
+			GUI.Label(new Rect(Screen.width - 266, Screen.height - 266, m_encoded.width, m_encoded.height), m_encoded);
 			GUI.Label(new Rect(Screen.width - 570, Screen.height - 25, 400, 20), "Scan the QR-Code to control the application with your smartphone.");
 		}
 	}
@@ -37,7 +37,7 @@ public class ConnectionSetupBehavior : MonoBehaviour
 				
 				BitMatrix bm = writer.encode(ipAddress + ";" + port, BarcodeFormat.QR_CODE, 256, 256);
 				
-				for(int i = 0; i < bm.Height; i++){
+				/*for(int i = 0; i < bm.Height; i++){
 					ZXing.Common.BitArray ba = bm.getRow(i, null);
 					ba.reverse();
 
@@ -46,7 +46,7 @@ public class ConnectionSetupBehavior : MonoBehaviour
 					}
 
 					bm.setRow(i, ba);
-				}
+				}*/
 				
 				BarcodeWriter brwriter = new BarcodeWriter();
 				Color32[] col = brwriter.Write(bm);

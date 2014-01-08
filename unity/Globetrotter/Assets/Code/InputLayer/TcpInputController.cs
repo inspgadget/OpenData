@@ -82,7 +82,15 @@ namespace Globetrotter.InputLayer
 			// running the listener is "host.contoso.com".
 			IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
 			IPAddress ipAddress = ipHostInfo.AddressList[0];
+
+			int port = 5555;
+
+			/*while(!isAvailable(port)){
+				port++;
+			}*/
+
 			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 5555);
+
 
 			lock(m_lockObj)
 			{
@@ -107,7 +115,7 @@ namespace Globetrotter.InputLayer
 					allDone.Reset();
 					
 					// Start an asynchronous socket to listen for connections.
-					UnityEngine.Debug.Log("Waiting for a connection...");
+					//UnityEngine.Debug.Log("Waiting for a connection...");
 					listener.BeginAccept( 
 					                     new AsyncCallback(AcceptCallback),
 					                     listener );
@@ -163,8 +171,36 @@ namespace Globetrotter.InputLayer
 					// All the data has been read from the 
 					// client. Display it on the console.
 					UnityEngine.Debug.Log("Read "+content.Length+" bytes from socket. "+content+" Data : {1}");
-					// Echo the data back to the client.
-					//Send(handler, content);
+
+					content = content.Remove(content.Length - 5);
+
+					InputType type = InputType.None;
+
+					if(content.StartsWith("DoubleTap")){
+						type = InputType.ClickDouble;
+					} else if (content.StartsWith("SwipeLeft")){
+//						type = InputType.WipeLeft;	//10er Schritte
+						type = InputType.ScrollLeft;
+					} else if (content.StartsWith("SwipeRight")){
+//						type = InputType.WipeRight;	//10er Schritte
+						type = InputType.ScrollRight;
+					} else if (content.StartsWith("VolumeUp")){
+						type = InputType.FocusPrevious;
+					} else if (content.StartsWith("VolumeDown")){
+						type = InputType.FocusNext;
+					} else if (content.StartsWith("LongPress")){
+						type = InputType.ClickLong;
+					} else if (content.StartsWith("ZoomIn")){
+						type = InputType.ZoomIn;
+					} else if (content.StartsWith("ZoomOut")){
+						type = InputType.ZoomOut;
+					}
+
+					UnityEngine.Debug.Log(type.ToString());
+
+					if(type != InputType.None){
+						OnInputReceived(this, type);
+					}
 				} else {
 					// Not all data received. Get more.
 					handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -218,5 +254,28 @@ namespace Globetrotter.InputLayer
 			// Received data string.
 			public StringBuilder sb = new StringBuilder();  
 		}
+
+		/*private bool isPortAvailable(int port);
+		{
+			bool isAvailable = true;
+			
+			// Evaluate current system tcp connections. This is the same information provided
+			// by the netstat command line application, just in .Net strongly-typed object
+			// form.  We will look through the list, and if our port we would like to use
+			// in our TcpClient is occupied, we will set isAvailable to false.
+			IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+			TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+
+			foreach(TcpConnectionInformation tcpi in tcpConnInfoArray)
+			{
+				if (tcpi.LocalEndPoint.Port==port)
+				{
+					isAvailable = false;
+					break;
+				}
+			}
+
+			return isAvailable;
+		}*/
 	}
 }

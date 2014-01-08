@@ -21,7 +21,8 @@ namespace Globetrotter.InputLayer
 		WipeRight = 16384,
 		WipeUp = 32768,
 		ZoomIn = 65536,
-		ZoomOut = 131072
+		ZoomOut = 131072,
+		None = -1
 	}
 
 	public static class InputTypeExtensions
