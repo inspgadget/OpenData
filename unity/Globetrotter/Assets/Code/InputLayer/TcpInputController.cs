@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -148,6 +148,8 @@ namespace Globetrotter.InputLayer
 			                     new AsyncCallback(ReadCallback), state);
 		}
 		int count = 0;
+		int c2 = 0;
+		DateTime dt, onRecivedDt;
 
 		public void ReadCallback(IAsyncResult ar) {
 			String content = String.Empty;
@@ -169,9 +171,10 @@ namespace Globetrotter.InputLayer
 				// more data.
 				content = state.sb.ToString();
 				if (content.IndexOf("<EOF>") > -1) {
+					onRecivedDt = DateTime.Now;
 					// All the data has been read from the 
 					// client. Display it on the console.
-					UnityEngine.Debug.Log("Read "+content.Length+" bytes from socket. "+content+" Data : {1}");
+					//UnityEngine.Debug.Log("Read "+content.Length+" bytes from socket. "+content+" Data : {1}");
 
 					content = content.Remove(content.Length - 5);
 
@@ -196,11 +199,23 @@ namespace Globetrotter.InputLayer
 					} else if (content.StartsWith("ZoomOut")){
 						type = InputType.ZoomOut;
 					} else if (content.StartsWith("Acc")){
+
 						string[] tmp = content.Split(';');
 						float x = float.Parse(tmp[1]);
 						float y = float.Parse(tmp[2]);
 						float z = float.Parse(tmp[3]);
 
+
+						if(c2 == 0){
+							dt = DateTime.Now;
+						} else if (c2 % 50 == 0){
+							TimeSpan ts = (DateTime.Now - dt);
+							UnityEngine.Debug.Log("{0} "+ts.Minutes +" min - "+ts.Seconds+" sec : "+ c2);
+
+							DateTime dt2 = DateTime.Parse(tmp[5]);
+
+							UnityEngine.Debug.Log("Last Package took " + (onRecivedDt - dt2).TotalSeconds + "seconds over network");
+						}
 						if(x > 5f){
 							type = InputType.RotateRight;
 						} else if(x < -5f){
@@ -210,9 +225,12 @@ namespace Globetrotter.InputLayer
 						} else if(y < -1f){
 							type = InputType.RotateUp;
 						}
+						c2++;
 					}
 
+					if(type != InputType.None){
 					UnityEngine.Debug.Log(type.ToString());
+					}
 
 					if(count % 5 == 0){
 						if(type != InputType.None){

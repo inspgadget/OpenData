@@ -33,8 +33,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				lock(m_lockObj)
 				{
-					lock(m_lockObj)
-					{
+					//lock(m_lockObj)
+					//{
 						int nextIndicatorIndex = m_currIndicatorIndex + 1;
 						
 						if(nextIndicatorIndex >= m_indicators.Length)
@@ -43,7 +43,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 						
 						return m_indicators[nextIndicatorIndex];
-					}
+					//}
 				}
 			}
 		}
@@ -54,8 +54,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				lock(m_lockObj)
 				{
-					lock(m_lockObj)
-					{
+					//lock(m_lockObj)
+					//{
 						int previousIndicatorIndex = m_currIndicatorIndex - 1;
 						
 						if(previousIndicatorIndex < 0)
@@ -64,7 +64,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 						
 						return m_indicators[previousIndicatorIndex];
-					}
+					//}
 				}
 			}
 		}
