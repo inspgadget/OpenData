@@ -83,7 +83,7 @@ namespace Globetrotter.InputLayer
 			for(int i = 0; selectedInterface == null && i < interfaces.Length; i++){
 				NetworkInterface cur = interfaces[i];
 				string type = cur.NetworkInterfaceType.ToString();
-				if(cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit){
+				if(cur.OperationalStatus == OperationalStatus.Up && cur.Description.ToLower().IndexOf("virtu") != -1 && (cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit)){
 					selectedInterface = cur;
 				}
 			}
