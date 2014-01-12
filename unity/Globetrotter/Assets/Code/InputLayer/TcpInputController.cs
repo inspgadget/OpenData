@@ -180,7 +180,7 @@ namespace Globetrotter.InputLayer
 						UnityEngine.Debug.Log(count);
 						_lastTime = DateTime.Now;
 						count = 0;
-					}*/
+					}*/ 
 					OnInputReceived(this, type);
 					//UnityEngine.Debug.Log(type.ToString());
 					count++;
