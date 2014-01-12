@@ -158,12 +158,7 @@ namespace Globetrotter.InputLayer
 					type = InputType.FocusNext;
 				} else if (content.StartsWith("LongPress")){
 					type = InputType.ClickLong;
-				} else if (content.StartsWith("ZoomIn")){
-					type = InputType.ZoomIn;
-				} else if (content.StartsWith("ZoomOut")){
-					type = InputType.ZoomOut;
-				} else if (content.StartsWith("Acc")){
-
+				}else if (content.StartsWith("Acc")){
 					string[] tmp = content.Split(';');
 					float x = float.Parse(tmp[1]);
 					float y = float.Parse(tmp[2]);
@@ -177,6 +172,13 @@ namespace Globetrotter.InputLayer
 						type = InputType.RotateDown;
 					} else if(y < -1f){
 						type = InputType.RotateUp;
+					}
+				} else if (content.StartsWith("Scale")){
+					float factor = float.Parse(content.Split(';')[1]);
+					if(factor < 1){
+						type = InputType.ZoomOut;
+					} else if (factor > 1){
+						type = InputType.ZoomIn;
 					}
 				}
 
