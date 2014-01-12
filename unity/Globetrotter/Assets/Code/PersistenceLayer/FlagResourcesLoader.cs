@@ -13,7 +13,7 @@ namespace Globetrotter.PersistenceLayer
 		{
 			if(string.IsNullOrEmpty(isoAlphaThreeCode) == false)
 			{
-				string filename = "flag_" + isoAlphaThreeCode.ToLower();
+				string filename = isoAlphaThreeCode.ToUpper();
 
 				return Resources.Load<Texture>(filename);
 			}
