@@ -174,13 +174,13 @@ namespace Globetrotter.InputLayer
 				}
 
 				if(type != InputType.None){
-					if(_lastTime == DateTime.MinValue){
+					/*if(_lastTime == DateTime.MinValue){
 						_lastTime = DateTime.Now;
 					} else if ((DateTime.Now - _lastTime).TotalSeconds >= 10){
 						UnityEngine.Debug.Log(count);
 						_lastTime = DateTime.Now;
 						count = 0;
-					}
+					}*/
 					OnInputReceived(this, type);
 					//UnityEngine.Debug.Log(type.ToString());
 					count++;
