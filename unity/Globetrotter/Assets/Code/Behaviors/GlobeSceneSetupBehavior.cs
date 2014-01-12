@@ -107,6 +107,10 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		//camera zoom behavior
 		CameraZoomBehavior cameraZoomBehavior = mainCamera.gameObject.AddComponent<CameraZoomBehavior>();
 		cameraZoomBehavior.Init(cameraZoomViewModel, new GameObject[]{ magnifyingGlass });
+
+		//country selection behavior
+		CountrySelection countrySelection = gameObject.AddComponent<CountrySelection>();
+		countrySelection.Init(countrySelectorViewModel, mainCamera);
 	}
 
 	void FixedUpdate()
@@ -115,6 +119,14 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		{
 			if(m_sceneName == "DataScene")
 			{
+				CountrySelectorViewModel countrySelectorViewModel = ObjectDepot.Instance.Retrive<CountrySelectorViewModel>();
+				CountrySelection countrySelection = gameObject.GetComponent<CountrySelection>();
+
+				if((countrySelectorViewModel != null) && (countrySelection != null))
+				{
+					countrySelectorViewModel.PropertyChanged -= countrySelection.PropertyChangedHandler;
+				}
+
 				Application.LoadLevel("GlobeToDataScene");
 			}
 		}

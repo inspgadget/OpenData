@@ -33,12 +33,11 @@ namespace Globetrotter.NetworkLayer
 							HttpResponse response = new HttpResponse();
 
 							string line = null;
-							bool didResend = false;
 
 							if(sr.EndOfStream == false)
 							{
 								line = sr.ReadLine();
-								response.StateLine = line;
+								response.StatusLine = line;
 
 								if(line.Contains("200"))
 								{

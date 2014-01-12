@@ -141,6 +141,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 						m_currCountryIndex = currCountryIndex;
 						m_countriesController.CurrentCountry = m_countries[m_currCountryIndex];
+
+						OnPropertyChanged("CurrentCountry");
 					}
 				}
 			}

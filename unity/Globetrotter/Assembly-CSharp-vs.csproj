@@ -52,6 +52,7 @@
      <Compile Include="Assets\Code\Behaviors\CameraZoomBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\ChartBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\ConnectionSetupBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\CountrySelection.cs" />
      <Compile Include="Assets\Code\Behaviors\CountrySelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\DataSceneSetupBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\GlobeBehavior.cs" />

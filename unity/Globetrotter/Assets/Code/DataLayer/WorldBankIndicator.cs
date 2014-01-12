@@ -74,7 +74,7 @@ namespace Globetrotter.DataLayer
 
 			HttpResponse response = new HttpRequestController().GetResponse(url, port);
 
-			if((response != null) && (response.StatusCode == 501))
+			if((response != null) && (response.StatusCode == 502))
 			{
 				UnityEngine.Debug.Log("Try to resend the request in 3 seconds.");
 
@@ -123,7 +123,7 @@ namespace Globetrotter.DataLayer
 			
 			sb.Append("/indicators/");
 			sb.Append(m_code);
-			sb.Append("?per_page=1024");
+			sb.Append("?per_page=4096");
 			sb.Append("&date=");
 			sb.Append(yearFrom);
 			sb.Append(":");
