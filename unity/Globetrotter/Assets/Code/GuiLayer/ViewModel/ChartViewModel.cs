@@ -204,90 +204,93 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 		public void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)
 		{
-			lock(m_lockObj)
+			if(args.Data != null)
 			{
-				m_worldBankData = args.Data;
-
-				m_min = double.MaxValue;
-				m_max = double.MinValue;
-
-				List<DataPoint> dataPoints = new List<DataPoint>();
-
-				//divide items by year
-				Dictionary<int, List<WorldBankDataItem>> items = new Dictionary<int, List<WorldBankDataItem>>();
-
-				foreach(WorldBankDataItem item in m_worldBankData.Items)
+				lock(m_lockObj)
 				{
-					List<WorldBankDataItem> itemsList = null;
-					items.TryGetValue(item.Year, out itemsList);
+					m_worldBankData = args.Data;
 
-					if(itemsList == null)
+					m_min = double.MaxValue;
+					m_max = double.MinValue;
+
+					List<DataPoint> dataPoints = new List<DataPoint>();
+
+					//divide items by year
+					Dictionary<int, List<WorldBankDataItem>> items = new Dictionary<int, List<WorldBankDataItem>>();
+
+					foreach(WorldBankDataItem item in m_worldBankData.Items)
 					{
-						itemsList = new List<WorldBankDataItem>();
-						items[item.Year] = itemsList;
+						List<WorldBankDataItem> itemsList = null;
+						items.TryGetValue(item.Year, out itemsList);
+
+						if(itemsList == null)
+						{
+							itemsList = new List<WorldBankDataItem>();
+							items[item.Year] = itemsList;
+						}
+
+						itemsList.Add(item);
+
+						if(item.Value < m_min)
+						{
+							m_min = item.Value;
+						}
+
+						if(item.Value > m_max)
+						{
+							m_max = item.Value;
+						}
 					}
 
-					itemsList.Add(item);
+					//series names
+					Dictionary<int, List<WorldBankDataItem>>.KeyCollection keys = items.Keys;
 
-					if(item.Value < m_min)
+					if(keys.Count > 0)
 					{
-						m_min = item.Value;
+						int n = items[keys.First()].Count;
+						string[] seriesNames = new string[n];
+
+						for(int k = 0; k < n; k++)
+						{
+							seriesNames[k] = items[keys.First()][k].Country;
+						}
+
+						Array.Sort<string>(seriesNames);
+
+						m_seriesNames = new string[5];
+
+						for(int l = 0; l < 5; l++)
+						{
+							m_seriesNames[l] = l < n ? seriesNames[l] : string.Empty;
+						}
 					}
 
-					if(item.Value > m_max)
+					//create data points
+					int[] years = keys.ToArray();
+					Array.Sort<int>(years);
+
+					for(int i = 0; i < years.Length; i++)
 					{
-						m_max = item.Value;
-					}
-				}
+						double[] data = new double[items[years[i]].Count];
 
-				//series names
-				Dictionary<int, List<WorldBankDataItem>>.KeyCollection keys = items.Keys;
+						for(int j = 0; j < data.Length; j++)
+						{
+							data[j] = items[years[i]][j].Value;
+						}
 
-				if(keys.Count > 0)
-				{
-					int n = items[keys.First()].Count;
-					string[] seriesNames = new string[n];
-
-					for(int k = 0; k < n; k++)
-					{
-						seriesNames[k] = items[keys.First()][k].Country;
+						dataPoints.Add(new DataPoint(years[i], data));
 					}
 
-					Array.Sort<string>(seriesNames);
+					m_dataPoints = dataPoints.ToArray();
 
-					m_seriesNames = new string[5];
-
-					for(int l = 0; l < 5; l++)
+					if(m_dataPoints.Length == 1)
 					{
-						m_seriesNames[l] = l < n ? seriesNames[l] : string.Empty;
+						m_currDataPointIndex = 0;
 					}
-				}
-
-				//create data points
-				int[] years = keys.ToArray();
-				Array.Sort<int>(years);
-
-				for(int i = 0; i < years.Length; i++)
-				{
-					double[] data = new double[items[years[i]].Count];
-
-					for(int j = 0; j < data.Length; j++)
+					else if(m_dataPoints.Length > 1)
 					{
-						data[j] = items[years[i]][j].Value;
+						m_currDataPointIndex = m_dataPoints.Length - 2;
 					}
-
-					dataPoints.Add(new DataPoint(years[i], data));
-				}
-
-				m_dataPoints = dataPoints.ToArray();
-
-				if(m_dataPoints.Length == 1)
-				{
-					m_currDataPointIndex = 0;
-				}
-				else if(m_dataPoints.Length > 1)
-				{
-					m_currDataPointIndex = m_dataPoints.Length - 2;
 				}
 			}
 		}

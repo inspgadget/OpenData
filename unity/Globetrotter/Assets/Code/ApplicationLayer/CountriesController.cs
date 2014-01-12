@@ -97,17 +97,23 @@ namespace Globetrotter.ApplicationLayer
 				WorldBankIndicator populationIndicator = m_dataController.GetIndicator("SP.POP.TOTL");
 				WorldBankData populationData = m_dataController.FetchData(countriesArray, populationIndicator, year, year);
 
-				for(int i = 0; i < populationData.Items.Count; i++)
+				if(populationData != null)
 				{
-					isoTwoCodeDictionary[populationData.Items[i].IsoTwoCode].Population = (int)populationData.Items[i].Value;
+					for(int i = 0; i < populationData.Items.Count; i++)
+					{
+						isoTwoCodeDictionary[populationData.Items[i].IsoTwoCode].Population = (int)populationData.Items[i].Value;
+					}
 				}
 
 				WorldBankIndicator surfaceAreaIndicator = m_dataController.GetIndicator("AG.SRF.TOTL.K2");
 				WorldBankData surfaceAreaData = m_dataController.FetchData(countriesArray, surfaceAreaIndicator, year, year);
-				
-				for(int j = 0; j < surfaceAreaData.Items.Count; j++)
+
+				if(surfaceAreaData != null)
 				{
-					isoTwoCodeDictionary[surfaceAreaData.Items[j].IsoTwoCode].SurfaceArea = surfaceAreaData.Items[j].Value;
+					for(int j = 0; j < surfaceAreaData.Items.Count; j++)
+					{
+						isoTwoCodeDictionary[surfaceAreaData.Items[j].IsoTwoCode].SurfaceArea = surfaceAreaData.Items[j].Value;
+					}
 				}
 			}
 

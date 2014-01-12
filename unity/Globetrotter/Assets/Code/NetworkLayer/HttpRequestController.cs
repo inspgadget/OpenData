@@ -32,9 +32,13 @@ namespace Globetrotter.NetworkLayer
 						{
 							HttpResponse response = new HttpResponse();
 
+							string line = null;
+							bool didResend = false;
+
 							if(sr.EndOfStream == false)
 							{
-								string line = sr.ReadLine();
+								line = sr.ReadLine();
+								response.StateLine = line;
 
 								if(line.Contains("200"))
 								{
@@ -65,12 +69,6 @@ namespace Globetrotter.NetworkLayer
 									if(contentLength > -1)
 									{
 										byte[] data = new byte[contentLength];
-
-										/*for(int i = 0; i < contentLength; i++)
-										{
-											data[i] = (byte)bs.ReadByte();
-										}*/
-
 										int nBytesReceived = 0;
 										int nBytesToRead = contentLength;
 
@@ -98,7 +96,9 @@ namespace Globetrotter.NetworkLayer
 								}
 								else
 								{
-									UnityEngine.Debug.LogError(line);
+									UnityEngine.Debug.LogError("Received http error: " + line);
+
+									return response;
 								}
 							}
 						}

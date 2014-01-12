@@ -174,7 +174,7 @@ namespace Globetrotter.ApplicationLayer
 		{
 			lock(m_lockObject)
 			{
-				if((WorldBankDataFetched != null) && (data != null))
+				if(WorldBankDataFetched != null)
 				{
 					WorldBankDataFetched(this, new WorldBankDataFetchedEventArgs(data));
 				}

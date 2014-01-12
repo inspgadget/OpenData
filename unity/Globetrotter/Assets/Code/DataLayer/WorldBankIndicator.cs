@@ -73,9 +73,28 @@ namespace Globetrotter.DataLayer
 			int port = 80;
 
 			HttpResponse response = new HttpRequestController().GetResponse(url, port);
-			IList<WorldBankDataItem> items = ParseXml(System.Text.Encoding.UTF8.GetString(response.Data));
 
-			return new WorldBankData(m_name, GetCountriesArrayAsString(isoAlphaThreeCode), false, items);
+			if((response != null) && (response.StatusCode == 501))
+			{
+				UnityEngine.Debug.Log("Try to resend the request in 3 seconds.");
+
+				System.Threading.Thread.Sleep(3000);
+
+				UnityEngine.Debug.Log("Slept for 3 seconds. Resend request to " + url);
+
+				response = new HttpRequestController().GetResponse(url, port);
+			}
+
+			if((response != null) && (response.StatusCode == 200))
+			{
+				IList<WorldBankDataItem> items = ParseXml(System.Text.Encoding.UTF8.GetString(response.Data));
+
+				return new WorldBankData(m_name, GetCountriesArrayAsString(isoAlphaThreeCode), false, items);
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
 		private IList<WorldBankDataItem> ParseXml(string xml)

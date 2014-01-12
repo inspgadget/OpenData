@@ -5,6 +5,7 @@ namespace Globetrotter.NetworkLayer
 {
 	public class HttpResponse
 	{
+		private string m_stateLine;
 		private Dictionary<string, string> m_header;
 		private byte[] m_data;
 
@@ -40,8 +41,40 @@ namespace Globetrotter.NetworkLayer
 			}
 		}
 
+		public int StatusCode
+		{
+			get
+			{
+				if(string.IsNullOrEmpty(m_stateLine) == false)
+				{
+					return int.Parse(m_stateLine.Split(' ')[1]);
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		}
+
+		public string StateLine
+		{
+			get
+			{
+				return m_stateLine;
+			}
+
+			set
+			{
+				if(value != null)
+				{
+					m_stateLine = value;
+				}
+			}
+		}
+
 		public HttpResponse()
 		{
+			m_stateLine = string.Empty;
 			m_header = new Dictionary<string, string>();
 			m_data = new byte[0];
 		}
