@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using System.Net.NetworkInformation;
 using Globetrotter.GuiLayer.Controllers;
 
 namespace Globetrotter.InputLayer
@@ -76,12 +76,19 @@ namespace Globetrotter.InputLayer
 		public void StartListening() {
 			// Data buffer for incoming data.
 			byte[] bytes = new Byte[1024];
-			
-			// Establish the local endpoint for the socket.
-			// The DNS name of the computer
-			// running the listener is "host.contoso.com".
-			IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-			IPAddress ipAddress = ipHostInfo.AddressList[0];
+
+			IPAddress ipAddress = null;
+			NetworkInterface[] inter = NetworkInterface.GetAllNetworkInterfaces();
+			foreach (UnicastIPAddressInformation ip in inter[0].GetIPProperties().UnicastAddresses)
+			{
+				if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+				{
+					ipAddress = ip.Address;
+				}
+			}
+
+			//IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+			 //= ipHostInfo.AddressList[0];
 			int port = 33000;
 
 			/*while(!isAvailable(port)){
