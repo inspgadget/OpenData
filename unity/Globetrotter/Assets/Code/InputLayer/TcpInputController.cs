@@ -78,45 +78,52 @@ namespace Globetrotter.InputLayer
 			byte[] bytes = new Byte[1024];
 
 			IPAddress ipAddress = null;
-			NetworkInterface[] inter = NetworkInterface.GetAllNetworkInterfaces();
-			foreach (UnicastIPAddressInformation ip in inter[0].GetIPProperties().UnicastAddresses)
-			{
-				if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-				{
-					ipAddress = ip.Address;
+			NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+			NetworkInterface selectedInterface = null;
+			for(int i = 0; selectedInterface != null && i < interfaces.Length; i++){
+				NetworkInterface cur = interfaces[i];
+				if(cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit){
+					selectedInterface = cur;
 				}
 			}
+			if(selectedInterface != null){
+				foreach (UnicastIPAddressInformation ip in selectedInterface.GetIPProperties().UnicastAddresses)
+				{
+					if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+					{
+						ipAddress = ip.Address;
+					}
+				}
 
-			//IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-			 //= ipHostInfo.AddressList[0];
-			int port = 33000;
+				//IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+				 //= ipHostInfo.AddressList[0];
+				int port = 33000;
 
-			/*while(!isAvailable(port)){
-				port++;
-			}*/
+				/*while(!isAvailable(port)){
+					port++;
+				}*/
 
-			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-			UdpClient u = new UdpClient(localEndPoint);
+				IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+				UdpClient u = new UdpClient(localEndPoint);
 
-			lock(m_lockObj)
-			{
-				m_ipEndPoint = localEndPoint;
+				lock(m_lockObj)
+				{
+					m_ipEndPoint = localEndPoint;
+				}
+				
+
+
+				// Bind the socket to the local endpoint and listen for incoming connections.
+				try {
+						UdpState s = new UdpState();
+						s.e = localEndPoint;
+						s.u = u;
+
+						u.BeginReceive(new AsyncCallback(ReadCallback), s);
+				} catch (Exception e) {
+					UnityEngine.Debug.LogError(e);
+				}
 			}
-			
-
-
-			// Bind the socket to the local endpoint and listen for incoming connections.
-			try {
-					UdpState s = new UdpState();
-					s.e = localEndPoint;
-					s.u = u;
-
-					u.BeginReceive(new AsyncCallback(ReadCallback), s);
-			} catch (Exception e) {
-				UnityEngine.Debug.LogError(e);
-			}
-			
-			
 		}
 
 		int count = 0;
