@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using System.Net.NetworkInformation;
 using Globetrotter.GuiLayer.Controllers;
 
 namespace Globetrotter.InputLayer
@@ -76,40 +76,55 @@ namespace Globetrotter.InputLayer
 		public void StartListening() {
 			// Data buffer for incoming data.
 			byte[] bytes = new Byte[1024];
-			
-			// Establish the local endpoint for the socket.
-			// The DNS name of the computer
-			// running the listener is "host.contoso.com".
-			IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-			IPAddress ipAddress = ipHostInfo.AddressList[0];
-			int port = 33000;
 
-			/*while(!isAvailable(port)){
-				port++;
-			}*/
-
-			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-			UdpClient u = new UdpClient(localEndPoint);
-
-			lock(m_lockObj)
-			{
-				m_ipEndPoint = localEndPoint;
+			IPAddress ipAddress = null;
+			NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+			NetworkInterface selectedInterface = null;
+			for(int i = 0; selectedInterface == null && i < interfaces.Length; i++){
+				NetworkInterface cur = interfaces[i];
+				string type = cur.NetworkInterfaceType.ToString();
+				if(cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit){
+					selectedInterface = cur;
+				}
 			}
-			
+			if(selectedInterface != null){
+				foreach (UnicastIPAddressInformation ip in selectedInterface.GetIPProperties().UnicastAddresses)
+				{
+					if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+					{
+						ipAddress = ip.Address;
+					}
+				}
+
+				//IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+				 //= ipHostInfo.AddressList[0];
+				int port = 33000;
+
+				/*while(!isAvailable(port)){
+					port++;
+				}*/
+
+				IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+				UdpClient u = new UdpClient(localEndPoint);
+
+				lock(m_lockObj)
+				{
+					m_ipEndPoint = localEndPoint;
+				}
+				
 
 
-			// Bind the socket to the local endpoint and listen for incoming connections.
-			try {
-					UdpState s = new UdpState();
-					s.e = localEndPoint;
-					s.u = u;
+				// Bind the socket to the local endpoint and listen for incoming connections.
+				try {
+						UdpState s = new UdpState();
+						s.e = localEndPoint;
+						s.u = u;
 
-					u.BeginReceive(new AsyncCallback(ReadCallback), s);
-			} catch (Exception e) {
-				UnityEngine.Debug.LogError(e);
+						u.BeginReceive(new AsyncCallback(ReadCallback), s);
+				} catch (Exception e) {
+					UnityEngine.Debug.LogError(e);
+				}
 			}
-			
-			
 		}
 
 		int count = 0;
@@ -151,12 +166,7 @@ namespace Globetrotter.InputLayer
 					type = InputType.FocusNext;
 				} else if (content.StartsWith("LongPress")){
 					type = InputType.ClickLong;
-				} else if (content.StartsWith("ZoomIn")){
-					type = InputType.ZoomIn;
-				} else if (content.StartsWith("ZoomOut")){
-					type = InputType.ZoomOut;
-				} else if (content.StartsWith("Acc")){
-
+				}else if (content.StartsWith("Acc")){
 					string[] tmp = content.Split(';');
 					float x = float.Parse(tmp[1]);
 					float y = float.Parse(tmp[2]);
@@ -170,6 +180,13 @@ namespace Globetrotter.InputLayer
 						type = InputType.RotateDown;
 					} else if(y < -1f){
 						type = InputType.RotateUp;
+					}
+				} else if (content.StartsWith("Scale")){
+					float factor = float.Parse(content.Split(';')[1]);
+					if(factor < 1){
+						type = InputType.ZoomOut;
+					} else if (factor > 1){
+						type = InputType.ZoomIn;
 					}
 				}
 
