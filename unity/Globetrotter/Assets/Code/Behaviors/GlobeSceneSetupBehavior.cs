@@ -113,9 +113,9 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 	{
 		lock(m_lockObj)
 		{
-			if(string.IsNullOrEmpty(m_sceneName) == false)
+			if(m_sceneName == "DataScene")
 			{
-				Application.LoadLevel(m_sceneName);
+				Application.LoadLevel("GlobeToDataScene");
 			}
 		}
 	}

@@ -91,11 +91,11 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 		public void InputReceivedHandler(object sender, InputReceivedEventArgs args)
 		{
-			lock(m_lockObj)
+			if(ReactOnInput == true)
 			{
-				if(ReactOnInput == true)
+				if(args.HasInputType(InputType.ScrollLeft) == true)
 				{
-					if(args.HasInputType(InputType.ScrollLeft) == true)
+					lock(m_lockObj)
 					{
 						m_countriesController.RemoveCountry(m_selectedCountries[m_currCountryIndex]);
 
@@ -110,8 +110,11 @@ namespace Globetrotter.GuiLayer.ViewModel
 							m_currCountryIndex = n - 1;
 						}
 					}
+				}
 
-					if(args.HasInputType(InputType.ScrollUp) == true)
+				if(args.HasInputType(InputType.ScrollUp) == true)
+				{
+					lock(m_lockObj)
 					{
 						if(m_currCountryIndex >= 0)
 						{
@@ -123,8 +126,11 @@ namespace Globetrotter.GuiLayer.ViewModel
 							}
 						}
 					}
+				}
 
-					if(args.HasInputType(InputType.ScrollDown) == true)
+				if(args.HasInputType(InputType.ScrollDown) == true)
+				{
+					lock(m_lockObj)
 					{
 						if(m_currCountryIndex >= 0)
 						{

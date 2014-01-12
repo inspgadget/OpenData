@@ -11,6 +11,8 @@ public class DataSceneSetupBehavior : MonoBehaviour
 {
 	private object m_lockObj = new object();
 
+	public GameObject loading;
+
 	public GameObject arrowLeft;
 	public GameObject arrowRight;
 
@@ -35,6 +37,12 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	public GUIText prevYearText;
 	public GUIText currYearText;
 	public GUIText nextYearText;
+	
+	public GameObject seriesOneLegend;
+	public GameObject seriesTwoLegend;
+	public GameObject seriesThreeLegend;
+	public GameObject seriesFourLegend;
+	public GameObject seriesFiveLegend;
 
 	public GUIText seriesOneLegendText;
 	public GUIText seriesTwoLegendText;
@@ -139,18 +147,32 @@ public class DataSceneSetupBehavior : MonoBehaviour
 							xAxis, yAxis,
 		                   	xAxisNameText, yAxisNameText,
 		                   	prevYearText, currYearText, nextYearText,
+							new GameObject[] { seriesOneLegend, seriesTwoLegend, seriesThreeLegend,
+												seriesFourLegend, seriesFiveLegend} ,
 		                    new GUIText[] { seriesOneLegendText, seriesTwoLegendText, seriesThreeLegendText,
 												seriesFourLegendText, seriesFiveLegendText },
 							focusedObjectMaterial, unfocusedObjectMaterial);
+
+		//indicator loading behavior
+		IndicatorLoadingBehavior indicatorLoadingBehavior = loading.AddComponent<IndicatorLoadingBehavior>();
+		indicatorLoadingBehavior.Init(indicatorSelectorViewModel, 1.0f);
 	}
 	
 	void FixedUpdate()
 	{
 		lock(m_lockObj)
 		{
-			if(string.IsNullOrEmpty(m_sceneName) == false)
+			if(m_sceneName == "GlobeScene")
 			{
-				Application.LoadLevel(m_sceneName);
+				IndicatorSelectorViewModel indicatorSelectorViewModel = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
+				IndicatorLoadingBehavior indicatorLoadingBehavior = loading.GetComponent<IndicatorLoadingBehavior>();
+
+				if((indicatorSelectorViewModel != null) && (indicatorLoadingBehavior != null))
+				{
+					indicatorSelectorViewModel.PropertyChanged -= indicatorLoadingBehavior.PropertyChangedHandler;
+				}
+
+				Application.LoadLevel("DataToGlobeScene");
 			}
 		}
 	}

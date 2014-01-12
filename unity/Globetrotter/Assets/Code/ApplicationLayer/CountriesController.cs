@@ -133,7 +133,7 @@ namespace Globetrotter.ApplicationLayer
 		{
 			lock(m_lockObj)
 			{
-				if(country != null)
+				if((country != null) && (m_selectedCountries.Contains(country) == false))
 				{
 					if(m_selectedCountries.Count >= CountriesController.MaxSelectedCountries)
 					{

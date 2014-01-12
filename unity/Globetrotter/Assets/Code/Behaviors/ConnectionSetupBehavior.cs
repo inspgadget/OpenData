@@ -13,13 +13,31 @@ public class ConnectionSetupBehavior : MonoBehaviour
 	private TcpInputController m_inputController;
 
 	private Texture2D m_encoded;
+	private GUIStyle m_textStyle;
+
+	void Start()
+	{
+		m_textStyle = new GUIStyle();
+		m_textStyle.alignment = TextAnchor.MiddleCenter;
+		m_textStyle.normal.textColor = Color.white;
+	}
 	
 	void OnGUI()
 	{
 		if(m_encoded != null)
 		{
-			GUI.Label(new Rect(Screen.width - 266, Screen.height - 266, m_encoded.width, m_encoded.height), m_encoded);
-			GUI.Label(new Rect(Screen.width - 570, Screen.height - 25, 400, 20), "Scan the QR-Code to control the application with your smartphone.");
+			int screenWidth = Screen.width;
+			int screenHeight = Screen.height;
+
+			GUI.Label(new Rect((screenWidth / 2) - (m_encoded.width / 2),
+			                   		(screenHeight / 2) - (m_encoded.height / 2),
+			                   		m_encoded.width,
+			                   		m_encoded.height),
+			          		m_encoded);
+
+			GUI.Label(new Rect(0, (screenHeight / 2) + (m_encoded.height / 2) + 10, screenWidth, 20),
+			          	"Scan the QR-Code to control the application with your smartphone.",
+			          	m_textStyle);
 		}
 	}
 

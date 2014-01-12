@@ -55,7 +55,9 @@
      <Compile Include="Assets\Code\Behaviors\CountrySelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\DataSceneSetupBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\GlobeBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\GlobeDataSwitcherBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\GlobeSceneSetupBehavior.cs" />
+     <Compile Include="Assets\Code\Behaviors\IndicatorLoadingBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\IndicatorSelectorBehavior.cs" />
      <Compile Include="Assets\Code\Behaviors\KeyboardInputController.cs" />
      <Compile Include="Assets\Code\Behaviors\MainMenuSceneSetupBehavior.cs" />
@@ -68,6 +70,7 @@
      <Compile Include="Assets\Code\DataLayer\WorldBankDataItem.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankDataParser.cs" />
      <Compile Include="Assets\Code\DataLayer\WorldBankIndicator.cs" />
+     <Compile Include="Assets\Code\DeadLockDetection.cs" />
      <Compile Include="Assets\Code\DomainLayer\Country.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\ChangeSceneEventArgs.cs" />
      <Compile Include="Assets\Code\GuiLayer\Controllers\DataSceneGuiController.cs" />
