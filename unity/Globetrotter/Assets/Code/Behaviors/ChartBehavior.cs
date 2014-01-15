@@ -10,7 +10,7 @@ public class ChartBehavior : MonoBehaviour
 
 	private GameObject m_xAxis;
 	private GameObject m_yAxis;
-	
+
 	public GameObject[] m_currDataPoints;
 
 	private GUIText m_xAxisNameText;
@@ -19,6 +19,9 @@ public class ChartBehavior : MonoBehaviour
 	private GUIText m_prevYearText;
 	private GUIText m_currYearText;
 	private GUIText m_nextYearText;
+
+	private GUIText m_yAxisHalfText;
+	private GUIText m_yAxisMaxText;
 
 	private GameObject[] m_legendObjects;
 	private GUIText[] m_legend;
@@ -51,6 +54,19 @@ public class ChartBehavior : MonoBehaviour
 			else
 			{
 				m_yAxisNameText.text = "Y";
+			}
+
+			if(m_chartViewModel.Max > 0)
+			{
+				m_yAxisHalfText.text = string.Format(System.Globalization.CultureInfo.CreateSpecificCulture("de-AT"),
+				                                     "{0:0,0}", (m_chartViewModel.Max / 2));
+				m_yAxisMaxText.text = string.Format(System.Globalization.CultureInfo.CreateSpecificCulture("de-AT"),
+				                                    "{0:0,0}", m_chartViewModel.Max);
+			}
+			else
+			{
+				m_yAxisHalfText.text = string.Empty;
+				m_yAxisMaxText.text = string.Empty;
 			}
 
 			m_xAxisNameText.text = "Year";
@@ -113,6 +129,7 @@ public class ChartBehavior : MonoBehaviour
 	                 	GameObject xAxis, GameObject yAxis,
 	                 	GUIText xAxisNameText, GUIText yAxisNameText,
 	                 	GUIText prevYearText, GUIText currYearText, GUIText nextYearText,
+	                 	GUIText yAxisHalfText, GUIText yAxisMaxText, 
 	                 	GameObject[] legendObjects, GUIText[] legend,
 	                 	Material focusedObjectMaterial, Material unfocusedObjectMaterial)
 	{
@@ -129,6 +146,9 @@ public class ChartBehavior : MonoBehaviour
 		m_prevYearText = prevYearText;
 		m_currYearText = currYearText;
 		m_nextYearText = nextYearText;
+
+		m_yAxisHalfText = yAxisHalfText;
+		m_yAxisMaxText = yAxisMaxText;
 
 		m_legendObjects = legendObjects;
 		m_legend = legend;

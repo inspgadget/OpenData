@@ -15,7 +15,8 @@ namespace Globetrotter.NetworkLayer
 			string host = GetHost(url);
 			string path = GetPath(url);
 
-			string request = "GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\n\r\n";
+			string request = "GET " + path + " HTTP/1.1\r\nHost: " + host +
+				"\r\nUser-Agent: university of applied sciences vorarlberg / academic project client\r\n\r\n";
 
 			using(TcpClient socket = new TcpClient(host, port))
 			{

@@ -38,6 +38,9 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	public GUIText currYearText;
 	public GUIText nextYearText;
 	
+	public GUIText yAxisHalfText;
+	public GUIText yAxisMaxText;
+	
 	public GameObject seriesOneLegend;
 	public GameObject seriesTwoLegend;
 	public GameObject seriesThreeLegend;
@@ -66,7 +69,7 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		m_arrowPositions = new Vector3[,] { { new Vector3(-4.5f, 5.1f, 0.0f), new Vector3(4.5f, 5.1f, 0.0f) },
 											{ new Vector3(-4.5f, 4.25f, 0.0f), new Vector3(4.5f, 4.25f, 0.0f) },
 											{ new Vector3(-4.5f, 4.25f, 0.0f), new Vector3(4.5f, 4.25f, 0.0f) },
-											{ new Vector3(-4.5f, 2.0f, 0.0f), new Vector3(4.5f, 2.0f, 0.0f) }};
+											{ new Vector3(-4.5f, 1.5f, 0.0f), new Vector3(4.5f, 1.5f, 0.0f) }};
 		
 		//input controller
 		IInputController inputController = ObjectDepot.Instance.Retrive<IInputController>();
@@ -147,6 +150,7 @@ public class DataSceneSetupBehavior : MonoBehaviour
 							xAxis, yAxis,
 		                   	xAxisNameText, yAxisNameText,
 		                   	prevYearText, currYearText, nextYearText,
+							yAxisHalfText, yAxisMaxText,
 							new GameObject[] { seriesOneLegend, seriesTwoLegend, seriesThreeLegend,
 												seriesFourLegend, seriesFiveLegend} ,
 		                    new GUIText[] { seriesOneLegendText, seriesTwoLegendText, seriesThreeLegendText,
