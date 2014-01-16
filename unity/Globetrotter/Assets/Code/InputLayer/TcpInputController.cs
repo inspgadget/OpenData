@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Net.NetworkInformation;
 using Globetrotter.GuiLayer.Controllers;
+using UnityEngine;
 
 namespace Globetrotter.InputLayer
 {
@@ -18,6 +19,39 @@ namespace Globetrotter.InputLayer
 		private IPEndPoint m_ipEndPoint;
 
 		private Thread m_thread;
+
+		[ThreadStatic]
+		private Vector3[] m_vert;
+		[ThreadStatic]
+		private Vector2[] m_uv;
+		[ThreadStatic]
+		private int[] m_triangles;
+		
+		public int[] Triangles {
+			get {
+				return m_triangles;
+			}
+			set {
+				m_triangles = value;
+			}
+		}
+		public Vector3[] Vertices {
+			get {
+				return m_vert;
+			}
+			set {
+				m_vert = value;
+			}
+		}
+
+		public Vector2[] UV {
+			get {
+				return m_uv;
+			}
+			set {
+				m_uv = value;
+			}
+		}
 
 		public String IpAddress
 		{
@@ -73,7 +107,7 @@ namespace Globetrotter.InputLayer
 
 		public ManualResetEvent allDone = new ManualResetEvent(false);
 
-		public void StartListening() {
+		void StartListening() {
 			// Data buffer for incoming data.
 			byte[] bytes = new Byte[1024];
 
@@ -83,7 +117,7 @@ namespace Globetrotter.InputLayer
 			for(int i = 0; selectedInterface == null && i < interfaces.Length; i++){
 				NetworkInterface cur = interfaces[i];
 				string type = cur.NetworkInterfaceType.ToString();
-				if(cur.OperationalStatus == OperationalStatus.Up && cur.Description.ToLower().IndexOf("virtu") != -1 && (cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit)){
+				if(cur.OperationalStatus == OperationalStatus.Up && cur.Description.ToLower().IndexOf("virtu") == -1 && (cur.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || cur.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet  || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx || cur.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT || cur.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit)){
 					selectedInterface = cur;
 				}
 			}
@@ -128,7 +162,6 @@ namespace Globetrotter.InputLayer
 		}
 
 		int count = 0;
-		DateTime _lastTime = DateTime.MinValue ;
 		bool changed = false;
 
 		public void ReadCallback(IAsyncResult ar) {

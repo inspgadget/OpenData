@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System;
 
 using Globetrotter.GuiLayer.ViewModel;
+using Globetrotter;
+using Globetrotter.InputLayer;
 
 public class CountrySelection : MonoBehaviour
 {
@@ -35,6 +37,30 @@ public class CountrySelection : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+		m_firstRun = true;
+		IInputController controller = ObjectDepot.Instance.Retrive<IInputController>();
+		if(controller is TcpInputController){
+			Mesh mesh = GetComponent<MeshFilter>().mesh;
+			TcpInputController c = (TcpInputController)controller;
+				Vector2[] uv = new Vector2[mesh.uv.Length];
+				for(int i = 0; i < mesh.uv.Length; i++){
+					Vector2 v = mesh.uv[i];
+					uv[i] = new Vector2(v.x, v.y);
+				}
+				Vector3[] vertices = new Vector3[mesh.vertices.Length];
+				for(int i = 0; i < mesh.vertices.Length; i++){
+					Vector3 v = mesh.vertices[i];
+					vertices[i] = new Vector3(v.x, v.y, v.z);
+				}
+				int[] tri = new int[mesh.triangles.Length];
+				for(int i = 0; i < mesh.triangles.Length; i++){
+					tri[i] = mesh.triangles[i];
+				}
+				c.Vertices = vertices;
+				c.UV = uv;
+				c.Triangles = tri;
+
+		}
 		trans = transform;
 		qTo = trans.rotation;
 		_countries = new Dictionary<string, Country>();
@@ -59,69 +85,81 @@ public class CountrySelection : MonoBehaviour
 	private Quaternion qTo;
 	private Transform trans;
 
+	bool m_rotateToCountry;
+	bool m_firstRun;
+
 	// Update is called once per frame
 	void Update () {
-		Vector3 v;
+		/*Ray ray = Camera.main.ViewportPointToRay (new Vector3(0.5f,0.5f,0));
+		RaycastHit hit;
+		
+		if (collider.Raycast (ray, out hit, 10000f)) {
+			//Debug.Log("hit: " + hit.point.x + " - " + hit.point.y + " - " + hit.point.z);
 
-		lock(m_lockObj)
-		{
-			v = m_rotationVector;
+			int w = (int)Mathf.Round(hit.textureCoord.x * 4096);
+			int h = (int)Mathf.Round(2048- hit.textureCoord.y * 2048);
+			
+			Vector2 v = PixelXYToLatLong(w, h);
+
+			Country c = getCountry(v.y, v.x);
+			if(c != null){
+				Debug.Log(c.Name);
+			} else {
+				Debug.Log("NULL");
+			}
+		}*/
+		if(m_firstRun){
+			rotate();
+			m_firstRun = false;
 		}
 
-		if((v.x != 0.0f) && (v.y != 0.0f) && (v.z != 0.0f))
-		{
-			Debug.Log("update change");
-			qTo = Quaternion.FromToRotation(v - trans.position, m_mainCamera.transform.position - trans.position);
-			qTo = qTo * transform.rotation;
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, qTo, Time.deltaTime * 500);
+		if(m_rotateToCountry){
+			Vector3 v;
 
 			lock(m_lockObj)
 			{
-				m_rotationVector = new Vector3(0.0f, 0.0f, 0.0f);
+				v = transform.TransformPoint(m_rotationVector);
 			}
-		}
 
-		trans.rotation = Quaternion.RotateTowards (trans.rotation, qTo, Time.deltaTime * speed);
+			if((v.x != 0.0f) && (v.y != 0.0f) && (v.z != 0.0f))
+			{
+				Debug.Log("update change");
+				qTo = Quaternion.FromToRotation(v - trans.position, m_mainCamera.transform.position - trans.position);
+				qTo = qTo * transform.rotation;
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, qTo, Time.deltaTime * 500);
+			}
+			
+			trans.rotation = Quaternion.RotateTowards (trans.rotation, qTo, Time.deltaTime * speed);
 
 
-
-		/*//if (Input.GetMouseButtonDown(0)){
+			if(v.x == 0.0f && v.y == 0.0f && v.z == 0.0f){
+				m_rotateToCountry = false;
+			}
 			Ray ray = Camera.main.ViewportPointToRay (new Vector3(0.5f,0.5f,0));
 			RaycastHit hit;
-			
 			if (collider.Raycast (ray, out hit, 10000f)) {
-				Debug.Log("hit: " + hit.point.x + " - " + hit.point.y + " - " + hit.point.z);
-				
+				//Debug.Log("hit: " + hit.textureCoord.x + " - " + hit.textureCoord.y );
+				//Debug.Log("uv3d: " + v.x + " - " + v.y + " - " + v.z);
+
 				int w = (int)Mathf.Round(hit.textureCoord.x * 4096);
 				int h = (int)Mathf.Round(2048- hit.textureCoord.y * 2048);
 				
-				Debug.Log("pixel: " + w + " - " + h); 
+				//Debug.Log("pixel: " + w + " - " + h); 
 				
 				Vector2 v2 = new Vector2();
-				v2.x = w / 4096;
-				v2.y = (h - 2048)/2048 * - 1 ;
-				Debug.Log("textur coord berechnung: " + v2.x + " - " + v2.y);
-				//asdf = UvTo3D(v2);
-				//Debug.Log("back: " + asdf.x + " - " + asdf.y + " - " + asdf.z);
-				
-				Debug.Log("----");
-				
-				v2 = PixelXYToLatLong(w, h);
-				Debug.Log(v2.x + " - " + v2.y);
-				//string url = "http://api.geonames.org/countryCode?lat="+v2.x+"&lng="+v2.y+"&username=stefan900";
-				//string data = getData(url).Trim();
-				//if(data.Length == 2){
-				//	RegionInfo info = new RegionInfo(data);
-				//	Debug.Log(info.ThreeLetterWindowsRegionName);
-				//}
-				Country c = getCountry(v2.y, v2.x);
-				if(c != null){
-					Debug.Log(c.Name);
-				} else {
-					Debug.Log("NULL");
+				v2.x = w / 4096f;
+				v2.y = (h - 2048)/2048f * - 1 ;
+				Vector3 v3 = UvTo3D(v2);
+				Vector3 v4 = transform.InverseTransformPoint(v);
+				//Debug.Log("v3: " + v3.x + " - " + v3.y + " - " + v3.z );
+				//Debug.Log("v4: " + v4.x + " - " + v4.y + " - " + v4.z );
+
+				if(Math.Abs(v3.x - v4.x) <= 0.1f && Math.Abs(v3.y - v4.y) <= 0.1f && Math.Abs(v3.z - v4.z) <= 0.1f){
+					//Fertig rotiert, wieder freigeben für Steuerung
+					m_rotateToCountry = false;
 				}
 			}
-		//}*/
+		}
 	}
 
 	void OnDestroy()
@@ -145,28 +183,40 @@ public class CountrySelection : MonoBehaviour
 		vector.y = (2048/180.0f) * (90 - lat);
 		return vector;
 	}
-	
+
 	Vector3 UvTo3D(Vector2 uv) {
-		Mesh mesh = GetComponent<MeshFilter>().mesh;
-		int[] tris = mesh.triangles;
-		Vector2[] uvs = mesh.uv;
-		Vector3[] verts = mesh.vertices;
-		for (int i = 0; i < tris.Length; i += 3){
-			Vector2 u1= uvs[tris[i]]; 
-			Vector2 u2= uvs[tris[i+1]];
-			Vector2 u3= uvs[tris[i+2]];
-			
-			float a = Area(u1, u2, u3); if (a == 0) continue;
-			
-			
-			float a1= Area(u2, u3, uv)/a; if (a1 < 0) continue;
-			float a2 = Area(u3, u1, uv)/a; if (a2 < 0) continue;
-			float a3 = Area(u1, u2, uv)/a; if (a3 < 0) continue;
-			
-			Vector3 p3D = a1*verts[tris[i]]+a2*verts[tris[i+1]]+a3*verts[tris[i+2]];
-			
-			return transform.TransformPoint(p3D);
+		Vector2[] uvs = null;
+		Vector3[] verts = null;
+		int[] tris = null;
+		IInputController controller = ObjectDepot.Instance.Retrive<IInputController>();
+		if(controller is TcpInputController){
+			TcpInputController c = (TcpInputController)controller;
+			uvs = c.UV;
+			verts = c.Vertices;
+			tris = c.Triangles;
+		} else {
+			Mesh mesh = GetComponent<MeshFilter>().mesh;
+			uvs = mesh.uv;
+			verts = mesh.vertices;
+			tris = mesh.triangles;
 		}
+			
+			for (int i = 0; i < tris.Length; i += 3){
+				Vector2 u1= uvs[tris[i]]; 
+				Vector2 u2= uvs[tris[i+1]];
+				Vector2 u3= uvs[tris[i+2]];
+				
+				float a = Area(u1, u2, u3); if (a == 0) continue;
+				
+				
+				float a1= Area(u2, u3, uv)/a; if (a1 < 0) continue;
+				float a2 = Area(u3, u1, uv)/a; if (a2 < 0) continue;
+				float a3 = Area(u1, u2, uv)/a; if (a3 < 0) continue;
+				
+				Vector3 p3D = a1*verts[tris[i]]+a2*verts[tris[i+1]]+a3*verts[tris[i+2]];
+				
+				return p3D;
+			}
 		
 		return Vector3.zero;
 	}
@@ -191,29 +241,34 @@ public class CountrySelection : MonoBehaviour
 
 	public void PropertyChangedHandler(object sender, PropertyChangedEventArgs args)
 	{
-		Debug.Log("property changed");
+		//Debug.Log("property changed");
 		if(sender == m_countrySelectorViewModel)
 		{
 			if(args.PropertyName == "CurrentCountry")
 			{
-				Debug.Log("change");
-				Country c = null;
-				_countries.TryGetValue(m_countrySelectorViewModel.CurrentCountry.IsoAlphaThreeCode, out c);
+				rotate();
+			}
+		}
+	}
 
-				if(c != null)
-				{
-					Debug.Log(c.Longitude + " - " + c.Latitude);
-					Vector2 v2 = LatLongToPixelXY(c.Latitude, c.Longitude);
-					v2.x = v2.x/ 4096;
-					v2.y = (v2.y - 2048) / 2048 * - 1;
-					Vector3 vector = UvTo3D(v2);
-					Debug.Log(vector.x+"-"+vector.y+"-"+vector.z);
-
-					lock(m_lockObj)
-					{
-						m_rotationVector = vector;
-					}
-				}
+	private void rotate(){
+		//Debug.Log("change");
+		Country c = null;
+		_countries.TryGetValue(m_countrySelectorViewModel.CurrentCountry.IsoAlphaThreeCode, out c);
+		
+		if(c != null)
+		{
+			Debug.Log(c.Longitude + " - " + c.Latitude);
+			Vector2 v2 = LatLongToPixelXY(c.Latitude, c.Longitude);
+			v2.x = v2.x/ 4096;
+			v2.y = (v2.y - 2048) / 2048 * - 1;
+			Vector3 vector = UvTo3D(v2);
+			Debug.Log(vector.x+"-"+vector.y+"-"+vector.z);
+			
+			lock(m_lockObj)
+			{
+				m_rotationVector = vector;
+				m_rotateToCountry = true;
 			}
 		}
 	}
