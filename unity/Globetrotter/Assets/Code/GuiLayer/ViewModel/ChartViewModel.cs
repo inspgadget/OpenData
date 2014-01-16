@@ -16,10 +16,23 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private DataPoint[] m_dataPoints;
 		private string[] m_seriesNames;
 
+		private byte[] m_chartData;
+
 		private double m_min;
 		private double m_max;
 
 		private int m_currDataPointIndex;
+
+		public byte[] ChartData
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_chartData;
+				}
+			}
+		}
 
 		public DataPoint CurrentDataPoint
 		{
@@ -142,11 +155,14 @@ namespace Globetrotter.GuiLayer.ViewModel
 			: base()
 		{
 			m_dataController = dataController;
+			m_dataController.ChartFetched += ChartFetchedHandler;
 			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
 			m_worldBankData = null;
 			m_dataPoints = new DataPoint[0];
 			m_seriesNames = new string[5];
+
+			m_chartData = null;
 
 			m_min = 0.0;
 			m_max = 0.0;
@@ -200,6 +216,22 @@ namespace Globetrotter.GuiLayer.ViewModel
 					}
 				}
 			}
+		}
+
+		public void DisconnectFromEvents()
+		{
+			m_dataController.ChartFetched -= ChartFetchedHandler;
+			m_dataController.WorldBankDataFetched -= WorldBankDataFetchedHandler;
+		}
+
+		public void ChartFetchedHandler(object sender, ChartFetchedEventArgs args)
+		{
+			lock(m_lockObj)
+			{
+				m_chartData = args.Data;
+			}
+
+			OnPropertyChanged("ChartData");
 		}
 
 		public void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)

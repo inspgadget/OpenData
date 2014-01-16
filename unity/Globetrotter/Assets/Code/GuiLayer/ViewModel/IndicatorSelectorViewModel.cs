@@ -79,6 +79,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 		{
 			m_countriesController = countriesController;
 			m_dataController = dataController;
+			m_dataController.ChartFetched += ChartFetchedHandler;
 			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
 			m_indicators = m_dataController.Indicators;
@@ -167,6 +168,16 @@ namespace Globetrotter.GuiLayer.ViewModel
 					}
 				}
 			}
+		}
+		
+		public void ChartFetchedHandler(object sender, ChartFetchedEventArgs args)
+		{
+			lock(m_lockObj)
+			{
+				m_isFetching = false;
+			}
+
+			OnPropertyChanged("IsFetching");
 		}
 
 		public void WorldBankDataFetchedHandler(object sender, WorldBankDataFetchedEventArgs args)

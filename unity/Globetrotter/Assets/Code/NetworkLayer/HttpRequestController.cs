@@ -113,7 +113,7 @@ namespace Globetrotter.NetworkLayer
 		{
 			string withoutProtocol = url.Substring(7);
 			int hostEnd = withoutProtocol.IndexOf("/");
-			
+
 			return withoutProtocol.Substring(0, hostEnd);
 		}
 		

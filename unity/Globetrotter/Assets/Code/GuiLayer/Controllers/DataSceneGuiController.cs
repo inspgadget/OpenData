@@ -20,6 +20,17 @@ namespace Globetrotter.GuiLayer.Controllers
 		private int m_focusIndex;
 		private List<ViewModelBase> m_focusList;
 
+		public ChartViewModel ChartViewModel
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_chartViewModel;
+				}
+			}
+		}
+
 		public int FocusIndex
 		{
 			get
@@ -68,7 +79,7 @@ namespace Globetrotter.GuiLayer.Controllers
 			{
 				if(args.HasInputType(InputType.ClickLong) == true)
 				{
-					//disconnect from event
+					//disconnect from events
 					m_inputController.InputReceived -= InputReceivedHandler;
 					
 					m_inputController.InputReceived -= m_yearToViewModel.InputReceivedHandler;

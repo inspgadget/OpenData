@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Code\ApplicationLayer\ChartFetchedEventArgs.cs" />
      <Compile Include="Assets\Code\ApplicationLayer\CountriesController.cs" />
      <Compile Include="Assets\Code\ApplicationLayer\DataController.cs" />
      <Compile Include="Assets\Code\ApplicationLayer\SelectedCountriesChangedEventArgs.cs" />
