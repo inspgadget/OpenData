@@ -23,6 +23,9 @@ public class CountrySelection : MonoBehaviour
 	private Dictionary<string, Country> _countries;
 
 	private Vector3 m_rotationVector;
+	private Vector2[] m_uv;
+	private Vector3[] m_vertices;
+	private int[] m_triangles;
 
 	public void Init(CountrySelectorViewModel countrySelectorViewModel, Camera mainCamera)
 	{
@@ -38,29 +41,23 @@ public class CountrySelection : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 		m_firstRun = true;
-		IInputController controller = ObjectDepot.Instance.Retrive<IInputController>();
-		if(controller is TcpInputController){
-			Mesh mesh = GetComponent<MeshFilter>().mesh;
-			TcpInputController c = (TcpInputController)controller;
-				Vector2[] uv = new Vector2[mesh.uv.Length];
-				for(int i = 0; i < mesh.uv.Length; i++){
-					Vector2 v = mesh.uv[i];
-					uv[i] = new Vector2(v.x, v.y);
-				}
-				Vector3[] vertices = new Vector3[mesh.vertices.Length];
-				for(int i = 0; i < mesh.vertices.Length; i++){
-					Vector3 v = mesh.vertices[i];
-					vertices[i] = new Vector3(v.x, v.y, v.z);
-				}
-				int[] tri = new int[mesh.triangles.Length];
-				for(int i = 0; i < mesh.triangles.Length; i++){
-					tri[i] = mesh.triangles[i];
-				}
-				c.Vertices = vertices;
-				c.UV = uv;
-				c.Triangles = tri;
 
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
+		m_uv = new Vector2[mesh.uv.Length];
+		for(int i = 0; i < mesh.uv.Length; i++){
+			Vector2 v = mesh.uv[i];
+			m_uv[i] = new Vector2(v.x, v.y);
 		}
+		m_vertices = new Vector3[mesh.vertices.Length];
+		for(int i = 0; i < mesh.vertices.Length; i++){
+			Vector3 v = mesh.vertices[i];
+			m_vertices[i] = new Vector3(v.x, v.y, v.z);
+		}
+		m_triangles = new int[mesh.triangles.Length];
+		for(int i = 0; i < mesh.triangles.Length; i++){
+			m_triangles[i] = mesh.triangles[i];
+		}
+
 		trans = transform;
 		qTo = trans.rotation;
 		_countries = new Dictionary<string, Country>();
@@ -185,38 +182,26 @@ public class CountrySelection : MonoBehaviour
 	}
 
 	Vector3 UvTo3D(Vector2 uv) {
-		Vector2[] uvs = null;
-		Vector3[] verts = null;
-		int[] tris = null;
-		IInputController controller = ObjectDepot.Instance.Retrive<IInputController>();
-		if(controller is TcpInputController){
-			TcpInputController c = (TcpInputController)controller;
-			uvs = c.UV;
-			verts = c.Vertices;
-			tris = c.Triangles;
-		} else {
-			Mesh mesh = GetComponent<MeshFilter>().mesh;
-			uvs = mesh.uv;
-			verts = mesh.vertices;
-			tris = mesh.triangles;
-		}
+		Vector2[] uvs = m_uv;
+		Vector3[] verts = m_vertices;
+		int[] tris = m_triangles;
+
+		for (int i = 0; i < tris.Length; i += 3){
+			Vector2 u1= uvs[tris[i]]; 
+			Vector2 u2= uvs[tris[i+1]];
+			Vector2 u3= uvs[tris[i+2]];
 			
-			for (int i = 0; i < tris.Length; i += 3){
-				Vector2 u1= uvs[tris[i]]; 
-				Vector2 u2= uvs[tris[i+1]];
-				Vector2 u3= uvs[tris[i+2]];
-				
-				float a = Area(u1, u2, u3); if (a == 0) continue;
-				
-				
-				float a1= Area(u2, u3, uv)/a; if (a1 < 0) continue;
-				float a2 = Area(u3, u1, uv)/a; if (a2 < 0) continue;
-				float a3 = Area(u1, u2, uv)/a; if (a3 < 0) continue;
-				
-				Vector3 p3D = a1*verts[tris[i]]+a2*verts[tris[i+1]]+a3*verts[tris[i+2]];
-				
-				return p3D;
-			}
+			float a = Area(u1, u2, u3); if (a == 0) continue;
+			
+			
+			float a1= Area(u2, u3, uv)/a; if (a1 < 0) continue;
+			float a2 = Area(u3, u1, uv)/a; if (a2 < 0) continue;
+			float a3 = Area(u1, u2, uv)/a; if (a3 < 0) continue;
+			
+			Vector3 p3D = a1*verts[tris[i]]+a2*verts[tris[i+1]]+a3*verts[tris[i+2]];
+			
+			return p3D;
+		}
 		
 		return Vector3.zero;
 	}

@@ -20,39 +20,6 @@ namespace Globetrotter.InputLayer
 
 		private Thread m_thread;
 
-		[ThreadStatic]
-		private Vector3[] m_vert;
-		[ThreadStatic]
-		private Vector2[] m_uv;
-		[ThreadStatic]
-		private int[] m_triangles;
-		
-		public int[] Triangles {
-			get {
-				return m_triangles;
-			}
-			set {
-				m_triangles = value;
-			}
-		}
-		public Vector3[] Vertices {
-			get {
-				return m_vert;
-			}
-			set {
-				m_vert = value;
-			}
-		}
-
-		public Vector2[] UV {
-			get {
-				return m_uv;
-			}
-			set {
-				m_uv = value;
-			}
-		}
-
 		public String IpAddress
 		{
 			get
