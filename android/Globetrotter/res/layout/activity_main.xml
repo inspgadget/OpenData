@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,66 +10,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-        <TableRow>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/earth" />
 
-            <Button
-                android:id="@+id/scanButton"
-                android:layout_width="200dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:onClick="scanQr"
-                android:text="Scan QR-Code" />
-        </TableRow>
+        <TextView
+            android:paddingLeft="15dp"
+            android:id="@+id/text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Globetrotter"
+            android:textSize="30sp" />
+    </LinearLayout>
 
-        <TableRow>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawablePadding="60dp"
+        android:text="Globetrotter enables you the possibility to discover different countries of the world and compare their characteristic figures by controlling the globe with your smartphone. Just scan the QR-Code on the screen and start the adventure."
+        android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:text="OR"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
-        </TableRow>
+    <Button
+        android:id="@+id/scanButton"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:onClick="scanQr"
+        android:text="Scan QR-Code" />
 
-        <TableRow>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/globe_new" />
 
-            <TextView
-                android:id="@+id/ipAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:text="IP - Address"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-        </TableRow>
-
-        <TableRow>
-
-            <EditText
-                android:id="@+id/editIp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ipAddress"
-                android:ems="10"
-                android:inputType="phone" >
-            </EditText>
-        </TableRow>
-
-        <TableRow>
-
-            <Button
-                android:id="@+id/connectButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:onClick="connect"
-                android:text="Connect" />
-        </TableRow>
-    </TableLayout>
-
-</ScrollView>
+</LinearLayout>

@@ -37,14 +37,6 @@ public class MainActivity extends Activity {
 		startActivityForResult(intent, 0);
 	}
 
-	public void connect(View view) {
-		String ip = ((TextView) findViewById(R.id.editIp)).getText().toString();
-
-		if (CheckIp(ip)) {
-			connect(ip, 33000);
-		}
-	}
-
 	public void connect(String ip, int port) {
 		if (connectionTest(ip, port)) {
 			Intent intentSender = new Intent(getApplicationContext(),
