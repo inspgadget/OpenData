@@ -160,9 +160,9 @@ namespace Globetrotter.InputLayer
 				} else if (content.StartsWith("SwipeRight")){
 //						type = InputType.WipeRight;	//10er Schritte
 					type = InputType.ScrollRight;
-				} else if (content.StartsWith("VolumeUp")){
+				} else if (content.StartsWith("UpSwipe")){
 					type = InputType.FocusPrevious;
-				} else if (content.StartsWith("VolumeDown")){
+				} else if (content.StartsWith("DownSwipe")){
 					type = InputType.FocusNext;
 				} else if (content.StartsWith("LongPress")){
 					type = InputType.ClickLong;

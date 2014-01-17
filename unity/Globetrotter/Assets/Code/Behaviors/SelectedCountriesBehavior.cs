@@ -4,10 +4,13 @@ using System.Collections;
 using Globetrotter.DomainLayer;
 using Globetrotter.GuiLayer;
 using Globetrotter.GuiLayer.ViewModel;
+using System;
+using System.IO;
 
 public class SelectedCountriesBehavior : MonoBehaviour
 {
 	private SelectedCountriesViewModel m_selectedCountriesViewModel;
+	private DateTime m_firstRunDt = DateTime.MinValue;
 
 	void OnGUI()
 	{
@@ -35,6 +38,26 @@ public class SelectedCountriesBehavior : MonoBehaviour
 			if(m_selectedCountriesViewModel.ReactOnInput == true)
 			{
 				style = StyleDepot.Instance.FocusedTextStyle;
+				DateTime now = DateTime.Now;
+				if(m_firstRunDt == DateTime.MinValue){
+					m_firstRunDt = now;
+				}
+				TimeSpan ts = (now - m_firstRunDt);
+				if(ts.TotalSeconds <= 6){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/doubletap2.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          0,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				}  else if (ts.TotalSeconds <= 12){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipedownupselectedcountries.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          0,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				}
 			}
 
 			if((selectedCountries != null) && (selectedCountries.Length > 0))
@@ -60,6 +83,15 @@ public class SelectedCountriesBehavior : MonoBehaviour
 				GUI.Label(new Rect( screenWidth - 210, (screenHeight / 2) + 15, 200, 25), "No countries selected.", style);
 			}
 		}
+	}
+
+	private Texture2D loadTexture(string path){
+		Texture2D texture = new Texture2D(256,200);
+		FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+		byte[] imageData = new byte[fs.Length];
+		fs.Read(imageData, 0, (int) fs.Length);
+		texture.LoadImage(imageData);
+		return texture;
 	}
 
 	public void Init(SelectedCountriesViewModel selectedCountriesViewModel)

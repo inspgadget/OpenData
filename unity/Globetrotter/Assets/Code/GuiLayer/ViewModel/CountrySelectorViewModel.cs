@@ -15,6 +15,17 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private int m_currCountryIndex;
 		private Country[] m_countries;
 
+		public int CurrCountryIndex {
+			get {
+				return m_currCountryIndex;
+			}
+			set {
+				m_currCountryIndex = value;
+				m_countriesController.CurrentCountry = m_countries[m_currCountryIndex];
+				OnPropertyChanged("CurrentCountry");
+			}
+		}
+
 		public Country CurrentCountry
 		{
 			get
@@ -72,7 +83,24 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 			m_currCountryIndex = GetIndexOfCountry(m_countriesController.CurrentCountry);
 		}
+
 		
+		public int GetIndexOfCountry(string IsoAlphaThreeCode)
+		{
+			if(!string.IsNullOrEmpty(IsoAlphaThreeCode))
+			{
+				for(int i = 0; i < m_countries.Length; i++)
+				{
+					if(m_countries[i].IsoAlphaThreeCode == IsoAlphaThreeCode)
+					{
+						return i;
+					}
+				}
+			}
+			
+			return -1;
+		}
+
 		private int GetIndexOfCountry(Country country)
 		{
 			if(country != null)
@@ -105,12 +133,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 					int scroll = 0;
 
-					if(args.HasInputType(InputType.ScrollLeft) == true)
+					if(args.HasInputType(InputType.ScrollRight) == true)
 					{
 						scroll = -1;
 					}
 
-					if(args.HasInputType(InputType.ScrollRight) == true)
+					if(args.HasInputType(InputType.ScrollLeft) == true)
 					{
 						scroll = 1;
 					}

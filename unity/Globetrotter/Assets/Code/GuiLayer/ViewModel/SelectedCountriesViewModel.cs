@@ -93,7 +93,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 		{
 			if(ReactOnInput == true)
 			{
-				if(args.HasInputType(InputType.ScrollLeft) == true)
+				if(args.HasInputType(InputType.ClickDouble) == true)
 				{
 					lock(m_lockObj)
 					{
@@ -112,7 +112,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 					}
 				}
 
-				if(args.HasInputType(InputType.ScrollUp) == true)
+				if(args.HasInputType(InputType.FocusPrevious) == true)
 				{
 					lock(m_lockObj)
 					{
@@ -128,7 +128,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 					}
 				}
 
-				if(args.HasInputType(InputType.ScrollDown) == true)
+				if(args.HasInputType(InputType.FocusNext) == true)
 				{
 					lock(m_lockObj)
 					{

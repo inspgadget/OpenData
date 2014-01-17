@@ -100,11 +100,15 @@ public class CountrySelection : MonoBehaviour
 
 			Country c = getCountry(v.y, v.x);
 			if(c != null){
-				Debug.Log(c.Name);
+				int ind = m_countrySelectorViewModel.GetIndexOfCountry(c.Code);
+				if(ind != -1){
+					m_countrySelectorViewModel.CurrCountryIndex	= ind;
+				}
 			} else {
 				Debug.Log("NULL");
 			}
 		}*/
+
 		if(m_firstRun){
 			rotate();
 			m_firstRun = false;
@@ -132,14 +136,14 @@ public class CountrySelection : MonoBehaviour
 			if(v.x == 0.0f && v.y == 0.0f && v.z == 0.0f){
 				m_rotateToCountry = false;
 			}
-			Ray ray = Camera.main.ViewportPointToRay (new Vector3(0.5f,0.5f,0));
-			RaycastHit hit;
-			if (collider.Raycast (ray, out hit, 10000f)) {
+			Ray ray2 = Camera.main.ViewportPointToRay (new Vector3(0.5f,0.5f,0));
+			RaycastHit hit2;
+			if (collider.Raycast (ray2, out hit2, 10000f)) {
 				//Debug.Log("hit: " + hit.textureCoord.x + " - " + hit.textureCoord.y );
 				//Debug.Log("uv3d: " + v.x + " - " + v.y + " - " + v.z);
 
-				int w = (int)Mathf.Round(hit.textureCoord.x * 4096);
-				int h = (int)Mathf.Round(2048- hit.textureCoord.y * 2048);
+				int w = (int)Mathf.Round(hit2.textureCoord.x * 4096);
+				int h = (int)Mathf.Round(2048- hit2.textureCoord.y * 2048);
 				
 				//Debug.Log("pixel: " + w + " - " + h); 
 				
