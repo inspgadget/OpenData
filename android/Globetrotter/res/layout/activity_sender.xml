@@ -11,9 +11,9 @@
     tools:context=".SenderActivity" >
     
   <ImageButton
-    android:layout_width="20dp"
+    android:layout_width="30dp"
     android:background="@drawable/help"
-    android:layout_height="20dp"
+    android:layout_height="30dp"
     android:layout_alignParentRight="true"
     android:onClick="help"
    />

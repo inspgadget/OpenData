@@ -30,58 +30,7 @@
                 android:text="With the double tap you can add the current country to the selection list. If you double tap on a country in the selection list you delete it from the list." />
         </TableRow>
 
-        <TableRow>
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/swipe_left" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="100dp"
-                android:text="With a swipe left gesture you can scroll through the list of countries if the context is set to the list" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/swipe_up" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="100dp"
-                android:text="With a swipe up gesture you can switch the context" />
-        </TableRow>
-
-        <TableRow>
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/swipe_left" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="100dp"
-                android:text="With a swipe left gesture you can scroll through the list of countries if the context is set to the list" />
-        </TableRow>
-
-        <TableRow>
+        <TableRow android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -98,24 +47,58 @@
                 android:text="With a swipe down gesture you can change the context" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="20dp" >
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/pinch" />
+                android:src="@drawable/swipe_up" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="100dp"
-                android:text="With a pinch gesture you can zoom out of the globus" />
+                android:text="With a swipe up gesture you can switch the context" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="20dp" >
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/swipe_left" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="100dp"
+                android:text="With a swipe left gesture you can scroll through the list of countries if the context is set to the list" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="20dp" >
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/swipe_right" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="100dp"
+                android:text="With a swipe right gesture you can scroll through the list of countries if the context is set to the list" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -132,7 +115,24 @@
                 android:text="If you do a long press you can switch between the country selection and the data visualisation" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="20dp" >
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/pinch" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="100dp"
+                android:text="With a pinch gesture you can zoom out of the globus" />
+        </TableRow>
+
+        <TableRow android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/imageView8"

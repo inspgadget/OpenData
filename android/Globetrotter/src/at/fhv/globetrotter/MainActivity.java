@@ -21,10 +21,8 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		TextView ip = (TextView) findViewById(R.id.editIp);
-		ip.setText("10.0.0.7");
-		TextView port = (TextView) findViewById(R.id.editPort);
-		port.setText("45021");
+		//TextView ip = (TextView) findViewById(R.id.editIp);
+		//ip.setText("10.0.0.7");
 	}
 
 	public static boolean CheckIp(final String ip) {
@@ -42,11 +40,8 @@ public class MainActivity extends Activity {
 	public void connect(View view) {
 		String ip = ((TextView) findViewById(R.id.editIp)).getText().toString();
 
-		String port = ((TextView) findViewById(R.id.editPort)).getText()
-				.toString();
-
 		if (CheckIp(ip)) {
-			connect(ip, Integer.parseInt(port));
+			connect(ip, 33000);
 		}
 	}
 
