@@ -7,10 +7,12 @@ using Globetrotter.DomainLayer;
 using Globetrotter.GuiLayer;
 using Globetrotter.GuiLayer.ViewModel;
 using Globetrotter.PersistenceLayer;
+using System.IO;
 
 public class CountrySelectorBehavior : MonoBehaviour
 {
 	private CountrySelectorViewModel m_countrySelectorViewModel;
+	private DateTime m_firstRunDt = DateTime.MinValue;
 
 	void OnGUI()
 	{
@@ -69,6 +71,40 @@ public class CountrySelectorBehavior : MonoBehaviour
 				if(m_countrySelectorViewModel.ReactOnInput == true)
 				{
 					style = StyleDepot.Instance.FocusedTextStyle;
+					DateTime now = DateTime.Now;
+					if(m_firstRunDt == DateTime.MinValue){
+						m_firstRunDt = now;
+					}
+					TimeSpan ts = (now - m_firstRunDt);
+					if(ts.TotalSeconds <= 6){
+						Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/doubletap.png");
+						GUI.DrawTexture( new Rect( 0, 
+						                          0,
+						                          texture.width,
+						                          texture.height ), 
+						                texture );
+					} else if (ts.TotalSeconds <= 12){
+						Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipedownup.png");
+						GUI.DrawTexture( new Rect( 0, 
+						                          0,
+						                          texture.width,
+						                          texture.height ), 
+						                texture );
+					} else if (ts.TotalSeconds <= 18){
+						Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/leftright.png");
+						GUI.DrawTexture( new Rect( 0, 
+						                          0,
+						                          texture.width,
+						                          texture.height ), 
+						                texture );
+					} else if (ts.TotalSeconds <= 24){
+						Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/longpress.png");
+						GUI.DrawTexture( new Rect( 0, 
+						                          0,
+						                          texture.width,
+						                          texture.height ), 
+						                texture );
+					}
 				}
 
 				StringBuilder sb = new StringBuilder();
@@ -85,6 +121,15 @@ public class CountrySelectorBehavior : MonoBehaviour
 				GUI.Label(new Rect(Screen.width - 210, 90, 200, 180), sb.ToString(), style);
 			}
 		}
+	}
+
+	private Texture2D loadTexture(string path){
+		Texture2D texture = new Texture2D(256,200);
+		FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+		byte[] imageData = new byte[fs.Length];
+		fs.Read(imageData, 0, (int) fs.Length);
+		texture.LoadImage(imageData);
+		return texture;
 	}
 
 	public void Init(CountrySelectorViewModel countrySelectorViewModel)
