@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 
 using Globetrotter.DataLayer;
 using Globetrotter.GuiLayer.ViewModel;
 
 public class ChartBehavior : MonoBehaviour
 {
+	private object m_lockObj = new object();
+
 	private ChartViewModel m_chartViewModel;
+
+	private GameObject m_chartPlane;
 
 	private GameObject m_xAxis;
 	private GameObject m_yAxis;
@@ -29,6 +35,8 @@ public class ChartBehavior : MonoBehaviour
 	private Material m_focusedObjectMaterial;
 	private Material m_unfocusedObjectMaterial;
 
+	private byte[] m_chartData;
+
 	void Start()
 	{
 		for(int i = 0; i < m_currDataPoints.Length; i++)
@@ -42,7 +50,28 @@ public class ChartBehavior : MonoBehaviour
 
 	void Update()
 	{
-		lock(m_chartViewModel.LockObject)
+		byte[] chartData = null;
+
+		lock(m_lockObj)
+		{
+			chartData = m_chartData;
+		}
+
+		if((chartData != null) && (chartData.Length > 0))
+		{
+			Texture2D texture = new Texture2D(1280, 648);
+			texture.LoadImage(chartData);
+
+			//
+			UnityEngine.Debug.Log("change texture");
+			//
+
+			m_chartPlane.renderer.material.mainTexture = texture;
+
+			m_chartData = null;
+		}
+
+		/*lock(m_chartViewModel.LockObject)
 		{
 			WorldBankIndicator indicator = m_chartViewModel.CurrentIndicator;
 
@@ -121,11 +150,12 @@ public class ChartBehavior : MonoBehaviour
 					                                                     	m_currDataPoints[i].transform.position.z);
 				}
 			}
-		}
+		}*/
 	}
 
 	public void Init(ChartViewModel chartViewModel,
 	                 	GameObject[] currDataPoints,
+	                 	GameObject chartPlane,
 	                 	GameObject xAxis, GameObject yAxis,
 	                 	GUIText xAxisNameText, GUIText yAxisNameText,
 	                 	GUIText prevYearText, GUIText currYearText, GUIText nextYearText,
@@ -134,8 +164,11 @@ public class ChartBehavior : MonoBehaviour
 	                 	Material focusedObjectMaterial, Material unfocusedObjectMaterial)
 	{
 		m_chartViewModel = chartViewModel;
+		m_chartViewModel.PropertyChanged += PropertyChangedHandler;
 
 		m_currDataPoints = currDataPoints;
+
+		m_chartPlane = chartPlane;
 
 		m_xAxis = xAxis;
 		m_yAxis = yAxis;
@@ -155,5 +188,21 @@ public class ChartBehavior : MonoBehaviour
 
 		m_focusedObjectMaterial = focusedObjectMaterial;
 		m_unfocusedObjectMaterial = unfocusedObjectMaterial;
+
+		m_chartData = null;
+	}
+
+	public void PropertyChangedHandler(object sender, PropertyChangedEventArgs args)
+	{
+		lock(m_lockObj)
+		{
+			if(sender == m_chartViewModel)
+			{
+				if(args.PropertyName == "ChartData")
+				{
+					m_chartData = m_chartViewModel.ChartData;
+				}
+			}
+		}
 	}
 }

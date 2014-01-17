@@ -37,6 +37,8 @@ public class DataSceneSetupBehavior : MonoBehaviour
 	public GUIText prevYearText;
 	public GUIText currYearText;
 	public GUIText nextYearText;
+
+	public GameObject chartPlane;
 	
 	public GUIText yAxisHalfText;
 	public GUIText yAxisMaxText;
@@ -87,6 +89,8 @@ public class DataSceneSetupBehavior : MonoBehaviour
 			dataController = new DataController();
 			ObjectDepot.Instance.Store<DataController>(dataController);
 		}
+
+		dataController.DataPath = Application.dataPath;
 		
 		//countries controller
 		CountriesController countriesController = ObjectDepot.Instance.Retrive<CountriesController>();
@@ -147,6 +151,7 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		chartBehavior.Init(chartViewModel,
 		                   	new GameObject[] { currentDataPointOne, currentDataPointTwo, currentDataPointThree,
 												currentDataPointFour, currentDataPointFive },
+							chartPlane,
 							xAxis, yAxis,
 		                   	xAxisNameText, yAxisNameText,
 		                   	prevYearText, currYearText, nextYearText,

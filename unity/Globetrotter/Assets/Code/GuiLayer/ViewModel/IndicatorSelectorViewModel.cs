@@ -116,7 +116,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 							m_isFetching = true;
 
 							m_dataController.CurrentIndicator = m_indicators[m_currIndicatorIndex];
-							m_dataController.FetchDataAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
+							//m_dataController.FetchDataAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
+							m_dataController.FetchChartAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
 						}
 					}
 

@@ -85,6 +85,8 @@ namespace Globetrotter.GuiLayer.Controllers
 					m_inputController.InputReceived -= m_yearToViewModel.InputReceivedHandler;
 					m_inputController.InputReceived -= m_yearToViewModel.InputReceivedHandler;
 					m_inputController.InputReceived -= m_chartViewModel.InputReceivedHandler;
+
+					m_chartViewModel.DisconnectFromEvents();
 					
 					//stop reacting on input
 					m_indicatorSelectorViewModel.ReactOnInput = false;

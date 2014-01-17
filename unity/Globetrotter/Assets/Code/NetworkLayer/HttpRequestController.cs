@@ -113,8 +113,14 @@ namespace Globetrotter.NetworkLayer
 		{
 			string withoutProtocol = url.Substring(7);
 			int hostEnd = withoutProtocol.IndexOf("/");
+			string host = withoutProtocol.Substring(0, hostEnd);
 
-			return withoutProtocol.Substring(0, hostEnd);
+			if(host.Contains("localhost") == true)
+			{
+				host = "127.0.0.1";
+			}
+
+			return host;
 		}
 		
 		private string GetPath(string url)

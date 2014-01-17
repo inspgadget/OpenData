@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 
@@ -27,6 +30,9 @@ namespace Globetrotter.ApplicationLayer
 		private int m_yearFrom;
 		private int m_yearTo;
 
+		private string m_dataPath;
+		private string m_tempDir;
+
 		public WorldBankIndicator CurrentIndicator
 		{
 			get
@@ -42,6 +48,25 @@ namespace Globetrotter.ApplicationLayer
 				lock(m_lockObject)
 				{
 					m_currIndicator = value;
+				}
+			}
+		}
+
+		public string DataPath
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_dataPath;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObject)
+				{
+					m_dataPath = value;
 				}
 			}
 		}
@@ -119,6 +144,22 @@ namespace Globetrotter.ApplicationLayer
 
 			m_yearTo = DateTime.Now.Year;
 			m_yearFrom = m_yearTo - 10;
+
+			m_dataPath = null;
+
+			//create temp directory
+			m_tempDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).Replace("\\", "/") + "/Globetrotter/temp";
+
+			if(Directory.Exists(m_tempDir) == false)
+			{
+				Directory.CreateDirectory(m_tempDir);
+
+				UnityEngine.Debug.Log("created temp dir: " + m_tempDir);
+			}
+			else
+			{
+				UnityEngine.Debug.Log("temp dir already exists: " + m_tempDir);
+			}
 		}
 
 		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator)
@@ -128,14 +169,81 @@ namespace Globetrotter.ApplicationLayer
 		
 		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)
 		{
-			HttpResponse response = new HttpRequestController().GetResponse(getChartRequestUrl(countries, indicator, yearFrom, yearTo), 8080);
-
-			if(response.StatusCode != 200)
+			try
 			{
-				UnityEngine.Debug.Log("chart not fetched: " + response.StatusCode);
-			}
+				//run adapter
+				Process javaAdapter = Process.Start("javaw.exe",
+				                                    "-jar " + m_dataPath + "/Chart/GlobetrotterChartWebServiceAdapter.jar " +
+				                                    m_tempDir + "/chart.png AUS;AUT" +
+				                                    " EG.USE.COMM.CL.ZS 1990 2014");
+				javaAdapter.WaitForExit();
 
-			return response.Data;
+				//read image file
+				using(BufferedStream bs = new BufferedStream(new FileStream(m_tempDir + "/chart.png", FileMode.Open)))
+				{
+					byte[] data = new byte[bs.Length];
+					bs.Read(data, 0, (int)bs.Length);
+
+					return data;
+				}
+
+				/*HttpResponse response = new HttpRequestController().GetResponse(getChartRequestUrl(countries, indicator, yearFrom, yearTo), 8080);
+
+				if(response.StatusCode != 200)
+				{
+					UnityEngine.Debug.Log("chart not fetched: " + response.StatusCode);
+				}
+
+				UnityEngine.Debug.Log("default: " + System.Text.Encoding.Default.GetString(response.Data));
+				UnityEngine.Debug.Log("ascii: " + System.Text.Encoding.ASCII.GetString(response.Data));
+				string imagePath = System.Text.ASCIIEncoding.ASCII.GetString(response.Data);
+
+				using(FileStream fs = new FileStream(imagePath, FileMode.Open))
+				{
+					byte[] data = new byte[fs.Length];
+					fs.Read(data, 0, data.Length);
+
+					UnityEngine.Debug.Log("yuhuuuuuuuuu: " + fs.Length + "; " + imagePath);
+
+					return data;
+				}*/
+				
+				//
+				//UnityEngine.Debug.Log("chart fetched");
+				//
+
+				/*WebClient wc = new WebClient();
+				Stream stream = wc.OpenRead(getChartRequestUrl(countries, indicator, yearFrom, yearTo));
+				List<byte> bytes = new List<byte>();
+				int b = -1;*/
+				/*byte[] data = new byte[stream.Length];
+				stream.Read(data, 0, (int)stream.Length);*/
+
+				/*while((b = stream.ReadByte()) > -1)
+				{
+					bytes.Add((byte)b);
+				}
+
+				return bytes.ToArray();*/
+
+				/*WebRequest request = WebRequest.Create(getChartRequestUrl(countries, indicator, yearFrom, yearTo));
+				WebResponse response = request.GetResponse();
+				Stream stream = response.GetResponseStream();
+				BinaryReader reader = new BinaryReader(stream);
+				byte[] imageBytes = reader.ReadBytes((int)stream.Length);
+				reader.Close();
+
+				return imageBytes;*/
+
+				//return response.Data;
+				//return data;
+			}
+			catch(Exception exc)
+			{
+				UnityEngine.Debug.LogError(exc);
+
+				return null;
+			}
 		}
 		
 		public void FetchChartAsync(Country[] countries, WorldBankIndicator indicator)
@@ -220,7 +328,7 @@ namespace Globetrotter.ApplicationLayer
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append("http://localhost:8080/GlobetrotterChartWebService/ChartGeneratorServlet?");
+			sb.Append("http://localhost:8080/GlobetrotterChartWebService/ChartGeneratorServlet");
 
 			//countries
 			sb.Append("?countries=");
