@@ -133,12 +133,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 					int scroll = 0;
 
-					if(args.HasInputType(InputType.ScrollLeft) == true)
+					if(args.HasInputType(InputType.ScrollRight) == true)
 					{
 						scroll = -1;
 					}
 
-					if(args.HasInputType(InputType.ScrollRight) == true)
+					if(args.HasInputType(InputType.ScrollLeft) == true)
 					{
 						scroll = 1;
 					}
