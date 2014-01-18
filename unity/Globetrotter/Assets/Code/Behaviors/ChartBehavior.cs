@@ -46,6 +46,8 @@ public class ChartBehavior : MonoBehaviour
 
 			m_legend[i].text = string.Empty;
 		}
+
+		m_chartPlane.renderer.enabled = false;
 	}
 
 	void Update()
@@ -67,6 +69,7 @@ public class ChartBehavior : MonoBehaviour
 			//
 
 			m_chartPlane.renderer.material.mainTexture = texture;
+			m_chartPlane.renderer.enabled = true;
 
 			m_chartData = null;
 		}

@@ -68,7 +68,7 @@ namespace Globetrotter.GuiLayer.Controllers
 
 			m_chartViewModel = chartViewModel;
 			m_chartViewModel.ReactOnInput = false;
-			m_focusList.Add(m_chartViewModel);
+			//m_focusList.Add(m_chartViewModel);
 
 			m_focusIndex = 0;
 		}

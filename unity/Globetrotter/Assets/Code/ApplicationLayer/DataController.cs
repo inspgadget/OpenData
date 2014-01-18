@@ -174,8 +174,8 @@ namespace Globetrotter.ApplicationLayer
 				//run adapter
 				Process javaAdapter = Process.Start("javaw.exe",
 				                                    "-jar " + m_dataPath + "/Chart/GlobetrotterChartWebServiceAdapter.jar " +
-				                                    m_tempDir + "/chart.png AUS;AUT" +
-				                                    " EG.USE.COMM.CL.ZS 1990 2014");
+				                                    m_tempDir + "/chart.png " + GetCountriesAsArgument(countries) +
+				                                    " " + indicator.Code + " " + yearFrom + " " + yearTo);
 				javaAdapter.WaitForExit();
 
 				//read image file
@@ -358,6 +358,23 @@ namespace Globetrotter.ApplicationLayer
 			//charttype
 			sb.Append("&charttype=");
 			sb.Append("linechart");
+
+			return sb.ToString();
+		}
+
+		private string GetCountriesAsArgument(Country[] countries)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			for(int i = 0; i < countries.Length; i++)
+			{
+				sb.Append(countries[i].IsoAlphaThreeCode);
+
+				if(i < (countries.Length - 1))
+				{
+					sb.Append(";");
+				}
+			}
 
 			return sb.ToString();
 		}
