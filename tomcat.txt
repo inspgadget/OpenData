@@ -1,0 +1,4 @@
+Tomcat liegt auf Ilias wegen Upload Problemen mit GitHub
+
+start mit /bin/startup.bat
+stop mit /bin/shutdown.bat
