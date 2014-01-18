@@ -48,6 +48,8 @@ public class ChartBehavior : MonoBehaviour
 		}
 
 		m_chartPlane.renderer.enabled = false;
+
+		m_yAxisNameText.text = string.Empty;
 	}
 
 	void Update()
@@ -64,12 +66,12 @@ public class ChartBehavior : MonoBehaviour
 			Texture2D texture = new Texture2D(1280, 648);
 			texture.LoadImage(chartData);
 
-			//
 			UnityEngine.Debug.Log("change texture");
-			//
 
 			m_chartPlane.renderer.material.mainTexture = texture;
 			m_chartPlane.renderer.enabled = true;
+
+			m_yAxisNameText.text = m_chartViewModel.CurrentIndicator.Name;
 
 			m_chartData = null;
 		}
