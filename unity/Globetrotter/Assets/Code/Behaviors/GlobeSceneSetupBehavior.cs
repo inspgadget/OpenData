@@ -13,6 +13,7 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 	public Camera mainCamera;
 	public GameObject magnifyingGlass;
+	public GameObject globeLight;
 
 	private GlobeSceneGuiController m_globeSceneGuiController;
 
@@ -94,7 +95,7 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		//globe behavior
 		GlobeBehavior globeBehavior = gameObject.AddComponent<GlobeBehavior>();
-		globeBehavior.Init(globeViewModel);
+		globeBehavior.Init(globeViewModel, globeLight);
 
 		//country selector behavior
 		CountrySelectorBehavior countrySelectorBehavior = mainCamera.gameObject.AddComponent<CountrySelectorBehavior>();

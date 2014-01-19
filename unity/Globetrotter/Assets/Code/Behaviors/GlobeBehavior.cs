@@ -7,6 +7,8 @@ using System.IO;
 
 public class GlobeBehavior : MonoBehaviour
 {
+	private GameObject m_globeLight;
+
 	private GlobeViewModel m_globeViewModel;
 	private DateTime m_firstRunDt = DateTime.MinValue;
 
@@ -21,6 +23,15 @@ public class GlobeBehavior : MonoBehaviour
 			m_globeViewModel.VerticalAngle = 0.0f;
 
 			transform.Rotate(verticalAngle, horizontalAngle, 0.0f, Space.World);
+		}
+
+		if(m_globeViewModel.ReactOnInput == true)
+		{
+			m_globeLight.light.intensity = 1.0f;
+		}
+		else
+		{
+			m_globeLight.light.intensity = 0.3f;
 		}
 	}
 
@@ -64,8 +75,10 @@ public class GlobeBehavior : MonoBehaviour
 		return texture;
 	}
 
-	public void Init(GlobeViewModel globeViewModel)
+	public void Init(GlobeViewModel globeViewModel, GameObject globeLight)
 	{
 		m_globeViewModel = globeViewModel;
+
+		m_globeLight = globeLight;
 	}
 }
