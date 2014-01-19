@@ -196,8 +196,8 @@ namespace Globetrotter.ApplicationLayer
 			{
 				//run adapter
 				Process javaAdapter = Process.Start("javaw.exe",
-				                                    "-jar " + m_dataPath + "/Chart/GlobetrotterChartWebServiceAdapter.jar " +
-				                                    m_tempDir + "/chart.png " + GetCountriesAsArgument(countries) +
+				                                    "-jar \"" + m_dataPath + "/Chart/GlobetrotterChartWebServiceAdapter.jar\" \"" +
+				                                    m_tempDir + "/chart.png\" " + GetCountriesAsArgument(countries) +
 				                                    " " + indicator.Code + " " + yearFrom + " " + yearTo + " " + chartType);
 				javaAdapter.WaitForExit();
 

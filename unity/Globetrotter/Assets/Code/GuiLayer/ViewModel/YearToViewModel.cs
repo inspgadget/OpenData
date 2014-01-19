@@ -48,6 +48,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				int delta = 0;
 
+				if(args.HasInputType(InputType.ClickDouble) == true)
+				{
+					IndicatorSelectorViewModel vm = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
+					vm.Fetch();
+				}
+
 				if(args.InputTypes.And(InputType.ScrollLeft) == InputType.ScrollLeft)
 				{
 					delta = -1;

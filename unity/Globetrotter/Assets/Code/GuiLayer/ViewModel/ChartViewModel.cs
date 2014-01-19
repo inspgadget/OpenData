@@ -206,7 +206,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 				if(ReactOnInput == true)
 				{
 					int scroll = 0;
-					
+
 					if(args.HasInputType(InputType.ScrollLeft) == true)
 					{
 						scroll = -1;
