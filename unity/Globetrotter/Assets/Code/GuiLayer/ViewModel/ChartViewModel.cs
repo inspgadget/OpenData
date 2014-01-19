@@ -12,11 +12,15 @@ namespace Globetrotter.GuiLayer.ViewModel
 	{
 		private DataController m_dataController;
 
+		private IndicatorSelectorViewModel m_indicatorSelectorViewModel;
+
 		private WorldBankData m_worldBankData;
 		private DataPoint[] m_dataPoints;
 		private string[] m_seriesNames;
 
 		private byte[] m_chartData;
+		private string[] m_chartTypes;
+		private int m_currChartType;
 
 		private double m_min;
 		private double m_max;
@@ -30,6 +34,17 @@ namespace Globetrotter.GuiLayer.ViewModel
 				lock(m_lockObj)
 				{
 					return m_chartData;
+				}
+			}
+		}
+
+		public string CurrentChartType
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_chartTypes[m_currChartType];
 				}
 			}
 		}
@@ -151,18 +166,32 @@ namespace Globetrotter.GuiLayer.ViewModel
 			}
 		}
 
-		public ChartViewModel(DataController dataController)
+		public ChartViewModel(DataController dataController, IndicatorSelectorViewModel indicatorSelectorViewModel)
 			: base()
 		{
 			m_dataController = dataController;
 			m_dataController.ChartFetched += ChartFetchedHandler;
 			m_dataController.WorldBankDataFetched += WorldBankDataFetchedHandler;
 
+			m_indicatorSelectorViewModel = indicatorSelectorViewModel;
+
 			m_worldBankData = null;
 			m_dataPoints = new DataPoint[0];
 			m_seriesNames = new string[5];
 
 			m_chartData = null;
+			m_chartTypes = new string[] { "linechart", "detailedlinechart", "barchart", "detailedbarchart" };
+			m_currChartType = -1;
+
+			for(int i = 0; i < m_chartTypes.Length; i++)
+			{
+				if(m_chartTypes[i] == m_dataController.CurrentChartType)
+				{
+					m_currChartType = i;
+
+					i = i + m_chartTypes.Length;
+				}
+			}
 
 			m_min = 0.0;
 			m_max = 0.0;
@@ -188,7 +217,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 						scroll = 1;
 					}
 					
-					if(args.HasInputType(InputType.WipeLeft) == true)
+					/*if(args.HasInputType(InputType.WipeLeft) == true)
 					{
 						scroll = -10;
 					}
@@ -196,11 +225,34 @@ namespace Globetrotter.GuiLayer.ViewModel
 					if(args.HasInputType(InputType.WipeRight) == true)
 					{
 						scroll = 10;
-					}
+					}*/
 
 					if(scroll != 0)
 					{
-						int currDataPointIndex = m_currDataPointIndex + scroll;
+						int currChartType = m_currChartType + scroll;
+
+						if(currChartType < 0)
+						{
+							currChartType = m_chartTypes.Length - 1;
+						}
+
+						if(currChartType >= m_chartTypes.Length)
+						{
+							currChartType = 0;
+						}
+
+						lock(m_lockObj)
+						{
+							m_currChartType = currChartType;
+							m_dataController.CurrentChartType = m_chartTypes[m_currChartType];
+
+							if(m_chartData != null)
+							{
+								m_indicatorSelectorViewModel.Fetch();
+							}
+						}
+
+						/*int currDataPointIndex = m_currDataPointIndex + scroll;
 
 						while(currDataPointIndex < 0)
 						{
@@ -212,7 +264,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 							currDataPointIndex = 0 + (currDataPointIndex - m_dataPoints.Length);
 						}
 
-						m_currDataPointIndex = currDataPointIndex;
+						m_currDataPointIndex = currDataPointIndex;*/
 					}
 				}
 			}
