@@ -74,8 +74,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 		{
 			m_horizontalAngle = 0.0f;
 			m_verticalAngle = 0.0f;
-			
+
 			m_speed = speed;
+			m_reactOnInput = false;
 		}
 		
 		public void InputReceivedHandler(object sender, InputReceivedEventArgs args)

@@ -14,6 +14,31 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 		private int m_currCountryIndex;
 		private Country[] m_selectedCountries;
+		private bool m_focusNextAvalaible = false;
+		private bool m_focusPreviousAvalaible = false;
+
+		public bool FocusNextAvalaible {
+			get {
+				return m_focusNextAvalaible;
+			}
+		}
+
+		public bool FocusPreviousAvalaible {
+			get {
+				return m_focusPreviousAvalaible;
+			}
+		}
+
+		public int CountryLength
+		{
+			get
+			{
+				lock(m_lockObj)
+				{
+					return m_selectedCountries.Length;
+				}
+			}
+		}
 
 		public int CurrentCountryIndex
 		{
@@ -86,6 +111,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 			else
 			{
 				m_currCountryIndex = -1;
+				m_focusNextAvalaible = true;
+				m_focusPreviousAvalaible  = true;
 			}
 		}
 
@@ -120,9 +147,14 @@ namespace Globetrotter.GuiLayer.ViewModel
 						{
 							m_currCountryIndex--;
 
+						
 							if(m_currCountryIndex < 0)
 							{
-								m_currCountryIndex = m_countriesController.Countries.Length - 1;
+								m_focusPreviousAvalaible = true;
+								m_currCountryIndex = 0;
+								//m_currCountryIndex = m_countriesController.Countries.Length - 1;
+							} else {
+								m_focusPreviousAvalaible = false;
 							}
 						}
 					}
@@ -136,9 +168,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 						{
 							m_currCountryIndex++;
 
-							if(m_currCountryIndex >= m_countriesController.Countries.Length)
+							if(m_currCountryIndex >= m_selectedCountries.Length)
 							{
-								m_currCountryIndex = 0;
+								m_currCountryIndex = m_selectedCountries.Length - 1;
+								m_focusNextAvalaible = true;
+							} else {
+								m_focusNextAvalaible = false;
 							}
 						}
 					}

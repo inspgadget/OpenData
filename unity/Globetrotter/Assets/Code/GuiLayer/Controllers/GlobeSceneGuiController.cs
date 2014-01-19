@@ -31,7 +31,7 @@ namespace Globetrotter.GuiLayer.Controllers
 			m_cameraZoomViewModel.ReactOnInput = true;
 
 			m_globeViewModel = globeViewModel;
-			m_globeViewModel.ReactOnInput = true;
+			//m_globeViewModel.ReactOnInput = true;
 
 			m_countrySelectorViewModel = countrySelectorViewModel;
 			m_countrySelectorViewModel.ReactOnInput = true;
@@ -61,11 +61,35 @@ namespace Globetrotter.GuiLayer.Controllers
 				}
 				else
 				{
-					if((args.HasInputType(InputType.FocusPrevious) == true) ||
-					   	(args.HasInputType(InputType.FocusNext) == true))
+					if(args.HasInputType(InputType.FocusPrevious) == true)
 					{
-						m_countrySelectorViewModel.ReactOnInput = !m_countrySelectorViewModel.ReactOnInput;
-						m_selectedCountriesViewModel.ReactOnInput = !m_selectedCountriesViewModel.ReactOnInput;
+						if(m_globeViewModel.ReactOnInput){
+							m_globeViewModel.ReactOnInput = false;
+							m_countrySelectorViewModel.ReactOnInput = false;
+							m_selectedCountriesViewModel.ReactOnInput = true;
+						}else if(m_countrySelectorViewModel.ReactOnInput){
+							m_globeViewModel.ReactOnInput = true;
+							m_countrySelectorViewModel.ReactOnInput = false;
+							m_selectedCountriesViewModel.ReactOnInput = false;
+						}else if(m_selectedCountriesViewModel.ReactOnInput && m_selectedCountriesViewModel.FocusPreviousAvalaible){
+							m_globeViewModel.ReactOnInput = false;
+							m_countrySelectorViewModel.ReactOnInput = true;
+							m_selectedCountriesViewModel.ReactOnInput = false;
+						}
+					} else if(args.HasInputType(InputType.FocusNext) == true){
+						if(m_globeViewModel.ReactOnInput){
+							m_globeViewModel.ReactOnInput = false;
+							m_countrySelectorViewModel.ReactOnInput = true;
+							m_selectedCountriesViewModel.ReactOnInput = false;
+						}else if(m_countrySelectorViewModel.ReactOnInput){
+							m_globeViewModel.ReactOnInput = false;
+							m_countrySelectorViewModel.ReactOnInput = false;
+							m_selectedCountriesViewModel.ReactOnInput = true;
+						}else if(m_selectedCountriesViewModel.ReactOnInput && m_selectedCountriesViewModel.FocusNextAvalaible){
+							m_globeViewModel.ReactOnInput = true;
+							m_countrySelectorViewModel.ReactOnInput = false;
+							m_selectedCountriesViewModel.ReactOnInput = false;
+						}
 					}
 				}
 			}
