@@ -110,7 +110,7 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 
 		//country selection behavior
 		CountrySelection countrySelection = gameObject.AddComponent<CountrySelection>();
-		countrySelection.Init(countrySelectorViewModel, mainCamera);
+		countrySelection.Init(globeViewModel, countrySelectorViewModel, mainCamera);
 	}
 
 	void FixedUpdate()

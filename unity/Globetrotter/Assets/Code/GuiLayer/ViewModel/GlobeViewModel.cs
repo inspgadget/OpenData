@@ -85,6 +85,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
+					if(args.HasInputType(InputType.ClickDouble) == true)
+					{
+						CountrySelectorViewModel cc = ObjectDepot.Instance.Retrive<CountrySelectorViewModel>();
+						cc.AddCountry();
+					}
+
 					if(args.HasInputType(InputType.RotateUp) == true)
 					{
 						VerticalAngle = VerticalAngle - m_speed;

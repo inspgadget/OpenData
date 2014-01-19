@@ -117,6 +117,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 			return -1;
 		}
 
+		public void AddCountry(){
+			if(m_currCountryIndex >= 0){
+				m_countriesController.AddCountry();
+			}
+		}
+
 		public void InputReceivedHandler(object sender, InputReceivedEventArgs args)
 		{
 			lock(m_lockObj)
@@ -125,10 +131,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 				{
 					if(args.HasInputType(InputType.ClickDouble) == true)
 					{
-						if(m_currCountryIndex >= 0)
-						{
-							m_countriesController.AddCountry();
-						}
+						AddCountry();
 					}
 
 					int scroll = 0;
