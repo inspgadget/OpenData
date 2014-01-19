@@ -30,8 +30,29 @@ namespace Globetrotter.ApplicationLayer
 		private int m_yearFrom;
 		private int m_yearTo;
 
+		private string m_currChartType;
+
 		private string m_dataPath;
 		private string m_tempDir;
+
+		public string CurrentChartType
+		{
+			get
+			{
+				lock(m_lockObject)
+				{
+					return m_currChartType;
+				}
+			}
+
+			set
+			{
+				lock(m_lockObject)
+				{
+					m_currChartType = value;
+				}
+			}
+		}
 
 		public WorldBankIndicator CurrentIndicator
 		{
@@ -145,6 +166,8 @@ namespace Globetrotter.ApplicationLayer
 			m_yearTo = DateTime.Now.Year;
 			m_yearFrom = m_yearTo - 10;
 
+			m_currChartType = "linechart";
+
 			m_dataPath = null;
 
 			//create temp directory
@@ -162,12 +185,12 @@ namespace Globetrotter.ApplicationLayer
 			}
 		}
 
-		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator)
+		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator, string chartType)
 		{
-			return FetchChart(countries, indicator, YearFrom, YearTo);
+			return FetchChart(countries, indicator, YearFrom, YearTo, chartType);
 		}
 		
-		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)
+		public byte[] FetchChart(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo, string chartType)
 		{
 			try
 			{
@@ -175,7 +198,7 @@ namespace Globetrotter.ApplicationLayer
 				Process javaAdapter = Process.Start("javaw.exe",
 				                                    "-jar " + m_dataPath + "/Chart/GlobetrotterChartWebServiceAdapter.jar " +
 				                                    m_tempDir + "/chart.png " + GetCountriesAsArgument(countries) +
-				                                    " " + indicator.Code + " " + yearFrom + " " + yearTo);
+				                                    " " + indicator.Code + " " + yearFrom + " " + yearTo + " " + chartType);
 				javaAdapter.WaitForExit();
 
 				//read image file
@@ -214,17 +237,22 @@ namespace Globetrotter.ApplicationLayer
 
 				/*WebClient wc = new WebClient();
 				Stream stream = wc.OpenRead(getChartRequestUrl(countries, indicator, yearFrom, yearTo));
-				List<byte> bytes = new List<byte>();
-				int b = -1;*/
-				/*byte[] data = new byte[stream.Length];
-				stream.Read(data, 0, (int)stream.Length);*/
 
-				/*while((b = stream.ReadByte()) > -1)
+				using(BufferedStream bs = new BufferedStream(wc.OpenRead(getChartRequestUrl(countries, indicator, yearFrom, yearTo))))
 				{
-					bytes.Add((byte)b);
-				}
+					using(MemoryStream ms = new MemoryStream())
+					{
+						byte[] buffer = new byte[4092];
+						int read = -1;
 
-				return bytes.ToArray();*/
+						while((read = bs.Read(buffer, 0, buffer.Length)) > -1)
+						{
+							ms.Write(buffer, 0 , read);
+						}
+
+						return ms.ToArray();
+					}
+				}*/
 
 				/*WebRequest request = WebRequest.Create(getChartRequestUrl(countries, indicator, yearFrom, yearTo));
 				WebResponse response = request.GetResponse();
@@ -246,10 +274,10 @@ namespace Globetrotter.ApplicationLayer
 			}
 		}
 		
-		public void FetchChartAsync(Country[] countries, WorldBankIndicator indicator)
+		public void FetchChartAsync(Country[] countries, WorldBankIndicator indicator, string chartType)
 		{
 			Thread thread = new Thread(delegate(){
-				byte[] data = FetchChart(countries, indicator, YearFrom, YearTo);
+				byte[] data = FetchChart(countries, indicator, YearFrom, YearTo, chartType);
 
 				OnChartFetched(data);
 			});
@@ -258,10 +286,10 @@ namespace Globetrotter.ApplicationLayer
 			thread.Start();
 		}
 		
-		public void FetchChartAsync(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)
+		public void FetchChartAsync(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo, string chartType)
 		{
 			Thread thread = new Thread(delegate(){
-				byte[] data = FetchChart(countries, indicator, yearFrom, yearTo);
+				byte[] data = FetchChart(countries, indicator, yearFrom, yearTo, chartType);
 
 				OnChartFetched(data);
 			});
@@ -324,7 +352,7 @@ namespace Globetrotter.ApplicationLayer
 			return codes;
 		}
 
-		private string getChartRequestUrl(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo)
+		private string getChartRequestUrl(Country[] countries, WorldBankIndicator indicator, int yearFrom, int yearTo, string chartType)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -357,7 +385,7 @@ namespace Globetrotter.ApplicationLayer
 
 			//charttype
 			sb.Append("&charttype=");
-			sb.Append("linechart");
+			sb.Append(chartType);
 
 			return sb.ToString();
 		}

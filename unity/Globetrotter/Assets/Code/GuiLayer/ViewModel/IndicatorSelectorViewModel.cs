@@ -86,6 +86,25 @@ namespace Globetrotter.GuiLayer.ViewModel
 			m_currIndicatorIndex = GetIndexOfIndicator(dataController.CurrentIndicator);
 			m_isFetching = false;
 		}
+
+		public void Fetch()
+		{
+			lock(m_lockObj)
+			{
+				if((m_currIndicatorIndex >= 0) && (m_isFetching == false) && (m_countriesController.SelectedCountries.Length > 0))
+				{
+					m_isFetching = true;
+					
+					m_dataController.CurrentIndicator = m_indicators[m_currIndicatorIndex];
+					//m_dataController.FetchDataAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
+					m_dataController.FetchChartAsync(m_countriesController.SelectedCountries,
+					                                 m_indicators[m_currIndicatorIndex],
+					                                 m_dataController.CurrentChartType);
+				}
+			}
+			
+			OnPropertyChanged("IsFetching");
+		}
 		
 		private int GetIndexOfIndicator(WorldBankIndicator indicator)
 		{
@@ -109,19 +128,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(args.HasInputType(InputType.ClickDouble) == true)
 				{
-					lock(m_lockObj)
-					{
-						if((m_currIndicatorIndex >= 0) && (m_isFetching == false) && (m_countriesController.SelectedCountries.Length > 0))
-						{
-							m_isFetching = true;
-
-							m_dataController.CurrentIndicator = m_indicators[m_currIndicatorIndex];
-							//m_dataController.FetchDataAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
-							m_dataController.FetchChartAsync(m_countriesController.SelectedCountries, m_indicators[m_currIndicatorIndex]);
-						}
-					}
-
-					OnPropertyChanged("IsFetching");
+					Fetch();
 				}
 				
 				int scroll = 0;

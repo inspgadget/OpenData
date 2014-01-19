@@ -124,7 +124,7 @@ public class DataSceneSetupBehavior : MonoBehaviour
 		inputController.InputReceived += yearToViewModel.InputReceivedHandler;
 
 		//chart view model
-		ChartViewModel chartViewModel = new ChartViewModel(dataController);
+		ChartViewModel chartViewModel = new ChartViewModel(dataController, indicatorSelectorViewModel);
 		inputController.InputReceived += chartViewModel.InputReceivedHandler;
 		
 		//data scene gui controller
