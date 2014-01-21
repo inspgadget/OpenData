@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		
+		<title>GlobetrotterChartWebService</title>
+		
+		<script type="text/javascript">
+			function getChart() {
+				var url = "http://localhost:8080/GlobetrotterChartWebService/ChartGeneratorServlet";
+				url = url + "?indicator=" + document.getElementById("indicator").value;
+				url = url + "&countries=" + document.getElementById("countries").value;
+				url = url + "&yearfrom=" + document.getElementById("yearfrom").value;
+				url = url + "&yearto=" + document.getElementById("yearto").value;
+				url = url + "&charttype=linechart";
+				
+				window.location = url;
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Parameters:</h1>
+		<form action="javascript:getChart()">
+			<label>Indicator:</label>
+			<input id="indicator" type="text" value="EG.USE.COMM.CL.ZS" /><br />
+			<label>Countries:</label>
+			<input id="countries" type="text" value="AUS;AUT" /><br />
+			<label>Year from:</label>
+			<input id="yearfrom" type="text" value="1990" /><br />
+			<label>Year to:</label>
+			<input id="yearto" type="text" value="2014" /><br />
+			<button type="submit">Get chart!</button>
+		</form>
+	</body>
+</html>
