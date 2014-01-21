@@ -55,7 +55,7 @@ public class ChartBehavior : MonoBehaviour
 		m_yAxisNameText.text = string.Empty;
 	}
 
-	void OnGui(){
+	void OnGUI(){
 		Debug.Log("asdfdsffads chart");
 		lock(m_chartViewModel.LockObject){
 			if(m_chartViewModel.ReactOnInput){

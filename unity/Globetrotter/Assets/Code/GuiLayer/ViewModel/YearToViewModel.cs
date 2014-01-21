@@ -9,8 +9,40 @@ namespace Globetrotter.GuiLayer.ViewModel
 	public class YearToViewModel : ViewModelBase
 	{
 		private DataController m_dataController;
-		
+
+		private DateTime m_lastChange;
+		private int m_lastYear;
 		private int m_max;
+		private int m_yearCurrent;
+		private bool m_loaded = false;
+
+		public bool Loaded
+		{
+			get {
+				return m_loaded;
+			}
+			set {
+				m_loaded = value;
+			}
+		}		
+
+		public int YearCurrent {
+			get {
+				return m_yearCurrent;
+			}
+		}
+
+		public DateTime LastChange {
+			get {
+				return m_lastChange;
+			}
+		}
+
+		public int LastYear {
+			get {
+				return m_lastYear;
+			}
+		}
 
 		public int Max
 		{
@@ -78,6 +110,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 				{
 					lock(m_lockObj)
 					{
+						m_lastYear = m_dataController.YearTo;
+
 						int year = m_dataController.YearTo + delta;
 						
 						if(year < m_dataController.YearFrom)
@@ -90,6 +124,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 						
 						m_dataController.YearTo = year;
+						m_yearCurrent = year;
+						m_lastChange = DateTime.Now;
+						m_loaded = false;
 					}
 				}
 			}

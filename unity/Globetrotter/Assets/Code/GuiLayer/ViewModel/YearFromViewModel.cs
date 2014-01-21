@@ -3,6 +3,7 @@ using System.Collections;
 
 using Globetrotter.ApplicationLayer;
 using Globetrotter.InputLayer;
+using System;
 
 namespace Globetrotter.GuiLayer.ViewModel
 {
@@ -11,6 +12,40 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private DataController m_dataController;
 
 		private int m_min;
+
+		private DateTime m_lastChange;
+		private int m_lastYear;
+		private int m_max;
+		private int m_yearCurrent;
+		private bool m_loaded = false;
+		
+		public bool Loaded
+		{
+			get {
+				return m_loaded;
+			}
+			set {
+				m_loaded = value;
+			}
+		}		
+		
+		public int YearCurrent {
+			get {
+				return m_yearCurrent;
+			}
+		}
+		
+		public DateTime LastChange {
+			get {
+				return m_lastChange;
+			}
+		}
+		
+		public int LastYear {
+			get {
+				return m_lastYear;
+			}
+		}
 
 		public int Min
 		{
@@ -90,6 +125,9 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 
 						m_dataController.YearFrom = year;
+						m_yearCurrent = year;
+						m_lastChange = DateTime.Now;
+						m_loaded = false;
 					}
 				}
 			}

@@ -5,6 +5,7 @@ using Globetrotter.GuiLayer;
 using Globetrotter.GuiLayer.ViewModel;
 using System.IO;
 using System;
+using Globetrotter;
 
 public class YearRangeBehavior : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class YearRangeBehavior : MonoBehaviour
 		m_offsetX = -4.0f;
 	}
 
-	void OnGui(){
+	void OnGUI(){
 		Debug.Log("asdfdsffads");
 		bool react = false;
 
@@ -141,6 +142,18 @@ public class YearRangeBehavior : MonoBehaviour
 			m_yearRangeScaleObj.renderer.material = m_unfocusedObjectMaterial;
 			m_yearFromObj.renderer.material = m_unfocusedObjectMaterial;
 			m_yearToObj.renderer.material = m_unfocusedObjectMaterial;
+		}
+
+		if(!m_yearToViewModel.Loaded && m_yearToViewModel.YearCurrent != m_yearToViewModel.LastYear && (DateTime.Now - m_yearToViewModel.LastChange).TotalSeconds >= 2){
+			IndicatorSelectorViewModel vm = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
+			vm.Fetch();
+			m_yearToViewModel.Loaded = true;
+		}
+
+		if(!m_yearFromViewModel.Loaded && m_yearFromViewModel.YearCurrent != m_yearFromViewModel.LastYear && (DateTime.Now - m_yearFromViewModel.LastChange).TotalSeconds >= 2){
+			IndicatorSelectorViewModel vm = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
+			vm.Fetch();
+			m_yearFromViewModel.Loaded = true;
 		}
 	}
 
