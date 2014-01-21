@@ -59,7 +59,12 @@ public class GlobeBehavior : MonoBehaviour
 				                          texture.height ), 
 				                texture );
 			} else if (ts.TotalSeconds <= 18){
-				//Zoom
+				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/zoom.png");
+				GUI.DrawTexture( new Rect( 0, 
+				                          0,
+				                          texture.width,
+				                          texture.height ), 
+				                texture );
 			} else if (ts.TotalSeconds <= 24){
 				//Sensor
 			}

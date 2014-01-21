@@ -3,6 +3,8 @@ using System.Collections;
 
 using Globetrotter.GuiLayer;
 using Globetrotter.GuiLayer.ViewModel;
+using System.IO;
+using System;
 
 public class YearRangeBehavior : MonoBehaviour
 {
@@ -20,9 +22,67 @@ public class YearRangeBehavior : MonoBehaviour
 
 	private float m_offsetX;
 
+	private DateTime m_firstRunDt = DateTime.MinValue;
+
 	void Start()
 	{
 		m_offsetX = -4.0f;
+	}
+
+	void OnGui(){
+		Debug.Log("asdfdsffads");
+		bool react = false;
+
+		lock(m_yearFromViewModel.LockObject){
+			if(m_yearFromViewModel.ReactOnInput){
+				react = true;
+			}
+		}
+
+		if(!react){
+			lock(m_yearToViewModel.LockObject){
+				if(m_yearToViewModel.ReactOnInput){
+					react = true;
+				}
+			}
+		}
+
+		if(react){
+			DateTime now = DateTime.Now;
+			if(m_firstRunDt == DateTime.MinValue){
+				m_firstRunDt = now;
+			}
+			TimeSpan ts = (now - m_firstRunDt);
+			if(ts.TotalSeconds <= 6){
+				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipe_d_y.png");
+				GUI.DrawTexture( new Rect( 0, 
+				                          Screen.height - texture.height,
+				                          texture.width,
+				                          texture.height ), 
+				                texture );
+			} else if (ts.TotalSeconds <= 12){
+				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/doubletap_d.png");
+				GUI.DrawTexture( new Rect( 0, 
+				                          Screen.height - texture.height,
+				                          texture.width,
+				                          texture.height ), 
+				                texture );
+			} else if (ts.TotalSeconds <= 18){
+				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/longpress.png");
+				GUI.DrawTexture( new Rect( 0, 
+				                          Screen.height - texture.height,
+				                          texture.width,
+				                          texture.height ), 
+				                texture );
+			} else if (ts.TotalSeconds <= 24){
+				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipedownup.png");
+				GUI.DrawTexture( new Rect( 0, 
+				                          Screen.height - texture.height,
+				                          texture.width,
+				                          texture.height ), 
+				                texture );
+			}
+		}
 	}
 
 	void Update()
@@ -82,6 +142,15 @@ public class YearRangeBehavior : MonoBehaviour
 			m_yearFromObj.renderer.material = m_unfocusedObjectMaterial;
 			m_yearToObj.renderer.material = m_unfocusedObjectMaterial;
 		}
+	}
+
+	private Texture2D loadTexture(string path){
+		Texture2D texture = new Texture2D(256,200);
+		FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+		byte[] imageData = new byte[fs.Length];
+		fs.Read(imageData, 0, (int) fs.Length);
+		texture.LoadImage(imageData);
+		return texture;
 	}
 
 	public void Init(YearFromViewModel yearFromViewModel, YearToViewModel yearToViewModel,

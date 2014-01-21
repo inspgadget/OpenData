@@ -5,6 +5,7 @@ using System.IO;
 
 using Globetrotter.DataLayer;
 using Globetrotter.GuiLayer.ViewModel;
+using System;
 
 public class ChartBehavior : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class ChartBehavior : MonoBehaviour
 
 	private byte[] m_chartData;
 
+	private DateTime m_firstRunDt = DateTime.MinValue;
+
 	void Start()
 	{
 		for(int i = 0; i < m_currDataPoints.Length; i++)
@@ -50,6 +53,41 @@ public class ChartBehavior : MonoBehaviour
 		m_chartPlane.renderer.enabled = false;
 
 		m_yAxisNameText.text = string.Empty;
+	}
+
+	void OnGui(){
+		Debug.Log("asdfdsffads chart");
+		lock(m_chartViewModel.LockObject){
+			if(m_chartViewModel.ReactOnInput){
+				DateTime now = DateTime.Now;
+				if(m_firstRunDt == DateTime.MinValue){
+					m_firstRunDt = now;
+				}
+				TimeSpan ts = (now - m_firstRunDt);
+				if(ts.TotalSeconds <= 6){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipe_d_diagr.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          Screen.height - texture.height,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				} else if (ts.TotalSeconds <= 12){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/longpress.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          Screen.height - texture.height,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				} else if (ts.TotalSeconds <= 18){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipedownup.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          Screen.height - texture.height,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				}
+			}
+		}
 	}
 
 	void Update()
@@ -195,6 +233,15 @@ public class ChartBehavior : MonoBehaviour
 		m_unfocusedObjectMaterial = unfocusedObjectMaterial;
 
 		m_chartData = null;
+	}
+
+	private Texture2D loadTexture(string path){
+		Texture2D texture = new Texture2D(256,200);
+		FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+		byte[] imageData = new byte[fs.Length];
+		fs.Read(imageData, 0, (int) fs.Length);
+		texture.LoadImage(imageData);
+		return texture;
 	}
 
 	public void PropertyChangedHandler(object sender, PropertyChangedEventArgs args)

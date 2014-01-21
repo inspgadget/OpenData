@@ -57,7 +57,14 @@ public class SelectedCountriesBehavior : MonoBehaviour
 					                          texture.width,
 					                          texture.height ), 
 					                texture );
-				}
+				} else if (ts.TotalSeconds <= 18){
+					Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/zoom.png");
+					GUI.DrawTexture( new Rect( 0, 
+					                          0,
+					                          texture.width,
+					                          texture.height ), 
+					                texture );
+				} 
 			}
 
 			if((selectedCountries != null) && (selectedCountries.Length > 0))
