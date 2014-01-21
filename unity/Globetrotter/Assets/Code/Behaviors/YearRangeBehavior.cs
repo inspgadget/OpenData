@@ -62,20 +62,13 @@ public class YearRangeBehavior : MonoBehaviour
 				                          texture.height ), 
 				                texture );
 			} else if (ts.TotalSeconds <= 12){
-				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/doubletap_d.png");
-				GUI.DrawTexture( new Rect( 0, 
-				                          Screen.height - texture.height,
-				                          texture.width,
-				                          texture.height ), 
-				                texture );
-			} else if (ts.TotalSeconds <= 18){
 				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/longpress.png");
 				GUI.DrawTexture( new Rect( 0, 
 				                          Screen.height - texture.height,
 				                          texture.width,
 				                          texture.height ), 
 				                texture );
-			} else if (ts.TotalSeconds <= 24){
+			} else if (ts.TotalSeconds <= 18){
 				Texture2D texture = loadTexture(Application.dataPath + "/Images/Resources/swipedownup.png");
 				GUI.DrawTexture( new Rect( 0, 
 				                          Screen.height - texture.height,
@@ -144,13 +137,13 @@ public class YearRangeBehavior : MonoBehaviour
 			m_yearToObj.renderer.material = m_unfocusedObjectMaterial;
 		}
 
-		if(!m_yearToViewModel.Loaded && m_yearToViewModel.YearCurrent != m_yearToViewModel.LastYear && (DateTime.Now - m_yearToViewModel.LastChange).TotalSeconds >= 2){
+		if(!m_yearToViewModel.Loaded && (DateTime.Now - m_yearToViewModel.LastChange).TotalSeconds >= 2){
 			IndicatorSelectorViewModel vm = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
 			vm.Fetch();
 			m_yearToViewModel.Loaded = true;
 		}
 
-		if(!m_yearFromViewModel.Loaded && m_yearFromViewModel.YearCurrent != m_yearFromViewModel.LastYear && (DateTime.Now - m_yearFromViewModel.LastChange).TotalSeconds >= 2){
+		if(!m_yearFromViewModel.Loaded && (DateTime.Now - m_yearFromViewModel.LastChange).TotalSeconds >= 2){
 			IndicatorSelectorViewModel vm = ObjectDepot.Instance.Retrive<IndicatorSelectorViewModel>();
 			vm.Fetch();
 			m_yearFromViewModel.Loaded = true;

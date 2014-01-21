@@ -16,6 +16,31 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private WorldBankIndicator[] m_indicators;
 		private bool m_isFetching;
 
+		private DateTime m_lastChange;
+		private bool m_loaded = false;
+
+		public bool Loaded
+		{
+			get {
+				return m_loaded;
+			}
+			set {
+				m_loaded = value;
+			}
+		}		
+		
+		public int IndicatorCurrent {
+			get {
+				return m_currIndicatorIndex;
+			}
+		}
+		
+		public DateTime LastChange {
+			get {
+				return m_lastChange;
+			}
+		}
+		
 		public WorldBankIndicator CurrentIndicator
 		{
 			get
@@ -172,6 +197,8 @@ namespace Globetrotter.GuiLayer.ViewModel
 							}
 							
 							m_currIndicatorIndex = currIndicatorIndex;
+							m_lastChange = DateTime.Now;
+							m_loaded = false;
 						}
 					}
 				}

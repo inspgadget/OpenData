@@ -14,9 +14,7 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private int m_min;
 
 		private DateTime m_lastChange;
-		private int m_lastYear;
 		private int m_max;
-		private int m_yearCurrent;
 		private bool m_loaded = false;
 		
 		public bool Loaded
@@ -29,24 +27,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 			}
 		}		
 		
-		public int YearCurrent {
-			get {
-				return m_yearCurrent;
-			}
-		}
-		
 		public DateTime LastChange {
 			get {
 				return m_lastChange;
 			}
 		}
 		
-		public int LastYear {
-			get {
-				return m_lastYear;
-			}
-		}
-
 		public int Min
 		{
 			get
@@ -125,7 +111,6 @@ namespace Globetrotter.GuiLayer.ViewModel
 						}
 
 						m_dataController.YearFrom = year;
-						m_yearCurrent = year;
 						m_lastChange = DateTime.Now;
 						m_loaded = false;
 					}
