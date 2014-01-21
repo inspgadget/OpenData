@@ -44,9 +44,9 @@ public class SenderActivity extends Activity implements SensorEventListener,
 	int _port;
 	GregorianCalendar _timestamp = new GregorianCalendar();
 	GregorianCalendar _timestampScale = new GregorianCalendar();
-	float _sensitivityHorizontal = 40;
-	float _sensitivityVertical = 10;
-	float _sensitivity = 400;
+	float _sensitivityHorizontal = 30;
+	float _sensitivityVertical = 30;
+	float _sensitivity = 150;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
