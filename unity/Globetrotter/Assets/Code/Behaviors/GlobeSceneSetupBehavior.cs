@@ -85,6 +85,8 @@ public class GlobeSceneSetupBehavior : MonoBehaviour
 		CameraZoomViewModel cameraZoomViewModel = new CameraZoomViewModel(new float[] { -1.5f, -3.0f}, 0.05f);
 		inputController.InputReceived += cameraZoomViewModel.InputReceivedHandler;
 
+		ObjectDepot.Instance.Store<CameraZoomViewModel>(cameraZoomViewModel);
+
 		//globe scene gui controller
 		m_globeSceneGuiController = new GlobeSceneGuiController(cameraZoomViewModel,
 		                                                        	globeViewModel,

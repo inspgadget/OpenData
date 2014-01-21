@@ -109,7 +109,7 @@ public class CountrySelection : MonoBehaviour
 						m_countrySelectorViewModel.CurrCountryIndex	= ind;
 					}
 				} else {
-					Debug.Log("NULL");
+					//Debug.Log("NULL");
 				}
 			}
 		} else {
@@ -128,7 +128,7 @@ public class CountrySelection : MonoBehaviour
 
 				if((v.x != 0.0f) && (v.y != 0.0f) && (v.z != 0.0f))
 				{
-					Debug.Log("update change");
+					//Debug.Log("update change");
 					qTo = Quaternion.FromToRotation(v - trans.position, m_mainCamera.transform.position - trans.position);
 					qTo = qTo * transform.rotation;
 					transform.rotation = Quaternion.RotateTowards(transform.rotation, qTo, Time.deltaTime * 500);
@@ -252,12 +252,12 @@ public class CountrySelection : MonoBehaviour
 		
 		if(c != null)
 		{
-			Debug.Log(c.Longitude + " - " + c.Latitude);
+			//Debug.Log(c.Longitude + " - " + c.Latitude);
 			Vector2 v2 = LatLongToPixelXY(c.Latitude, c.Longitude);
 			v2.x = v2.x/ 4096;
 			v2.y = (v2.y - 2048) / 2048 * - 1;
 			Vector3 vector = UvTo3D(v2);
-			Debug.Log(vector.x+"-"+vector.y+"-"+vector.z);
+			//Debug.Log(vector.x+"-"+vector.y+"-"+vector.z);
 			
 			lock(m_lockObj)
 			{

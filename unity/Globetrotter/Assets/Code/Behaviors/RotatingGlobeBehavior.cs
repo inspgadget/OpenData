@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Globetrotter;
+using Globetrotter.GuiLayer.ViewModel;
 
 public class RotatingGlobeBehavior : MonoBehaviour
 {

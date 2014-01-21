@@ -85,6 +85,12 @@ namespace Globetrotter.GuiLayer.ViewModel
 			{
 				if(ReactOnInput == true)
 				{
+					CameraZoomViewModel czvm = ObjectDepot.Instance.Retrive<CameraZoomViewModel>();
+					float speed = czvm.Slow ? m_speed / 5.0f : m_speed;
+					UnityEngine.Debug.Log("-----");
+					UnityEngine.Debug.Log(czvm.Slow.ToString());
+					UnityEngine.Debug.Log(speed.ToString());
+					UnityEngine.Debug.Log("-----");
 					if(args.HasInputType(InputType.ClickDouble) == true)
 					{
 						CountrySelectorViewModel cc = ObjectDepot.Instance.Retrive<CountrySelectorViewModel>();
@@ -93,22 +99,22 @@ namespace Globetrotter.GuiLayer.ViewModel
 
 					if(args.HasInputType(InputType.RotateUp) == true)
 					{
-						VerticalAngle = VerticalAngle - m_speed;
+						VerticalAngle = VerticalAngle - speed;
 					}
 					
 					if(args.HasInputType(InputType.RotateDown) == true)
 					{
-						VerticalAngle = VerticalAngle + m_speed;
+						VerticalAngle = VerticalAngle + speed;
 					}
 					
 					if(args.HasInputType(InputType.RotateLeft) == true)
 					{
-						HorizontalAngle = HorizontalAngle + m_speed;
+						HorizontalAngle = HorizontalAngle + speed;
 					}
 					
 					if(args.HasInputType(InputType.RotateRight) == true)
 					{
-						HorizontalAngle = HorizontalAngle - m_speed;
+						HorizontalAngle = HorizontalAngle - speed;
 					}
 				}
 			}

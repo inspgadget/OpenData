@@ -10,6 +10,13 @@ namespace Globetrotter.GuiLayer.ViewModel
 		private float m_z;
 		private float[] m_limits;
 		private float m_speed;
+		private bool m_slow;
+
+		public bool Slow {
+			get {
+				return m_slow;
+			}
+		}
 
 		public float Z
 		{
@@ -45,11 +52,15 @@ namespace Globetrotter.GuiLayer.ViewModel
 				{
 					if(args.HasInputType(InputType.ZoomIn) == true)
 					{
+						UnityEngine.Debug.Log(m_limits[0].ToString());
 						float z = m_z + m_speed;
 						
 						if(z <= m_limits[0])
 						{
 							m_z = z;
+							if( z >= -2.8f){
+								m_slow = true;
+							}
 						}
 					}
 					
@@ -60,6 +71,10 @@ namespace Globetrotter.GuiLayer.ViewModel
 						if(z >= m_limits[1])
 						{
 							m_z = z;
+
+							if( z < -2.8f){
+								m_slow = false;
+							}
 						}
 					}
 				}
